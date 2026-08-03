@@ -1,0 +1,24 @@
+# This repo is authored on Windows but executed inside WSL/Ubuntu.
+# Without this, git's autocrlf writes CRLF into .sh/.py files and bash fails with
+# `\r: command not found`. Force LF for everything textual.
+* text=auto eol=lf
+
+*.sh   text eol=lf
+*.py   text eol=lf
+*.yaml text eol=lf
+*.yml  text eol=lf
+*.json text eol=lf
+*.md   text eol=lf
+*.cfg  text eol=lf
+*.toml text eol=lf
+
+# Never touch these.
+*.pkl  binary
+*.npz  binary
+*.pt   binary
+*.pth  binary
+*.onnx binary
+*.mp4  binary
+*.mov  binary
+*.png  binary
+*.jpg  binary

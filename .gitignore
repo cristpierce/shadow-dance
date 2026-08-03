@@ -1,0 +1,37 @@
+# --- Capture + intermediate motion data -------------------------------------
+# Raw video and the SMPL/retarget intermediates are large and regenerable.
+# The curated dataset ships to Hugging Face, not here.
+data/raw/
+data/video/
+data/smpl/
+data/retarget/
+*.mp4
+*.mov
+*.avi
+*.npz
+*.pkl
+
+# --- Training outputs --------------------------------------------------------
+checkpoints/
+outputs/
+logs/
+runs/
+wandb/
+*.pt
+*.pth
+*.onnx
+
+# --- Python ------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+*.egg-info/
+.ipynb_checkpoints/
+
+# --- Tooling -----------------------------------------------------------------
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

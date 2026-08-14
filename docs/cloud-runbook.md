@@ -12,7 +12,7 @@ final test repeats all four motions under three independent simulator seeds for 
 policy. The job is intentionally one serial task so the checkpoint and evidence chain
 cannot drift across machines.
 
-## The four things only the entrant can do
+## The five things only the entrant can do
 
 1. **Accept NVIDIA's terms in your own name.** Read the
    [Omniverse Licence Agreement](https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-omniverse-license-agreement/),
@@ -30,7 +30,8 @@ cannot drift across machines.
    variables are exactly `YES`.
 
 2. **Complete interactive Nebius login and confirm usable credit/quota.** The portal's
-   "applied" state is not proof that the $50 credit has posted. Complete `npa configure`,
+   "applied" state is not proof that the $50 credit has posted. In WSL, run
+   `cd /home/crist/npa-shadow-operator && .venv/bin/npa configure --interactive --provision`,
    select the intended project, and confirm an L40S can be scheduled in `eu-north1`.
 
 3. **Complete Hugging Face login locally.** Never paste a token into chat, Git, YAML, or
@@ -38,14 +39,22 @@ cannot drift across machines.
    Windows project, and let WSL `npa configure` store/resolve `HF_TOKEN` through its
    protected credential prompt for cloud publication. Use a token authorized to create
    and update the two public repositories (a download-only token is insufficient). The
-   dataset and final model should be public at
-   `cristpierce/shadow-dip-v1` and `cristpierce/shadow-dance-sonic`.
+   Confirm the intended Hugging Face handle; no public `cristpierce` profile or repos
+   were visible through the public API on August 14. If that namespace is created, the
+   dataset and final model defaults are `cristpierce/shadow-dip-v1` and
+   `cristpierce/shadow-dance-sonic`.
 
-4. **Have the teammate merge the canonical GitHub PR and submit the portal entry.** The
+4. **Have the teammate merge the canonical GitHub PR and confirm their registered
+   name.** The
    current account has read-only access to `Durp06/shadow-dance`; the working changes are
    in [PR #1](https://github.com/Durp06/shadow-dance/pull/1). A registered team member
-   must also confirm both names, check every public link while logged out, and change the
-   Ultimate Bots entry from `DRAFT` to submitted.
+   must provide the exact teammate name shown in the portal before the final copy is
+   frozen.
+
+5. **Publish the real policy comparison and submit the portal entry.** A signed-in team
+   member must upload the final hash-verified simulator video to YouTube if the portal
+   requires that host, check every public link while logged out, and change the Ultimate
+   Bots entry from `DRAFT` to submitted. The kinematic reference video is not a substitute.
 
 Everything else in this runbook is automated or already prepared.
 

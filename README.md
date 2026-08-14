@@ -15,8 +15,10 @@ fills result tables with estimates.
 *Kinematic target only—not stock or fine-tuned policy output.*
 
 > Current state (2026-08-14): the original synthetic references and fail-closed
-> reproducible pipeline pass local validation. Stock/fine-tuned metrics, final ONNX
-> links, and the policy before/after video remain pending authorized compute access.
+> reproducible pipeline pass local validation and public Linux regeneration. The
+> immutable [Shadow Dip v1.0.0 reference release](https://github.com/cristpierce/shadow-dance/releases/tag/shadow-dip-v1.0.0)
+> is public. Stock/fine-tuned metrics, final ONNX links, and the policy before/after
+> video remain pending authorized compute access.
 > See [PROGRESS.md](PROGRESS.md).
 > The exact Nebius execution and publication handoff is in
 > [docs/cloud-runbook.md](docs/cloud-runbook.md).
@@ -35,7 +37,7 @@ before either policy is measured on the independent final-test family.
 
 | Gate | Artifact | State |
 |---|---|---|
-| Original data + provenance | `shadow-dip-v1` manifest, PKLs, and source CSVs | 30 sequences generated and hashed |
+| Original data + provenance | [`shadow-dip-v1.0.0`](https://github.com/cristpierce/shadow-dance/releases/tag/shadow-dip-v1.0.0) manifest, PKLs, and source CSVs | 30 sequences generated, hashed, and public |
 | G1 limits / foot IK / support QA | `results/reference-validation.json` | 30/30 pass; 0 warnings |
 | Stock SONIC on validation moves | raw eval log + novelty report | Pending Isaac run |
 | Fine-tuned SONIC | independent 5/500/2,000 checkpoint ladder from pinned base | Pending Isaac run |
@@ -95,7 +97,11 @@ Render a labelled *reference-only* preview:
 The small frozen PKLs, source CSVs, manifest, validator report, code, hashes, and clearly
 watermarked reference preview are committed so the cloud job needs no hidden local
 input. Policy renders remain ignored until they are packaged with their run evidence.
-The submission dataset will also be published as a versioned Hugging Face artifact.
+The exact frozen bundle is also available in the public
+[GitHub reference release](https://github.com/cristpierce/shadow-dance/releases/tag/shadow-dip-v1.0.0),
+whose archive SHA-256 is
+`94099f031b8a0b5ea36c809e705f77088342a6b54d73f9735508b146841c1370`.
+It will be mirrored to a versioned Hugging Face dataset after entrant authentication.
 
 ### Frozen reference QA
 

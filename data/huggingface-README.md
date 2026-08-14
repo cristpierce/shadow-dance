@@ -30,6 +30,11 @@ limitations.
 
 Repository: https://github.com/Durp06/shadow-dance
 
+Immutable source release:
+https://github.com/cristpierce/shadow-dance/releases/tag/shadow-dip-v1.0.0
+(archive SHA-256
+`94099f031b8a0b5ea36c809e705f77088342a6b54d73f9735508b146841c1370`).
+
 These are desired kinematic trajectories, not policy rollouts and not proof of physical
 robot execution.
 

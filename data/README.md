@@ -22,3 +22,9 @@ manifest SHA-256 is
 regeneration reproduced the manifest and all 60 CSV/PKL files byte-for-byte. The
 committed validation report SHA-256 is
 `5aedeedee8d775c34c0b5c67f235591829da281cfa9385b8b8a15b8c10a6b999`.
+
+Until Hugging Face authentication is available, the immutable public distribution is
+[Shadow Dip v1.0.0 on GitHub](https://github.com/cristpierce/shadow-dance/releases/tag/shadow-dip-v1.0.0).
+Its 2,112,908-byte archive has SHA-256
+`94099f031b8a0b5ea36c809e705f77088342a6b54d73f9735508b146841c1370` and is tagged at
+commit `684c6e8130505d9d85ea0a5048d8121179b6cd68`.

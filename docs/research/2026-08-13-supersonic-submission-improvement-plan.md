@@ -797,6 +797,11 @@ the portal/Discord immediately:
   final-test split, repeated seed aggregate, ONNX export, and repository license were
   not visible. Those observations are a dated public-artifact comparison, not a claim
   that the team lacks private evidence or will not add it before the deadline.
+- Its v2 result is also a useful warning against headline progress alone: the selected
+  stage reached 69/81 frames (85.2%) but recorded 0% success. The v3 result became a
+  claimed 100% completion only after appending a 100-frame landing-recovery segment and
+  selecting among recovery checkpoints. Shadow Dance therefore treats full recovery
+  and success as hard gates, while progress and MPJPE remain diagnostics.
 - The strategic response is not a late switch to an acrobatic skill. Shadow Dance must
   make the unsupported off-axis hold and recovery visually unmistakable, then win the
   evidence categories with an exact stock baseline, frozen validation/test separation,
@@ -854,11 +859,13 @@ The following updates supersede earlier references to a single “held-out” he
   `pose_aa`. The generator now emits both consistently, NVIDIA's pinned converter
   round-trips the turn within 2e-6, and the reference validator hard-fails future drift.
 - Public Ubuntu/Python 3.11 regeneration passed all 12 tests and all 30 validator cases
-  with zero warnings. Comparing its QA report with the frozen Windows/Python 3.13 report
-  showed a maximum metric difference of `2.11e-8`, but platform floating-point details
-  still change some last CSV digits and therefore compressed PKL hashes. The public gate
-  consequently enforces exact path/schema/dtype/split contracts plus `1e-6` maximum
-  numeric drift, while the published artifacts themselves remain bound to exact SHA-256.
+  with zero warnings in
+  [run 31848829025](https://github.com/cristpierce/shadow-dance/actions/runs/31848829025).
+  Against the frozen Windows/Python 3.13 bundle, maximum drift was `1e-5` in the
+  inspectable degree/centimetre CSV representation, `1.20e-7` in the SONIC PKLs,
+  `3.72e-9` in manifest IK values, and `2.11e-8` in validation metrics. The public gate
+  enforces exact paths, schemas, dtypes, and splits; a `2e-5` CSV-schema tolerance; and
+  a `1e-6` PKL/manifest/report tolerance. Published files remain bound to exact SHA-256.
 - The workstation's RTX 5070 Ti Laptop GPU is visible inside WSL2 (12,227 MiB VRAM),
   with 15 GiB VM RAM and ample disk. NVIDIA's current Isaac Lab requirements call for
   at least 16 GB VRAM and 32 GB RAM for full Isaac Sim workflows. Local execution is a
@@ -901,6 +908,13 @@ The following updates supersede earlier references to a single “held-out” he
   release path and verified as version `0.12.254` (83,198,114 bytes). Profile/config
   inspection then failed closed because no `~/.nebius/config.yaml` exists. This proves
   tooling readiness without implying login, posted credit, quota, or resource access.
+- The immutable public
+  [Shadow Dip v1.0.0 release](https://github.com/cristpierce/shadow-dance/releases/tag/shadow-dip-v1.0.0)
+  was published August 14 at commit `684c6e8130505d9d85ea0a5048d8121179b6cd68`.
+  GitHub reports the 2,112,908-byte archive digest as
+  `94099f031b8a0b5ea36c809e705f77088342a6b54d73f9735508b146841c1370` and the explicitly
+  labelled kinematic-reference MP4 digest as
+  `d9f6f4284e5cecbc80349d050786b2c876a26f1a93dd4ba6e3da8f9149efe0c3`.
 
 ### Decisions
 

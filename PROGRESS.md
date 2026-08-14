@@ -1,6 +1,6 @@
 # SuperSONIC submission progress
 
-**Last updated:** 2026-08-14 15:40 PT
+**Last updated:** 2026-08-14 16:10 PT
 **Branch:** `feature/supersonic-submission`
 **Deadline:** 2026-08-16 23:59 PT
 
@@ -27,7 +27,8 @@ status here must remain truthful.
   visually inspected the hero hold.
 - [x] Added Linux CI that regenerates and validates from the pinned NVIDIA checkout,
   then checks exact inventories/schemas/splits and cross-platform numeric equivalence
-  of every CSV/PKL field at `1e-6` absolute tolerance.
+  of every CSV field at `2e-5` in its degree/centimetre schema and every SONIC PKL,
+  manifest IK value, and QA metric at `1e-6` absolute tolerance.
 - [x] Committed and pushed the implementation to `cristpierce/shadow-dance` and opened
   [upstream PR #1](https://github.com/Durp06/shadow-dance/pull/1).
 - [x] Passed the complete public Linux CI run, including NVIDIA Git LFS assets:
@@ -63,11 +64,21 @@ status here must remain truthful.
   that hashes every uncut source clip, the frozen comparison, and edited output.
 - [x] Installed and verified official Nebius CLI `0.12.254` for Linux/amd64; no profile,
   cloud authentication, or paid resource was created.
+- [x] Passed the final public Ubuntu/Python 3.11 evidence run: 12/12 tests, 30/30
+  regenerated reference validations, zero warnings, and exact inventory/schema/split
+  plus cross-platform numeric reproduction checks
+  ([run 31848829025](https://github.com/cristpierce/shadow-dance/actions/runs/31848829025)).
+- [x] Published the immutable public
+  [Shadow Dip v1.0.0 reference release](https://github.com/cristpierce/shadow-dance/releases/tag/shadow-dip-v1.0.0)
+  with GitHub-verified asset digests, full generated data, QA report, provenance, and a
+  clearly labelled non-policy kinematic preview.
+- [x] Finished the diff/security review, pushed the frozen implementation, and updated
+  [upstream PR #1](https://github.com/Durp06/shadow-dance/pull/1).
 
-## In progress
+## Ready after entrant handoff
 
-- [ ] Complete final diff/security review, commit the frozen package, push it to the
-  fork, confirm CI, and update PR #1.
+- [ ] Run the stock novelty gate and bounded checkpoint ladder as soon as the named
+  licence acceptance, Nebius authentication/credit, and publication credentials exist.
 
 ## External gates
 
@@ -75,10 +86,12 @@ status here must remain truthful.
   for `OMNI_KIT_ACCEPT_EULA=YES` and `ISAACSIM_ACCEPT_EULA=YES`.
 - [ ] Interactive Nebius profile/login plus visible challenge credit, project, object
   storage credentials, and L40S quota. The pinned CLI itself is installed.
-- [ ] Hugging Face authentication and choice/creation of public dataset/model repos.
+- [ ] Hugging Face account/handle confirmation, write-capable authentication, and
+  creation of public dataset/model repositories.
 - [ ] A working browser session for authenticated Ultimate Bots portal actions, or
   manual portal entry by a team member using the prepared copy and links.
-- [ ] Teammate merges the PR or grants `cristpierce` write access to the canonical repo.
+- [ ] Teammate's exact registered name plus merge of the PR or write access for
+  `cristpierce` on the canonical repo.
 
 ## Not yet claimed
 
@@ -88,8 +101,8 @@ status here must remain truthful.
 
 ## Next execution order
 
-1. Finish local verification, push the frozen commit, and publish the generated dataset
-   once Hugging Face is authenticated.
+1. Obtain the entrant-owned licence/authentication handoff and mirror the immutable
+   GitHub dataset release to Hugging Face.
 2. Materialize the no-compute plan, then run the Isaac sample smoke and stock validation
    baseline once NVIDIA acceptance and Nebius authentication are present.
 3. Go/no-go novelty decision; adjust the target if stock already succeeds.

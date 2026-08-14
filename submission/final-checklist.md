@@ -16,12 +16,18 @@
 
 ## Evidence
 
-- [ ] Reference validator overall pass and visual inspection.
+- [x] Reference validator overall pass and visual inspection.
 - [ ] Stock baseline establishes a real novelty gap; otherwise revise hero before train.
-- [ ] Selected checkpoint wins on held-out—not only train—references.
+- [ ] Selected checkpoint wins on validation—not only train—references.
+- [ ] Final headline comes from test motions first opened after the winner was frozen.
+- [ ] Stock and selected policy each have all 12 final trials (4 motions × 3 seeds).
+- [ ] `final-comparison.json` hash-binds test summaries to `selection.json`.
 - [ ] Stand/turn retention is disclosed.
 - [ ] Uncut repeated attempts accompany the edited comparison.
-- [ ] ONNX checker/Runtime report, I/O contract, and hashes published.
+- [ ] `video-manifest.json` verifies the reference, all matched stock/selected source
+  clips, display seed, final metrics report, and edited video hash.
+- [ ] Exact five-graph SONIC ONNX bundle passes checker/Runtime inference; `_g1.onnx`
+  nominee, I/O contract, and hashes are published.
 - [ ] Public URLs work when logged out and point to immutable revisions/tags.
 
 ## Licensing and safety
@@ -29,5 +35,7 @@
 - [ ] Named NVIDIA/Isaac EULA acceptance recorded before Isaac provisioning.
 - [ ] NVIDIA Open Model License accompanies derivative weights.
 - [ ] Apache-2.0 and third-party notices included.
-- [ ] Dataset card says no BONES-SEED and accurately describes synthetic generation.
-- [ ] Simulation-only and real-robot safety limitations are visible.
+- [x] Dataset card says no BONES-SEED and accurately describes synthetic generation.
+- [x] Public copy includes the portal-requested exact acknowledgement, "Motion Data by
+  Bones Studio," without implying BONES-SEED was used.
+- [x] Simulation-only and real-robot safety limitations are visible.

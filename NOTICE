@@ -32,6 +32,10 @@ depends on, several of which are more restrictive:
       attribution. Do not use or distribute BONES data unless eligibility and the
       intended treatment of restricted inputs are confirmed.
 
+      Challenge acknowledgement requested by the Ultimate Bots portal:
+      "Motion Data by Bones Studio". This acknowledgement does not mean BONES-SEED
+      motion was incorporated into shadow-dip-v1; it was not.
+
   NVIDIA Omniverse / Isaac Sim
       Governed by the NVIDIA Omniverse Licence Agreement, accepted at
       install time. Not redistributed here.

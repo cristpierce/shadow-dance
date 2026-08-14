@@ -12,6 +12,28 @@ import numpy as np
 import onnx
 import onnxruntime as ort
 
+ORT_DTYPES = {
+    "tensor(bool)": np.bool_,
+    "tensor(double)": np.float64,
+    "tensor(float)": np.float32,
+    "tensor(float16)": np.float16,
+    "tensor(int8)": np.int8,
+    "tensor(int16)": np.int16,
+    "tensor(int32)": np.int32,
+    "tensor(int64)": np.int64,
+    "tensor(uint8)": np.uint8,
+    "tensor(uint16)": np.uint16,
+    "tensor(uint32)": np.uint32,
+    "tensor(uint64)": np.uint64,
+}
+SONIC_SUFFIXES = (
+    "_smpl.onnx",
+    "_g1.onnx",
+    "_teleop.onnx",
+    "_encoder.onnx",
+    "_decoder.onnx",
+)
+
 
 def sha256(path: Path) -> str:
     digest = hashlib.sha256()
@@ -33,26 +55,29 @@ def inspect(path: Path) -> dict:
         {"name": value.name, "shape": value.shape, "type": value.type}
         for value in session.get_outputs()
     ]
-    # Shape-dynamic policy graphs cannot always accept a generic probe. The graph load
-    # and checker are still hard gates; inference is attempted only for concrete inputs.
-    inference = {"attempted": False, "passed": None}
-    concrete_inputs = all(
-        all(isinstance(dim, int) and dim > 0 for dim in value.shape)
-        for value in session.get_inputs()
-    )
-    if concrete_inputs:
-        feed = {
-            value.name: np.zeros(value.shape, dtype=np.float32) for value in session.get_inputs()
-        }
-        result = session.run(None, feed)
-        inference = {
-            "attempted": True,
-            "passed": all(np.isfinite(array).all() for array in result),
-            "output_summaries": [
-                {"shape": list(array.shape), "min": float(array.min()), "max": float(array.max())}
-                for array in result
-            ],
-        }
+    feed = {}
+    for value in session.get_inputs():
+        dtype = ORT_DTYPES.get(value.type)
+        if dtype is None:
+            raise ValueError(f"unsupported ONNX Runtime input type {value.type}: {path.name}")
+        probe_shape = [dim if isinstance(dim, int) and dim > 0 else 1 for dim in value.shape]
+        feed[value.name] = np.zeros(probe_shape, dtype=dtype)
+    result = session.run(None, feed)
+    inference = {
+        "attempted": True,
+        "passed": all(array.size > 0 and np.isfinite(array).all() for array in result),
+        "output_summaries": [
+            {
+                "shape": list(array.shape),
+                "dtype": str(array.dtype),
+                "min": float(array.min()),
+                "max": float(array.max()),
+            }
+            for array in result
+        ],
+    }
+    if not inference["passed"]:
+        raise ValueError(f"ONNX Runtime inference returned empty or non-finite output: {path.name}")
     return {
         "file": path.name,
         "bytes": path.stat().st_size,
@@ -72,7 +97,24 @@ def main() -> None:
     files = sorted(args.artifact_dir.glob("*.onnx"))
     if not files:
         raise SystemExit(f"No ONNX files in {args.artifact_dir}")
-    report = {"overall_pass": True, "artifacts": [inspect(path) for path in files]}
+    matches = {
+        suffix: [path for path in files if path.name.endswith(suffix)] for suffix in SONIC_SUFFIXES
+    }
+    invalid = {suffix: paths for suffix, paths in matches.items() if len(paths) != 1}
+    if invalid:
+        rendered = {suffix: [path.name for path in paths] for suffix, paths in invalid.items()}
+        raise SystemExit(f"Incomplete or ambiguous SONIC ONNX bundle: {rendered}")
+    prefixes = {paths[0].name.removesuffix(suffix) for suffix, paths in matches.items()}
+    if len(prefixes) != 1 or len(files) != len(SONIC_SUFFIXES):
+        raise SystemExit("SONIC ONNX files do not form one exact five-graph export bundle")
+    portal_nominee = matches["_g1.onnx"][0].name
+    report = {
+        "format": "shadow_dance_onnx_validation_v1",
+        "overall_pass": True,
+        "portal_nominee": portal_nominee,
+        "bundle_prefix": prefixes.pop(),
+        "artifacts": [inspect(path) for path in files],
+    }
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     print(json.dumps(report, indent=2))

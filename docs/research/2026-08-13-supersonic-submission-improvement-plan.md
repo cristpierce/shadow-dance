@@ -621,7 +621,7 @@ checksums, licenses, and a download command.
 
 1. One sentence: what was taught and why stock SONIC cannot do it.
 2. Embedded or linked 20–30 second before/after.
-3. Three-result table: held-out hero, WBT/fundamentals, ONNX validation.
+3. Three-result table: repeated final-test hero, fundamentals retention, ONNX validation.
 4. Exact reproduction quickstart.
 5. Dataset composition and license/provenance.
 6. Training config and compute used.
@@ -632,9 +632,9 @@ Use a result-backed claim template and fill the brackets only from frozen evalua
 outputs:
 
 > We taught SONIC a five-second **Shadow Partner Dip**—dance frame, split-stance pivot,
-> unsupported off-axis dip, held beat, and controlled recovery. On the same held-out
-> references, stock SONIC completed `[x/n]` trials and our fine-tuned policy completed
-> `[y/n]`, while walking/turning changed by `[z]` percentage points.
+> unsupported off-axis dip, held beat, and controlled recovery. Across the same 12
+> untouched final-test trials, stock SONIC completed `[x/12]` and our fine-tuned policy
+> completed `[y/12]`, while stand/turn retention changed by `[z]` percentage points.
 
 Avoid claiming real-robot validation unless Ultimate Bots actually runs it. Say
 “designed for G1 and validated in simulation.”
@@ -669,7 +669,7 @@ Avoid claiming real-robot validation unless Ultimate Bots actually runs it. Say
 - Capture/generate the small amplitude/tempo/direction set and owned fundamentals.
 - Validate every motion and freeze train/validation/test manifests.
 - Save stock baseline metrics and renders before training.
-- Run the 5/25/100 checkpoint ladder.
+- Run the 5/500/2,000 checkpoint ladder.
 - Evaluate held-out hero plus stand/walk/turn; choose whether to continue or fix data.
 
 ### August 15 — complete and submit early
@@ -776,9 +776,32 @@ the portal/Discord immediately:
 
 - Public search did not reveal a reliable gallery of current Trial 03 entries. That is
   not evidence of low competition; entries may be private, portal-only, or unindexed.
-- GitHub repository searches on August 13 for the exact challenge name and close
-  variants returned only `Durp06/shadow-dance`. This narrows the public comparison set
-  but still says nothing about private or differently named entries.
+- A refreshed GitHub search on August 14 found
+  [`danniely/ultimate-bots-G1`](https://github.com/danniely/ultimate-bots-G1), created
+  August 9 and explicitly described as a SuperSONIC fine-tune. Its public evidence
+  describes an airborne `s_batido` martial-arts motion plus landing recovery, a selected
+  step-600 checkpoint, and a claimed 100% full-motion physics evaluation. This is a
+  serious challenge-targeted comparator, although its authenticated portal status is
+  not public.
+- At public commit `467865beead8253dd68ca65204e818e02f2f2a57`, that comparator's
+  [`final_metrics.json`](https://github.com/danniely/ultimate-bots-G1/blob/467865beead8253dd68ca65204e818e02f2f2a57/exports/metrics/final_metrics.json)
+  records its initial run as 2,000 iterations, 512 environments, 24,576,000 timesteps,
+  and 9,544.61 training seconds. Its checked-in config uses a `2e-5` actor learning
+  rate. Later public stages add 1,000 + 1,000 iterations and a 750-iteration recovery
+  run whose step-600 checkpoint was selected. These are self-reported artifacts, not
+  independently rerun benchmarks, but they make a 100-iteration competition ladder
+  plainly underpowered.
+- In that repository's indexed tree at the August 14 snapshot, the reported result is
+  centered on one reference motion. A stock before/after, independent multi-motion
+  final-test split, repeated seed aggregate, ONNX export, and repository license were
+  not visible. Those observations are a dated public-artifact comparison, not a claim
+  that the team lacks private evidence or will not add it before the deadline.
+- The strategic response is not a late switch to an acrobatic skill. Shadow Dance must
+  make the unsupported off-axis hold and recovery visually unmistakable, then win the
+  evidence categories with an exact stock baseline, frozen validation/test separation,
+  12 final trials per policy, retention checks, all-owned data provenance, and an exact
+  validated five-graph export. If the selected policy does not execute cleanly, this
+  evidence design cannot substitute for the missing result.
 - The public `sonic-g1-video-eval` and
   [`motionmatching-g1-door`](https://github.com/whitealex95/motionmatching-g1-door)
   repositories are engineering comparables, not confirmed Trial 03 competitors.
@@ -790,6 +813,102 @@ the portal/Discord immediately:
   ladder, and stop rules are deadline-risk controls, not a promised learning curve.
 - All proposed success thresholds beyond the cited NVIDIA guidance are internal project
   gates, not official challenge rules.
+
+## August 14 execution decisions and evidence hardening
+
+The following updates supersede earlier references to a single “held-out” headline set.
+
+### Facts verified locally
+
+- The [official challenge page](https://www.ultimatebots.com/hackathon), rechecked
+  August 14, says “one move, one task, or one idea—depth beats breadth,” requires a
+  short simulation demo and stock before/after, and judges Ambition, Execution, Data
+  craft, and Reproducibility. Execution explicitly includes reliability across runs;
+  finalists are also evaluated by the organizers in simulation and on league robots.
+- The frozen owned dataset now contains **26** motions: 18 training/rehearsal,
+  4 selection-validation (`heldout`), and 4 final-test (`test`). All 26 pass the
+  committed MuJoCo reference validator with zero warnings.
+- Across the full frozen set, worst measured reference values are 6.66 mm foot-IK
+  position residual, 3.57° orientation residual, 15.9% of the Isaac joint-speed limit,
+  54.71 rad/s² peak joint acceleration, 4.24 mm floor penetration, +5.41 cm minimum
+  two-foot support margin, +7.24 cm deep-hold support margin, and zero self contacts.
+  The deepest family member drops the pelvis 14.7 cm and reaches 0.49 rad (28.1°) of
+  waist roll while remaining inside the pinned G1 joint envelope.
+- A clean isolated regeneration produced the same 52 CSV/PKL payloads and the same
+  manifest bytes (SHA-256 `3b7d91fbc4ec46c6591be3c583fba3dfbc9174045d3adb9eb8d0aa52a9abc3f0`),
+  then independently passed all 26 validator cases. This is the local reproducibility
+  proof for the strengthened reference geometry.
+- The final four motions use independent amplitude, duration, hold, back-step, width,
+  direction, and seed specifications. They are not copied into the training or
+  selection-validation directories.
+- The pinned NPA/SkyPilot operator environment passes its local status and verification
+  checks. The digest-pinned L40S SONIC image materializes into a no-compute SkyPilot
+  task contract. No Nebius authentication or posted challenge credit has been observed
+  yet, so no paid GPU was allocated and no policy result is claimed.
+- At pinned NPA commit `1e8acb921aa953c1e2ce018bcbc6417611768a16`, the CLI's
+  guaranteed no-submit `--plan-only` return path applies to `npa.workflow` specs, not
+  generic SkyPilot YAML. Shadow Dance therefore uses a dedicated read-only call to the
+  SONIC materializer with registry authentication disabled. This prevents a “planning”
+  check from accidentally reaching SkyPilot on an authenticated operator machine.
+- NVIDIA's pinned [`ImEvalCallback`](https://github.com/NVlabs/GR00T-WholeBodyControl/blob/c374bae5b9039cd0ee71377e654d11ce1bc69e1d/gear_sonic/trl/callbacks/im_eval_callback.py)
+  truncates gathered results to the number of unique motions. Increasing `num_envs`
+  above four therefore does not create repeated final trials for a four-motion split.
+  Independent evaluator invocations with different seeds are required to substantiate
+  reliability across runs.
+- The upstream exporter writes graphs to `config.experiment_dir/exported`, and a copied
+  checkpoint's saved config still names its original training directory. The wrapper
+  must explicitly override `experiment_dir` to the selected checkpoint package;
+  otherwise a successful export can be followed by a false "no graphs found" release
+  failure. The exporter produces one same-prefix five-graph bundle: SMPL, G1, teleop,
+  shared encoder, and G1 decoder.
+- The presentation path now generates a deterministic target/before/after video only
+  after `final-comparison.json` exists. A separate manifest binds the reference, every
+  matched uncut stock/selected source clip, display seed, frozen metrics, and edited
+  output by size and SHA-256. Model publication refuses media drift.
+- The authenticated portal screenshot explicitly asks public projects to credit
+  "Motion Data by Bones Studio." Public repository, dataset, model-card, and portal copy
+  now include that exact acknowledgement while separately disclosing that no
+  BONES-SEED motion or derivative entered `shadow-dip-v1`.
+- A read-only SkyPilot catalog query on August 14 priced the exact Nebius
+  `gpu-l40s-a_1gpu-16vcpu-64gb` target at $1.747/hour on demand and $0.848/hour spot,
+  consistent with [Nebius component pricing](https://docs.nebius.com/compute/resources/pricing).
+  At the on-demand price, $50 covers about 28.6 VM-hours before storage/controller
+  costs; the configured eight-hour attempt cap is about $13.98.
+- The official Nebius Linux/amd64 CLI binary was installed from the vendor object-store
+  release path and verified as version `0.12.254` (83,198,114 bytes). Profile/config
+  inspection then failed closed because no `~/.nebius/config.yaml` exists. This proves
+  tooling readiness without implying login, posted credit, quota, or resource access.
+
+### Decisions
+
+- Use `heldout` only as selection-validation: stock novelty gating, ladder stopping,
+  and winner selection may inspect it.
+- Freeze the winning checkpoint identity in `selection.json` before evaluating either
+  stock or selected policy on `test`. Bind the final comparison to the SHA-256 of that
+  selection report. Use this untouched test comparison—not validation—as the portal's
+  headline result.
+- Evaluate each of the four final-test motions at seeds 101, 202, and 303 for stock and
+  selected policies. Report all 12 trials per policy, per-motion reliability, and the
+  macro mean of per-motion local MPJPE. Bind both the motion and seed inventories into
+  `final-comparison.json`.
+- Keep the 18-motion training set unchanged after the test freeze. If the stock novelty
+  gate fails, do not repurpose the test data; stop and preregister a separate harder
+  target before generating or training anything new.
+- Prefer the on-demand L40S direct-image workflow for deadline reliability and rendering
+  support. The frozen run is exactly 5/500/2,000 iterations with 64 environments for
+  the smoke and 512 for the two main candidates. This supersedes the initial
+  5/25/100 debug-scale ladder: NVIDIA documents 100 iterations as a local debug run,
+  while the public challenge-targeted `ultimate-bots-G1` evidence reports 2,000
+  iterations at 512 environments in 9,544.61 seconds. Independent candidates retain a
+  clean same-base comparison, and the 8-hour worker guard still leaves substantial
+  time around that public benchmark. Any longer ladder requires a new versioned
+  protocol decision before the untouched test is opened; it is not silently enabled.
+- Enforce an eight-hour worker timeout with a 15-minute recovery window and tear down
+  the small jobs controller after terminal status. This bounds a stuck attempt while
+  retaining enough of the $50 credit for one evidence-driven retry.
+- Treat synthetic kinematic preview footage only as an explanation of the target.
+  Submission “before” and “after” footage must remain real stock-policy and selected-
+  policy simulator output.
 
 ## Primary sources
 

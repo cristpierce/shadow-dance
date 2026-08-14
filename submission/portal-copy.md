@@ -19,26 +19,31 @@ off-axis dip, holds the pose for a beat, and recovers without a partner, hand su
 or floor contact.
 
 This is not a generic “robot dances” entry. SONIC already knows broad dance motion. Our
-test is the exact unsupported sequence. On identical held-out references and seeds,
-stock SONIC completed **[x/n]** trials versus **[y/n]** for our selected checkpoint;
+test is the exact unsupported sequence. After selecting the checkpoint on separate
+validation motions, we opened an untouched final-test family. Across 12 matched test
+trials per policy (4 motions × 3 simulator seeds), stock SONIC completed **[x/12]**
+versus **[y/12]** for our selected checkpoint;
 local MPJPE changed from **[a] mm** to **[b] mm**. Stand/turn retention changed by
 **[z] points**, so the improvement is not purchased by discarding basic control.
 
-Our 22-sequence dataset is team-authored and reproducible: 12 training dips spanning
+Our 26-sequence dataset is team-authored and reproducible: 12 training dips spanning
 direction, depth, tempo, hold, and step geometry; 6 conservative rehearsal motions;
-and 4 independently parameterized held-out dips. MuJoCo inverse kinematics pins the
-feet against NVIDIA's official G1 model. A public manifest records every specification,
-phase, upstream commit, IK residual, and SHA-256. No BONES-SEED motion or third-party
-video is included.
+4 independently parameterized validation dips; and 4 independently parameterized
+final-test dips. MuJoCo inverse kinematics pins the feet against NVIDIA's official G1
+model. A public manifest records every specification, phase, upstream commit, IK
+residual, and SHA-256. No BONES-SEED motion or third-party video is included.
 
 We fine-tuned the released `sonic_release/last.pt` checkpoint using its G1 reference
 encoder and upstream-supported dummy SMPL path. We evaluated stock and candidate
-checkpoints against the same frozen motions, selected from a 5/25/100/[...] checkpoint
+checkpoints against the same frozen motions, selected from a 5/500/2,000 checkpoint
 ladder, exported the selected G1 ONNX policy, and validated the graph and I/O in ONNX
 Runtime. Full commands, raw logs, configs, limitations, licenses, and uncut runs are in
 the repository.
 
 Validated in simulation; no real-robot claim is made.
+
+Challenge acknowledgement: **Motion Data by Bones Studio.** No BONES-SEED motion or
+derived data was used in our independently authored dataset.
 
 ## Loadout links
 
@@ -50,7 +55,7 @@ Validated in simulation; no real-robot claim is made.
 
 ## Final honesty check
 
-- [ ] Every number is generated from frozen held-out output.
+- [ ] Headline numbers come from all 12 untouched final-test trials bound to selection.
 - [ ] “Before” is stock policy output, not reference playback.
 - [ ] “After” uses the exact published checkpoint.
 - [ ] ONNX SHA-256 in the portal matches the public file.

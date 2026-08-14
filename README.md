@@ -14,9 +14,12 @@ fills result tables with estimates.
 
 *Kinematic target only—not stock or fine-tuned policy output.*
 
-> Current state (2026-08-13): original synthetic references and the reproducible
-> pipeline are being validated. Stock/fine-tuned metrics, final ONNX links, and the
-> policy before/after video remain pending compute access. See [PROGRESS.md](PROGRESS.md).
+> Current state (2026-08-14): the original synthetic references and fail-closed
+> reproducible pipeline pass local validation. Stock/fine-tuned metrics, final ONNX
+> links, and the policy before/after video remain pending authorized compute access.
+> See [PROGRESS.md](PROGRESS.md).
+> The exact Nebius execution and publication handoff is in
+> [docs/cloud-runbook.md](docs/cloud-runbook.md).
 
 ## Why this is a meaningful new skill
 
@@ -24,18 +27,20 @@ SONIC already has broad dance data, so the claim is not “the robot learned to 
 The proposed novelty is the complete partnerless sequence: a recognizable asymmetric
 arm frame, a planted back-step, lateral and backward load transfer, a sustained
 approximately 30-degree waist-envelope pose, and controlled recovery. The hard novelty
-gate is behavioral: the same frozen held-out reference must make stock SONIC fail or
-materially under-track while the adapted policy succeeds.
+gate is behavioral: stock SONIC must fail or materially under-track the frozen
+validation family while the adapted policy succeeds. Checkpoint selection then freezes
+before either policy is measured on the independent final-test family.
 
 ## Evidence dashboard
 
 | Gate | Artifact | State |
 |---|---|---|
-| Original data + provenance | `shadow-dip-v1` manifest and source CSVs | 22 sequences generated and hashed |
-| G1 limits / foot IK / support QA | `results/reference-validation.json` | 22/22 pass; 0 warnings |
-| Stock SONIC on held-out moves | raw eval log + uncut render | Pending Isaac run |
-| Fine-tuned SONIC | checkpoint ladder at 5/25/100/250/500 | Pending Isaac run |
+| Original data + provenance | `shadow-dip-v1` manifest, PKLs, and source CSVs | 26 sequences generated and hashed |
+| G1 limits / foot IK / support QA | `results/reference-validation.json` | 26/26 pass; 0 warnings |
+| Stock SONIC on validation moves | raw eval log + novelty report | Pending Isaac run |
+| Fine-tuned SONIC | independent 5/500/2,000 checkpoint ladder from pinned base | Pending Isaac run |
 | Fundamentals retention | identical stock/fine-tuned suite | Pending Isaac run |
+| Untouched final test | 4 motions × 3 seeds per policy, bound to frozen selection | Pending checkpoint selection |
 | Deployable policy | checked ONNX graphs + hashes | Pending selected checkpoint |
 | Judge-facing comparison | locked-camera stock/fine-tuned video | Pending both policy renders |
 
@@ -48,11 +53,14 @@ planted. The generator produces:
 
 - 12 training dip variants across direction, depth, timing, hold, and step geometry;
 - 6 conservative stand/squat/sway/torso-turn rehearsal motions;
-- 4 separately parameterized held-out dip variants; and
+- 4 separately parameterized validation dips used for checkpoint selection;
+- 4 independently parameterized final-test dips opened only after selection; and
 - both transparent degree/centimetre CSV and SONIC motion-lib PKL forms.
 
-Held-out variants are never placed in the training directory. Dataset details and
-limitations are in [docs/dataset-card.md](docs/dataset-card.md).
+Validation and final-test variants are never placed in the training directory. Final
+test is excluded from every training, novelty, early-stopping, and checkpoint-selection
+decision. Dataset details and limitations are in
+[docs/dataset-card.md](docs/dataset-card.md).
 
 ## Reproduce locally
 
@@ -61,7 +69,7 @@ commit `c374bae5b9039cd0ee71377e654d11ce1bc69e1d` next to this repository.
 
 ```powershell
 py -3.13 -m venv .venv
-.venv\Scripts\python -m pip install -e ".[dev]"
+.venv\Scripts\python -m pip install -e ".[dev,onnx,publish]"
 $env:SONIC_ROOT = "C:\path\to\GR00T-WholeBodyControl"
 
 .venv\Scripts\shadow-generate --sonic-root $env:SONIC_ROOT
@@ -73,35 +81,38 @@ Render a labelled *reference-only* preview:
 
 ```powershell
 .venv\Scripts\shadow-render `
-  data/generated/heldout/shadow_dip_left_heldout_19.pkl `
+  data/generated/heldout/shadow_dip_left_heldout_21.pkl `
   --sonic-root $env:SONIC_ROOT `
   --manifest data/manifests/shadow-dip-v1.json `
   --output media/reference-kinematic.mp4
 ```
 
-The generated PKLs and videos are intentionally ignored by Git. The source CSVs,
-manifest, validator report, code, and hashes make them reproducible. The submission
-dataset will also be published as a versioned Hugging Face artifact.
+The small frozen PKLs, source CSVs, manifest, validator report, code, hashes, and clearly
+watermarked reference preview are committed so the cloud job needs no hidden local
+input. Policy renders remain ignored until they are packaged with their run evidence.
+The submission dataset will also be published as a versioned Hugging Face artifact.
 
 ### Frozen reference QA
 
 These are measured from `results/reference-validation.json`, not policy results:
 
-| Check | Worst case across 22 sequences |
+| Check | Worst case across 26 sequences |
 |---|---:|
-| Foot IK position / orientation residual | 6.00 mm / 3.21° |
+| Foot IK position / orientation residual | 6.66 mm / 3.57° |
 | Joint-limit violation | 0 rad |
-| Peak joint speed vs Isaac limit | 15.7% |
-| Floor penetration | 3.58 mm |
-| Planted-foot horizontal speed, p95 | 0.011 m/s |
+| Peak pelvis drop / waist roll | 0.147 m / 0.490 rad (28.1°) |
+| Peak joint speed vs Isaac limit | 15.9% |
+| Peak joint acceleration | 54.71 rad/s² |
+| Floor penetration | 4.24 mm |
+| Planted-foot horizontal speed, p95 | 0.0106 m/s |
 | Two-foot support margin | +0.054 m minimum |
-| Deep-hold support margin | +0.070 m minimum |
-| Dynamic single-support margin | −0.028 m minimum |
+| Deep-hold support margin | +0.072 m minimum |
+| Dynamic single-support margin | −0.029 m minimum |
 | MuJoCo self contacts | 0 |
 
 The negative instantaneous margin occurs during the moving-foot interval and is why
 the policy baseline remains a mandatory go/no-go gate; the planted deepest hold has a
-positive 7.0 cm quasi-static margin.
+positive 7.24 cm quasi-static margin.
 
 ## Train, compare, and export
 
@@ -113,30 +124,35 @@ chain.
 ```bash
 # 5-iteration data/environment smoke
 SONIC_ROOT=/workspace/GR00T-WholeBodyControl \
-NUM_ENVS=256 ITERATIONS=5 RUN_NAME=shadow_dip_smoke \
+NUM_ENVS=64 ITERATIONS=5 RUN_NAME=shadow_dip_smoke \
 bash scripts/train.sh
 
-# Identical frozen held-out references for stock and a candidate checkpoint
-bash scripts/evaluate.sh /workspace/sonic_release/last.pt stock
-bash scripts/evaluate.sh /workspace/outputs/.../model_step_000100.pt finetuned_100
+# Identical frozen validation references for stock and a candidate checkpoint
+MOTION_KEYS_FILE=data/splits/heldout.txt NUM_ENVS=4 SEED=42 \
+  bash scripts/evaluate.sh /workspace/sonic_release/last.pt stock data/generated/heldout
+MOTION_KEYS_FILE=data/splits/heldout.txt NUM_ENVS=4 SEED=42 \
+  bash scripts/evaluate.sh /workspace/outputs/.../last.pt stage-2000 data/generated/heldout
 
 # Locked-camera policy output and ONNX export
-bash scripts/render_policy.sh /workspace/sonic_release/last.pt stock
-bash scripts/render_policy.sh /workspace/outputs/.../best.pt finetuned
-bash scripts/export_onnx.sh /workspace/outputs/.../best.pt
+MOTION_KEYS_FILE=data/splits/test.txt NUM_ENVS=4 SEED=303 \
+  bash scripts/render_policy.sh /workspace/sonic_release/last.pt stock data/generated/test
+MOTION_KEYS_FILE=data/splits/test.txt NUM_ENVS=4 SEED=303 \
+  bash scripts/render_policy.sh /workspace/outputs/.../last.pt selected data/generated/test
+bash scripts/export_onnx.sh /workspace/outputs/.../last.pt data/generated/test
 python scripts/verify_artifacts.py /workspace/outputs/.../exported
 ```
 
-The checkpoint ladder stops when held-out improvement plateaus or fundamentals regress.
-It is not an instruction to burn the full credit allocation. Exact parameters and the
-selection rule are in [configs/shadow_dip_finetune.yaml](configs/shadow_dip_finetune.yaml).
+The checkpoint ladder is bounded by the 8-hour cloud wall-time guard and stops if no
+candidate clears the preregistered novelty, improvement, and retention gates. It is not
+an instruction to burn the full credit allocation. Exact parameters and the selection
+rule are in [configs/shadow_dip_finetune.yaml](configs/shadow_dip_finetune.yaml).
 
 ## Result contract
 
 The final headline will be populated only from frozen evaluation artifacts:
 
-> On the same held-out Shadow Partner Dip references, stock SONIC completed `[x/n]`
-> trials and the selected fine-tuned checkpoint completed `[y/n]`; local MPJPE changed
+> Across 12 untouched final-test trials (4 motions × 3 simulator seeds), stock SONIC completed `[x/12]`
+> trials and the selected fine-tuned checkpoint completed `[y/12]`; local MPJPE changed
 > from `[a]` to `[b]` mm while the stand/turn retention score changed by `[z]` points.
 
 Reference playback proves the target is kinematically coherent. It is not evidence that
@@ -153,6 +169,7 @@ scripts/                train, eval, render, export, artifact checks
 results/                raw/derived evaluation contract
 submission/             portal-ready copy and completion checklist
 docs/research/          dated challenge and strategy research
+docs/cloud-runbook.md   exact no-compute plan, launch, recovery, and publication handoff
 ```
 
 ## Safety, licensing, and limits
@@ -170,3 +187,9 @@ docs/research/          dated challenge and strategy research
 Team **SELTZER** (two members). Repository implementation and submission coordination:
 Pierce Crist (`cristpierce`) and teammate. The final portal copy will name both members
 exactly as registered before submission.
+
+## Challenge acknowledgement
+
+**Motion Data by Bones Studio.** This acknowledgement is included as requested by the
+Ultimate Bots portal. Shadow Dance's published trajectories are independently
+team-authored; no BONES-SEED motion or derived data is included.

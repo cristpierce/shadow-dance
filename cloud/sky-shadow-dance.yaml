@@ -1,0 +1,58 @@
+# Single L40S managed job for stock baseline, checkpoint ladder, evaluation, render,
+# and export. The SONIC image is the SkyPilot runtime itself, so NPA can inject a
+# short-lived Nebius registry pull token without exposing it in this file. Launch only
+# with the immutable values and explicit NVIDIA acceptance described in the runbook.
+name: shadow-dance-supersonic
+resources:
+  cloud: nebius
+  accelerators: L40S:1
+  cpus: 16
+  memory: 64
+  disk_size: 200
+  image_id: docker:${POLICY_IMAGE}
+envs:
+  # There is no confirmed public GHCR copy; supply the configured Nebius registry
+  # image through --image and --var POLICY_IMAGE=... at launch.
+  POLICY_IMAGE: ${POLICY_IMAGE}
+  SONIC_PAYLOAD_MODE: direct
+  SUBMISSION_REPO: https://github.com/cristpierce/shadow-dance.git
+  SUBMISSION_COMMIT: ${SUBMISSION_COMMIT}
+  RUN_ID: ${RUN_ID}
+  EVIDENCE_S3_URI: ${EVIDENCE_S3_URI}
+  LADDER: 5,500,2000
+  FINAL_TEST_SEEDS: 101,202,303
+  MAX_WALLTIME: 8h
+  SMOKE_NUM_ENVS: "64"
+  MAIN_NUM_ENVS: "512"
+  TRAIN_SEED: "42"
+  LEARNING_RATE: "2e-5"
+  REGULAR_SAVE_FREQUENCY: "1000000"
+  SAVE_LAST_FREQUENCY: "5"
+  RENDER_SEED: "303"
+  HF_MODEL_REPO: ${HF_MODEL_REPO}
+  HF_DATASET_REPO: cristpierce/shadow-dip-v1
+  OMNI_KIT_ACCEPT_EULA: ${OMNI_KIT_ACCEPT_EULA}
+  ISAACSIM_ACCEPT_EULA: ${ISAACSIM_ACCEPT_EULA}
+  S3_ENDPOINT_URL: https://storage.eu-north1.nebius.cloud
+setup: |
+  set -euo pipefail
+  command -v git >/dev/null
+  project_dir="${HOME}/shadow-dance"
+  if [ ! -d "${project_dir}/.git" ]; then
+    git clone "${SUBMISSION_REPO}" "${project_dir}"
+  fi
+  cd "${project_dir}"
+  git fetch origin "${SUBMISSION_COMMIT}"
+  git checkout --detach "${SUBMISSION_COMMIT}"
+  test "$(git rev-parse HEAD)" = "${SUBMISSION_COMMIT}"
+  test "${SONIC_REPO_REF:-}" = 0a87181c9106d0e49293400714b157676e0ec664
+  /opt/npa/sim/venv/bin/python -c 'import boto3, huggingface_hub, imageio, numpy, onnx, PIL'
+  /opt/npa/sim/venv/bin/python scripts/verify_dataset_bundle.py
+run: |
+  set -euo pipefail
+  cd "${HOME}/shadow-dance"
+  command -v timeout >/dev/null
+  test -x /isaac-sim/python.sh
+  test -x /opt/npa/sim/venv/bin/python
+  timeout --signal=TERM --kill-after=15m "${MAX_WALLTIME}" \
+    bash scripts/cloud_pipeline.sh

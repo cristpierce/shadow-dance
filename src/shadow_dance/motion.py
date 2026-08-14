@@ -195,7 +195,7 @@ def _hero_upper_body_keyframes(amplitude: float, direction: str) -> np.ndarray:
     pivot[22:29] += [-0.07, -0.07, 0.10, 0.10, 0.08, -0.06, 0.08]
 
     dip = pivot.copy()
-    dip[12:15] = [-0.28, 0.43, -0.45]
+    dip[12:15] = [-0.34, 0.50, -0.50]
     dip[15:22] = [-0.78, 0.92, -0.58, 1.08, -0.35, 0.22, -0.25]
     dip[22:29] = [-0.90, -0.60, 0.50, 1.15, 0.30, -0.20, 0.30]
 
@@ -383,14 +383,14 @@ def generate_motion(
     right_rotations = np.repeat(neutral_feet["right"][1][None, :, :], 7, axis=0)
 
     if spec.kind == "shadow_dip":
-        depth = 0.140 * spec.amplitude
-        lateral = 0.047 * spec.amplitude * sign
+        depth = 0.150 * spec.amplitude
+        lateral = 0.065 * spec.amplitude * sign
         # Shift above the planted stance foot before lifting the other foot. The
         # lateral transfer is part of the choreography and keeps the single-support
         # interval physically interpretable instead of relying on kinematic foot lift.
         root_keys[1] += [0.0, 0.097 * sign, -0.070]
         root_keys[2] += [0.005, 0.097 * sign, -0.070]
-        root_keys[3:5] += [-0.030 * spec.amplitude, lateral, -depth]
+        root_keys[3:5] += [-0.055 * spec.amplitude, lateral, -depth]
         root_keys[5] += [-0.005, 0.097 * sign, -0.070]
 
         # The foot opposite the dip direction steps back/out, then plants for the hold.
@@ -514,7 +514,7 @@ def generate_motion(
 
 
 def default_specs() -> list[SequenceSpec]:
-    """Return frozen train/validation specifications for dataset v1."""
+    """Return frozen train, selection-validation, and final-test specs for v1."""
 
     specs: list[SequenceSpec] = []
     amplitudes = [0.62, 0.76, 0.88, 1.0]
@@ -596,6 +596,29 @@ def default_specs() -> list[SequenceSpec]:
                 amplitude=amplitude,
                 duration_s=duration,
                 step_back_m=step,
+                hold_s=hold,
+                seed=counter,
+            )
+        )
+        counter += 1
+
+    # Final comparison motions are not evaluated until after checkpoint selection.
+    # Their geometry differs from both train and selection-validation specifications.
+    for direction, amplitude, duration, step, width, hold in [
+        ("left", 0.78, 5.05, 0.142, 0.045, 0.55),
+        ("right", 0.86, 4.95, 0.148, 0.058, 0.51),
+        ("left", 0.98, 5.45, 0.158, 0.047, 0.65),
+        ("right", 0.90, 4.85, 0.150, 0.062, 0.56),
+    ]:
+        specs.append(
+            SequenceSpec(
+                id=f"shadow_dip_{direction}_test_{counter:02d}",
+                split="test",
+                direction=direction,
+                amplitude=amplitude,
+                duration_s=duration,
+                step_back_m=step,
+                step_width_m=width,
                 hold_s=hold,
                 seed=counter,
             )

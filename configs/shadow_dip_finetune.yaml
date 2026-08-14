@@ -2,20 +2,44 @@
 # `manager/universal_token/all_modes/sonic_release` at the pinned commit.
 project: shadow-dance
 dataset: shadow-dip-v1
-upstream_commit: c374bae5b9039cd0ee71377e654d11ce1bc69e1d
+dataset_validation_upstream_commit: c374bae5b9039cd0ee71377e654d11ce1bc69e1d
+runtime_image: npa-sonic:0.1.2
+runtime_image_digest: sha256:bdf81f5b7f1c879ac920df53588a15129b2ac71d9492e8c2fc34ce636a5373fb
+runtime_sonic_commit: 0a87181c9106d0e49293400714b157676e0ec664
 base_checkpoint: nvidia/GEAR-SONIC/sonic_release/last.pt
+base_model_revision: 9c0ff22b4ffec27c5392e8e284eb2f2df7a5b4e2
+base_checkpoint_size_bytes: 469418283
+base_checkpoint_sha256: e6bdab3f64a39336b3d41877d4f497d05f58af275f288ec0e6746c283ded8909
+base_config_size_bytes: 28331
+base_config_sha256: f08187795fa16a839a28bc1c18e0555d38d9420e03733744341cdcb56ab629c7
 config: manager/universal_token/all_modes/sonic_release
 reference_mode: g1
 smpl_motion_file: dummy
-seed: 42
-learning_rate: 2.0e-5
-checkpoint_ladder_iterations: [5, 25, 100, 250, 500]
-first_cloud_run:
+training_seed: 42
+actor_learning_rate: 2.0e-5
+checkpoint_ladder_iterations: [5, 500, 2000]
+smoke_num_envs: 64
+main_num_envs: 512
+regular_checkpoint_frequency: 1000000
+rolling_checkpoint_frequency: 5
+max_walltime: 8h
+selection_seed: 42
+final_test_seeds: [101, 202, 303]
+render_seed: 303
+cloud:
   gpu: NVIDIA-L40S
-  num_envs: 1024
+  use_spot: false
   headless: true
   use_wandb: false
+selection_thresholds:
+  max_stock_success: 0.75
+  min_stock_mpjpe_l_mm: 50.0
+  min_hero_success_delta: 0.25
+  min_hero_mpjpe_improvement_fraction: 0.10
+  max_retention_success_drop: 0.1666666667
+  max_retention_mpjpe_increase_fraction: 0.15
 selection_rule: >-
-  Maximize held-out hero completion and minimize local MPJPE; reject a checkpoint if
-  stand/turn retention regresses materially. Continue past a ladder gate only when the
-  frozen held-out score improves.
+  Maximize selection-validation hero completion and minimize local MPJPE; reject a
+  checkpoint unless it clears the frozen hero-improvement and stand/turn-retention
+  thresholds. Freeze the winner before evaluating stock and selected policies on the
+  untouched final-test split.

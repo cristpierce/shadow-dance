@@ -1,15 +1,19 @@
 # --- Capture + intermediate motion data -------------------------------------
 # Raw video and the SMPL/retarget intermediates are large and regenerable.
-# The curated dataset ships to Hugging Face, not here.
+# The small frozen train/validation/test bundle is explicitly committed below.
 data/raw/
 data/video/
 data/smpl/
 data/retarget/
 *.mp4
+!media/reference-kinematic.mp4
 *.mov
 *.avi
 *.npz
 *.pkl
+!data/generated/train/*.pkl
+!data/generated/heldout/*.pkl
+!data/generated/test/*.pkl
 
 # --- Training outputs --------------------------------------------------------
 checkpoints/
@@ -27,6 +31,7 @@ __pycache__/
 .venv/
 venv/
 .env
+.runtime/
 *.egg-info/
 .ipynb_checkpoints/
 

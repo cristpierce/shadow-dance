@@ -1,195 +1,157 @@
-# Shadow Dance — Ghost Trial 03 (SuperSONIC Challenge)
+# Shadow Dance experiment specification
 
-> **August 13 update:** use the
-> [deadline-focused submission improvement plan](../docs/research/2026-08-13-supersonic-submission-improvement-plan.md)
-> as the current source of truth where it conflicts with this original design, especially
-> for data format, BONES-SEED usage, evidence gates, and schedule.
+- **Challenge:** Ultimate Bots Trial 03, SuperSONIC
+- **Team:** SELTZER
+- **Track:** Performance Arts
+- **Robot/policy:** Unitree G1, NVIDIA GEAR-SONIC
+- **Status:** reference/data pipeline complete; stock-policy baseline awaits authorized
+  Isaac/Nebius access
+- **Deadline:** 2026-08-16 23:59 PT
 
-**Status:** 22-sequence synthetic reference set and QA complete; stock-policy baseline pending Isaac
-**Deadline:** Aug 16 2026, 11:59 PM PDT — **internal target: submit Aug 15**
-**Track:** Performance Arts (confirmed in the portal on August 13)
-**Entry:** one hero move + full phrase demo
+This is the current experiment contract. Historical capture, SMPL, and BONES-SEED ideas
+were discarded before training and are not part of the submission dataset or claim.
 
----
+## 1. Falsifiable claim
 
-## 1. The claim
+Teach stock SONIC a single readable move it has not already mastered: the **Shadow
+Partner Dip**. The G1 establishes an absent-partner ballroom frame, steps back and
+pivots, transfers its weight into an unsupported off-axis dip, holds the pose, then
+recovers without partner counterweight, hand support, or floor contact.
 
-Teach a Unitree G1 the **solo partner-dance lead** — Texas two-step / swing performed
-without a follow. Hero move: **the shadow dip**, a deep asymmetric lean with large
-centre-of-mass excursion, held and recovered with no partner counterweight.
+The entry succeeds only if all of the following are true:
 
-Why it's a good claim:
+1. Stock SONIC shows a measured novelty gap on the frozen selection-validation family.
+2. A fine-tuned checkpoint materially improves that family under preregistered gates.
+3. Stand/turn retention remains within the preregistered regression bounds.
+4. The frozen winner improves an independently parameterized final-test family across
+   three simulator seeds.
+5. The exact selected checkpoint exports as a coherent five-graph SONIC ONNX bundle and
+   every graph passes checker, load, and finite CPU inference probes.
 
-- **Original.** Stock SONIC has generic dance in its training distribution, but not
-  lead-frame partner dance, and not a dip. The arm frame held for an absent partner is
-  what makes it read as partner dance rather than freestyle.
-- **Tractable.** A *solo* dip has no external contact and no partner load, so there is
-  nothing to model beyond the robot's own balance. Easier in sim than it looks.
-- **Aligned with the benchmark.** Two-step is rhythmic weight-transfer locomotion.
-  WBT-Bench includes a fundamentals check on walking and turning, so the surrounding
-  phrase reinforces the objective score instead of fighting it.
+If stock already masters the validation family, the current motion is not claimed as a
+new skill and training stops. If no candidate clears the gates, no winner is published.
 
-## 2. Hard constraints
+## 2. Owned data contract
 
-| Constraint | Value | Consequence |
-|---|---|---|
-| Compute budget | $50 Nebius (~15–25 GPU-hr) | One real fine-tune. No from-scratch training. |
-| Docs recommend | 64+ GPUs, 100K iters to converge | We are doing a *short* fine-tune off `sonic_release/last.pt`. |
-| Local GPU | RTX 3060 Ti, 8 GB VRAM, 32 GB RAM | QA and smoke tests only (`num_envs` 4–16). Not training. |
-| Training OS | Ubuntu 22.04+, CUDA 12.x, Python 3.11 | **Day-1 risk if the gaming PC is Windows.** See §7. |
-| Calendar | 14 days | Capture must finish by Aug 9. |
+`shadow-dip-v1` contains 26 team-authored procedural G1 sequences:
 
-**The strategy that follows from this:** the dataset is the submission. Compute is fixed
-and small; the only lever we control is data quality and curation.
+| Split | Count | Purpose |
+|---|---:|---|
+| Train hero dips | 12 | Direction, amplitude, tempo, hold, and step-geometry variation |
+| Train rehearsal | 6 | Stand, squat, sway, and torso-turn retention rehearsal |
+| Selection validation | 4 | Novelty gate and candidate selection only |
+| Final test | 4 | First policy evaluation after the winner is frozen |
 
-## 3. Pipeline
+The keyframed artistic trajectory is solved against NVIDIA's pinned G1 MJCF with
+MuJoCo leg inverse kinematics. Source CSVs, SONIC-ready PKLs, split lists, generator
+parameters, validation results, upstream identity, and SHA-256 hashes are committed.
 
-Config is **`sonic_release`** (encoders: G1, teleop, SMPL). Not `sonic_bones_seed` — the
-SOMA/BVH encoder needs 64+ GPUs, which rules out the entire BVH route.
+No BONES-SEED motion, human video, SMPL body data, or third-party dance asset is used.
+The official `smpl_motion_file=dummy` path is deliberate: training uses the G1 motion
+library without inventing paired human data.
 
-Fine-tuning takes **two paired motion libraries**:
+The reference validator must pass joint limits, foot IK, velocity, acceleration, floor,
+planted-foot, support-margin, and self-contact checks. Reference playback proves only
+that the target is coherent; it is never presented as policy execution.
 
-```
-++manager_env.commands.motion.motion_lib_cfg.motion_file=<robot_filtered>    # G1 retargeted
-++manager_env.commands.motion.motion_lib_cfg.smpl_motion_file=<smpl_filtered> # SMPL human
-```
+## 3. Frozen training contract
 
-Every clip must exist in both. So the road is **SMPL** — which is what monocular
-video-to-motion models emit natively.
+- Base model: `nvidia/GEAR-SONIC`, revision
+  `9c0ff22b4ffec27c5392e8e284eb2f2df7a5b4e2`.
+- Base checkpoint SHA-256:
+  `e6bdab3f64a39336b3d41877d4f497d05f58af275f288ec0e6746c283ded8909`.
+- Runtime: `npa-sonic:0.1.2` L40S image at digest
+  `sha256:bdf81f5b7f1c879ac920df53588a15129b2ac71d9492e8c2fc34ce636a5373fb`.
+- Runtime SONIC commit: `0a87181c9106d0e49293400714b157676e0ec664`.
+- Candidate budgets: independent 5, 500, and 2,000 iteration fine-tunes from the same base.
+- Seed for selection evaluation: 42.
+- No W&B dependency, no hidden data, and no training/test overlap.
+- One on-demand Nebius L40S worker with an 8-hour hard wall-time guard.
 
-```
-video (multi-cam)
-  → SMPL sequences            [Studio import  OR  GVHMR / WHAM]
-  → retarget to G1 29-DoF     [→ Bones-SEED-style CSV, 120 fps]
-  → motion_lib PKL            [convert_soma_csv_to_motion_lib.py --fps 30 --fps_source 120]
-  → replay QA                 [++replay=True — LOCAL, free]
-  → mix with BONES-SEED       [see §5]
-  → fine-tune                 [Nebius, +checkpoint=sonic_release/last.pt]
-  → eval + ONNX export        [local]
-```
+The five-iteration run is also the data/environment smoke. Each surviving candidate is
+packaged with its original config and checkpoint hash before evaluation. Longer stages
+may be added only by an explicit documented decision after inspecting genuine evidence;
+they are not silently included in the headline comparison.
 
-Note: `gear_sonic/data_process/` scripts **do not require Isaac Lab** and run on any
-machine with `pip install -e gear_sonic/`. Conversion work can happen on the Mac.
+## 4. Selection and test protocol
 
-## 4. Capture protocol
+### Novelty gate
 
-Target: **20–40 curated clips, 2–6 s each.** Small on purpose — matched to the budget.
+Stock must have validation success at or below 75%, or local MPJPE at or above 50 mm.
+The stock report and raw metrics are hash-bound into `novelty.json`.
 
-### Rig
-- 2–3 static cameras on tripods at ~0°, 45°, 90°. Never directly behind.
-- 60 fps minimum; 120 fps for spins and the dip.
-- **Lock exposure and focus.** Auto-exposure hunting wrecks pose estimation.
-- Fast shutter (1/250 s+) — motion blur is the enemy of HMR.
-- Bright, even, diffuse light. No windows or lamps behind you.
-- Plain background that contrasts with your clothing.
-- **Fitted clothing.** Baggy jeans and loose western shirts are the single most common
-  cause of bad SMPL fits. This conflicts with normal two-step attire — dress for the
-  tracker, not the dance floor.
-- Full body in frame with headroom and floor visible. Tape-mark the floor so your feet
-  never leave frame.
+### Candidate eligibility
 
-### Per take
-1. Loud clap at the head of every take (multi-cam sync).
-2. Two-second A-pose (arms ~45°, feet shoulder width) — clean init and scale reference.
-3. Say the move name out loud (free labelling).
-4. Fixed metronome BPM. Two-step ~170–190; swing ~136–180.
+A candidate must satisfy both:
 
-### Move list
-Each move isolated, 8–12 clean reps, with a beat of stillness before and after.
+- hero improvement: at least +25 percentage points success, or no success regression
+  plus at least 10% local-MPJPE improvement; and
+- retention: no more than 1/6 success loss and no more than 15% local-MPJPE increase.
 
-1. Basic two-step, traveling
-2. Rock step / triple step
-3. Inside turn prep + travel
-4. Outside turn
-5. Lead's own 360° spin
-6. **Dip: entry → hold → recover** (hero)
-7. Transitions between the above
-8. **Neutral take** — plain walking, turning in place, standing. Cheap insurance for the
-   WBT-Bench fundamentals check.
-9. One continuous 30–45 s freestyle phrase, for the demo video.
+Eligible checkpoints are ranked by validation success, validation MPJPE, retention
+success, then retention MPJPE. `selection.json` records the frozen winner, every source
+summary hash, and the winning checkpoint's byte size and SHA-256.
 
-### Shooting the dip specifically
-- Break into three phases and shoot each separately: entry (weight commit), hold
-  (static 2–3 s), recovery.
-- Shoot the **hold as a static pose** too — trivially easy for the tracker, gives a clean
-  target keyframe.
-- Shoot at **three amplitudes** (shallow / medium / full). If full exceeds G1's joint
-  limits you already have fallbacks and don't reshoot.
-- Shoot every move at three tempos (50%, 75%, performance). Slow versions retarget more
-  reliably *and* give a natural training curriculum.
-- **Keep the arm frame.** It's what makes it read as partner dance, and it's what a
-  3-point teleop rig would drive.
+### Untouched final test
 
-## 5. Fine-tune set — the catastrophic-forgetting problem
+Only after `selection.json` exists are stock and the selected checkpoint evaluated on
+the four final-test motions at seeds 101, 202, and 303. Upstream SONIC truncates one
+evaluation result to its unique-motion inventory, so the pipeline runs three distinct
+evaluator invocations per policy rather than pretending extra environments are repeats.
 
-WBT-Bench scores walking and turning fundamentals. Fine-tuning on nothing but dips will
-degrade locomotion and tank the objective score while acing the subjective one.
+The headline therefore contains 12 trials per policy. `final-comparison.json` binds the
+selection report, exact motion inventory, exact seed inventory, every per-seed summary,
+and the raw metrics chain. The final test never changes the selected checkpoint.
 
-The fine-tune set must be a **mix**: custom dance clips plus a rehearsal buffer of
-general BONES-SEED motion.
+## 5. Artifact and video contract
 
-- Starting point: **~25% custom / ~75% BONES-SEED**, sampled to include locomotion.
-- This is an experiment, not a known constant. Sweep it if budget allows.
-- **Signal to watch:** if `tracking_anchor_pos` or the walking/turning rewards fall while
-  dip tracking improves, the custom ratio is too high.
-- Document the sweep. This is exactly the "pipeline cleanliness" the rubric rewards.
+The selected release contains:
 
-## 6. Targets
+- the exact `last.pt` and training `config.yaml` named by `selection.json`;
+- five same-prefix SONIC graphs: SMPL, G1, teleop, shared encoder, and G1 decoder;
+- `model_config.yaml`, graph I/O metadata, ONNX checker/runtime results, and hashes;
+- selection, final comparison, compact summaries, raw logs/metrics, and environment
+  identity; and
+- the NVIDIA Open Model License text and required attribution.
 
-| Metric | Target | Source |
-|---|---|---|
-| `success_rate` | > 0.97 | eval_agent_trl.py |
-| `mpjpe_l` | < 30 mm | eval_agent_trl.py |
-| `mpjpe_g` | < 200 mm | eval_agent_trl.py |
-| `rewards/total` | 3.0+ | W&B |
-| `rewards/anchor_pos_err` | < 0.15 m | W&B |
-| `rewards/body_pos_err` | < 0.10 m | W&B |
+The `_g1.onnx` graph is the portal nominee. Publication refuses checkpoint, raw metric,
+aggregate, ONNX, release-checksum, or media-manifest drift.
 
-Realistically a short fine-tune will not hit full-convergence numbers. What matters is
-**delta vs the stock checkpoint on our dance clips**, with fundamentals held roughly flat.
-Measure the stock baseline on our clips first so the before/after is quantitative, not
-just visual.
+The judge-facing video is built only from real simulator output after final evaluation:
 
-## 7. Risks
+1. a clearly labelled team-authored kinematic target that says it is not policy output;
+2. matched, fixed-camera stock and selected renders for all four test motions at display
+   seed 303; and
+3. frozen aggregate success/MPJPE numbers covering all 12 trials per policy.
 
-| Risk | Severity | Mitigation |
-|---|---|---|
-| Gaming PC is Windows; stack needs Ubuntu 22.04+ | **High** | Dual-boot or WSL2 on day 1. Fallback: MuJoCo `visualize_motion.py` locally for QA, Isaac Lab only on Nebius. |
-| 8 GB VRAM below Isaac Sim comfort | Medium | Headless, `num_envs` 4–16. Rendering is the VRAM hog. |
-| Dip exceeds G1 waist/ankle range | Medium | Amplitude sweep already captured. Retarget → replay → scale down. Document the envelope — it's a finding, not a failure. |
-| Monocular HMR fails on fast spins | Medium | Multi-cam; slow-tempo takes; 120 fps. |
-| Catastrophic forgetting | Medium | §5 mixed set. |
-| $50 burns out mid-run | Medium | Prove the entire path on `sample_data` locally first. Reserve ~30% of credits for one recovery run. |
-| **Quest 2 teleop demo** | **Low value / high cost** | Documented VR path is **PICO 4 Ultra + XRoboToolkit**, or CloudXR — *not* Quest. The teleop encoder (head + 2 wrists) is real, but the Quest plumbing is not provided. **Stretch goal only. Do not let it touch the critical path.** |
+When one run ends first, the shorter panel freezes and displays `RUN ENDED`; footage is
+not cut around falls or resets. `video-manifest.json` hashes the reference, every uncut
+source clip, the final comparison, and the edited output.
 
-## 8. Licensing
+## 6. Compute and failure policy
 
-- Own footage → clean. Do not use third-party dance video.
-- Check BONES-SEED terms before redistributing any derived clips.
-- SMPL body model has its own non-commercial license — check before publishing the dataset.
-- Winners grant Ultimate Bots the right to run the winning skill on real robots.
+The exact target currently prices at $1.747 per L40S worker-hour on demand. The 8-hour
+worker ceiling is about $13.98 before the small controller cost, leaving room inside a
+$50 challenge credit for one diagnosed recovery run. On-demand is preferred near the
+deadline because interruption would cost more evidence time than spot savings justify.
 
-## 9. Schedule
+The workflow uploads checkpoints, configs, logs, summaries, and evidence incrementally
+to a run-scoped S3 prefix. On failure it uploads the recoverable state before exit. A
+rerun syncs unchanged hash-matching objects rather than duplicating them.
 
-| Date | Work |
-|---|---|
-| Aug 2 | Portal housekeeping. Toolchain: Ubuntu, Isaac Lab, `check_environment.py --training`. |
-| Aug 3 | Prove the path end-to-end on NVIDIA `sample_data`: replay → smoke train → eval → ONNX export. **No custom data yet.** |
-| Aug 4 | Studio-vs-OSS bake-off on one 10 s test clip. Pick a pipeline. |
-| Aug 5–7 | Capture sessions. Reshoot window Aug 8–9. |
-| Aug 7–9 | video → SMPL → retarget → PKL. Replay QA loop. Baseline the stock checkpoint on our clips. |
-| Aug 9–10 | Build the mixed fine-tune set. |
-| Aug 10–13 | Nebius fine-tune. Main run + one recovery run held in reserve. |
-| Aug 13–14 | Eval, ONNX export, before/after renders. |
-| Aug 14–15 | Writeup, HF uploads, GitHub repo, **submit Aug 15**. |
-| Aug 16 | Buffer only. Never plan to submit on deadline day. |
+The workflow is not launchable until the entrant explicitly accepts the applicable
+NVIDIA Omniverse, Isaac Sim materials, and software licences. It never interprets a
+generic project approval as licence acceptance.
 
-## 10. Submission checklist (7 portal fields)
+## 7. Reporting and safety
 
-- [ ] Track → **Performance Arts**
-- [ ] Project name — the move
-- [ ] Writeup — what, why it's hard, how
-- [ ] GitHub repo — code + training config
-- [ ] ONNX policy — Hugging Face
-- [ ] Dataset — Hugging Face
-- [ ] Sim video — before and after
+- Never fill a result placeholder from an estimate, beauty render, reference playback,
+  train metric, or validation metric.
+- Report stock and selected failures as well as successes.
+- State that results are simulation-only; do not claim real-G1 validation.
+- A physical run requires vendor limits, an operator emergency stop, a clear fall zone,
+  and independent safety review.
+- Public dataset/model links and hashes must be tested while logged out before portal
+  submission.
+- The Ultimate Bots entry must be moved from DRAFT to submitted before the deadline by
+  an authenticated team member.

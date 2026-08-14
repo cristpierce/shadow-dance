@@ -10,13 +10,19 @@
   },
   "license": "Apache-2.0",
   "contains_bones_seed": false,
-  "sequence_count": 22,
+  "sequence_count": 26,
   "splits": {
     "heldout": [
       "shadow_dip_left_heldout_19",
       "shadow_dip_right_heldout_20",
       "shadow_dip_left_heldout_21",
       "shadow_dip_right_heldout_22"
+    ],
+    "test": [
+      "shadow_dip_left_test_23",
+      "shadow_dip_right_test_24",
+      "shadow_dip_left_test_25",
+      "shadow_dip_right_test_26"
     ],
     "train": [
       "shadow_dip_left_train_01",
@@ -90,8 +96,8 @@
       "files": {
         "motion_lib": "train/shadow_dip_left_train_01.pkl",
         "source_csv": "csv/train/shadow_dip_left_train_01.csv",
-        "motion_lib_sha256": "a043ff0ebe9b1719b2d1d347e2e53e3c31b13f2b7637485748e5d86d29c4af21",
-        "source_csv_sha256": "43cbe04292eaa1de9b0ae5f140319a29b0edf722f718d0d8504578e0fa1e25ce"
+        "motion_lib_sha256": "376bcfbfab1fb262cefdb46ed1075956f15ae4123c0a50acf33249b400d93d91",
+        "source_csv_sha256": "1c3902e24bd9893f4a973a923c61375c1cd4a5cf753acfa90390a89ad06e335c"
       }
     },
     {
@@ -144,8 +150,8 @@
       "files": {
         "motion_lib": "train/shadow_dip_left_train_02.pkl",
         "source_csv": "csv/train/shadow_dip_left_train_02.csv",
-        "motion_lib_sha256": "d7aed8ed593d92609be1634990b13cef885df44f3ebfebce6eaa2306db0f0c13",
-        "source_csv_sha256": "c7582dce764c922980c7de1d59fe786a6910917a6d5652a6620bc5390a550fd3"
+        "motion_lib_sha256": "acbc7b314f747e92b40453a28b9182c7b0521aa61bc426d441f667e6a9c5b705",
+        "source_csv_sha256": "3a4bb14dc845fb8cf1e215ba0e10b8769697de18f0189cc455df1f7b4f9b2fc5"
       }
     },
     {
@@ -198,8 +204,8 @@
       "files": {
         "motion_lib": "train/shadow_dip_left_train_03.pkl",
         "source_csv": "csv/train/shadow_dip_left_train_03.csv",
-        "motion_lib_sha256": "381aedfc8eef3a633d182a679df2e830da9508fdb4e8f2542f96c8059c5a79f7",
-        "source_csv_sha256": "4a742747b3ce52b721001aeb9b13e5e274ce3e9ecc2d175c98269e9285ebb2e7"
+        "motion_lib_sha256": "3bde873410ede2ba077fe4fb86a9a424360c0dd629f185286099ee97c3528c5b",
+        "source_csv_sha256": "d1bf33302ce1c8ad6630d6a257500ef1edf81edb1296cfa667b442c51eb53249"
       }
     },
     {
@@ -252,8 +258,8 @@
       "files": {
         "motion_lib": "train/shadow_dip_right_train_04.pkl",
         "source_csv": "csv/train/shadow_dip_right_train_04.csv",
-        "motion_lib_sha256": "6a020ee3ef6dff8ada0ff0d2b1e8cc3cd25bff901506f54f4543ba2f0f4638c6",
-        "source_csv_sha256": "92f36bf8291a4e7b5e9a0ab2b9950a055031c43001a7f349fa83380062749efe"
+        "motion_lib_sha256": "dc6f3235a6ea992a688f2d523513687543331225b1a72520343e39379fb291cc",
+        "source_csv_sha256": "28ce11f51868961c8695bc69bca6ef102a08ddac390b7badeb0a822559fe055d"
       }
     },
     {
@@ -306,8 +312,8 @@
       "files": {
         "motion_lib": "train/shadow_dip_right_train_05.pkl",
         "source_csv": "csv/train/shadow_dip_right_train_05.csv",
-        "motion_lib_sha256": "68986af308e2a98367fdedc49a670470a44e9c9eb80a5b5d568f1c57f5a27c2c",
-        "source_csv_sha256": "19a592957c2e02ef6245cd8ea1bef42879ca9c7d3a7463d32c2e6d2bf0849c33"
+        "motion_lib_sha256": "ed8e3740224e8c589a279e71748917e74c2abadc0e382e639495ac5f9dce6804",
+        "source_csv_sha256": "383a74496533e992817acd381af17122b2ea1604589184f74b5538fb94fbe5b6"
       }
     },
     {
@@ -360,8 +366,8 @@
       "files": {
         "motion_lib": "train/shadow_dip_right_train_06.pkl",
         "source_csv": "csv/train/shadow_dip_right_train_06.csv",
-        "motion_lib_sha256": "fa4e297212b0227269f497dc7d2bf7dec919a1ae39958d914cb68999938c4bfd",
-        "source_csv_sha256": "3d600059306ccb1f5d30582f17ff15f29a9ea74c3c6295156d1409be539251dc"
+        "motion_lib_sha256": "c20582d98f72c784286a9f8acc35ee3f37641609984b6f1f1b16d2bca3429919",
+        "source_csv_sha256": "df69b16b80b9bc730a1a4577b6922444b936a031ba4aa954735ed36c563170c1"
       }
     },
     {
@@ -414,8 +420,8 @@
       "files": {
         "motion_lib": "train/shadow_dip_left_train_07.pkl",
         "source_csv": "csv/train/shadow_dip_left_train_07.csv",
-        "motion_lib_sha256": "7f5b180f867de8807e7c9044320052fd90c6693608e1a3d43b52f12212f0f329",
-        "source_csv_sha256": "d540873d3898f1bb50829b56650fc7c76df6523e923bf791c43266431d74dc82"
+        "motion_lib_sha256": "780cc3781f65b6bfce2e61f8826de2609b3f3697b871662cdc06ab1b607aef7a",
+        "source_csv_sha256": "a75c0973949264561b107b5886782a45075a24d20171fbe09533514f67febd16"
       }
     },
     {
@@ -468,8 +474,8 @@
       "files": {
         "motion_lib": "train/shadow_dip_right_train_08.pkl",
         "source_csv": "csv/train/shadow_dip_right_train_08.csv",
-        "motion_lib_sha256": "b53d396ea8dc9cf5fea697fe9085ca3a28808f2ad8417e16034464e060956cdd",
-        "source_csv_sha256": "08485113076227d5967a219ca3362fdee0a68ade81dab08c8b796232e8acfe8a"
+        "motion_lib_sha256": "9fd1f3b5aeeb69c8474f249b03a3211b9ff206c2635d88440f4d4bbe493cc033",
+        "source_csv_sha256": "ca7d55933676ff39b707490ec14962b64a1a1b929bf82abf916befe754db4507"
       }
     },
     {
@@ -522,8 +528,8 @@
       "files": {
         "motion_lib": "train/shadow_dip_left_train_09.pkl",
         "source_csv": "csv/train/shadow_dip_left_train_09.csv",
-        "motion_lib_sha256": "20ce4bf21858b69ac26ac0bb88953c803691c6185dd41daf1de7d9d20ed5bbfd",
-        "source_csv_sha256": "0896a832fa05cad7fdbc0ad10b10f95e8d52cae95f3f0d4d4883519282f5c44d"
+        "motion_lib_sha256": "2c628a139ae24e5d2368ec463f2ceb85d343b82b5fa0e8bc91eaf981451dbaf9",
+        "source_csv_sha256": "2cf99b389d005798430ec4025df7abaa5b89c3c93284db3f0f85ee4e60aa96de"
       }
     },
     {
@@ -576,8 +582,8 @@
       "files": {
         "motion_lib": "train/shadow_dip_right_train_10.pkl",
         "source_csv": "csv/train/shadow_dip_right_train_10.csv",
-        "motion_lib_sha256": "c747b9a6658354abfaa0b819ce078fe9bfa5c180d96945068f19e87fff267f55",
-        "source_csv_sha256": "8dd08f9e933f2ea05491cae610c40ffa86e315f813114e8ec671f548c3cf2269"
+        "motion_lib_sha256": "bd8b4028423352ed06b986da2af73fe3579aad306d5bff8b568a7523730b6ea5",
+        "source_csv_sha256": "b97594e398bb8de9cfa4e6644adf1dcf8cdf34b6ba2cb199c11b8a0ecf517b03"
       }
     },
     {
@@ -630,8 +636,8 @@
       "files": {
         "motion_lib": "train/shadow_dip_left_train_11.pkl",
         "source_csv": "csv/train/shadow_dip_left_train_11.csv",
-        "motion_lib_sha256": "08d1c82c0d1df7b823673423873a6376cc5b912e8107292bca673b49d5a765fb",
-        "source_csv_sha256": "0b42bd69c96e02a034a42ddca137f2c9e4a8447ed7724b7eb8dabf4d8103f926"
+        "motion_lib_sha256": "ecd304a3b2aca81f2d0c1d8124155e75c9bb740d9c1bccc90881a052e6ea7b24",
+        "source_csv_sha256": "5b54ff2b656b3ae656f7c509e4951856e002af4e94539148d17c2bce0d3700ea"
       }
     },
     {
@@ -684,8 +690,8 @@
       "files": {
         "motion_lib": "train/shadow_dip_right_train_12.pkl",
         "source_csv": "csv/train/shadow_dip_right_train_12.csv",
-        "motion_lib_sha256": "81c4db799832d3c1ae99a246ef9239419321cd2cb9229b3840256052890344a6",
-        "source_csv_sha256": "774109e0f5e64c9b15cd67aa1a5d31d35b071b3457890161473a42bd894c5194"
+        "motion_lib_sha256": "6af7c00bea1c38827b4db191a0508f53a7e697eec396a0793c875531999b4d9f",
+        "source_csv_sha256": "1c09baa84db983ad89b12d95f0f7f63016f0167b267b6ea97a8051d0fee2d907"
       }
     },
     {
@@ -1062,8 +1068,8 @@
       "files": {
         "motion_lib": "heldout/shadow_dip_left_heldout_19.pkl",
         "source_csv": "csv/heldout/shadow_dip_left_heldout_19.csv",
-        "motion_lib_sha256": "78f7a34f411c4ae1b443248b07a8b9af1e2255e92b1268795d551b897c9ebd99",
-        "source_csv_sha256": "cf8cb22e49e80be125409923666e56b58ff6c4445c69d0828862c3302aaedc48"
+        "motion_lib_sha256": "1a6641979d803a3e2a9fa9ecf7b23bd29d53391edcbd425d6efaade0a28dd5c7",
+        "source_csv_sha256": "235f149f9aeb071dc544e911d27eacf214021f6e2420188653284106ed8f7509"
       }
     },
     {
@@ -1116,8 +1122,8 @@
       "files": {
         "motion_lib": "heldout/shadow_dip_right_heldout_20.pkl",
         "source_csv": "csv/heldout/shadow_dip_right_heldout_20.csv",
-        "motion_lib_sha256": "da5e1dc4b7e1b4ddd90c9294bb0d158fdf5a546c9bc4205a36852a7aa8fc8516",
-        "source_csv_sha256": "d44d8bd279f2abf7280ecc7c129442e95bb76a63e095a3cfc58687ce489890db"
+        "motion_lib_sha256": "f275ce038ef8e33e8def6d3b581be6cdef11772586a3f7cc5233558b92136265",
+        "source_csv_sha256": "9f64cb3cf308038992b2759842bae1d87ee3327769062251b30518f5687f33d6"
       }
     },
     {
@@ -1170,8 +1176,8 @@
       "files": {
         "motion_lib": "heldout/shadow_dip_left_heldout_21.pkl",
         "source_csv": "csv/heldout/shadow_dip_left_heldout_21.csv",
-        "motion_lib_sha256": "6371c92d384c1b4f4834008ca40e398e54052844638d5a32a247809b66540ebc",
-        "source_csv_sha256": "9306eccce052c13055450ae9225bf9b69c3b0fd823f9a6ff34754ab7042186f7"
+        "motion_lib_sha256": "aa7b3a3c467b38b47353aa3dbe95415017c5ae7ab4b5b1964145ee1e0d5d77e7",
+        "source_csv_sha256": "98cb1437fcec8ef3fc1119d19e796c7ef2ec67a1da6de4cc35c8d74846cf0494"
       }
     },
     {
@@ -1224,8 +1230,224 @@
       "files": {
         "motion_lib": "heldout/shadow_dip_right_heldout_22.pkl",
         "source_csv": "csv/heldout/shadow_dip_right_heldout_22.csv",
-        "motion_lib_sha256": "2e32d31735f87237d3d4303c6fc1637a472352e03e0689228872b80006061400",
-        "source_csv_sha256": "6ff4042245cc09da783b66b1df9cd6f22ba1f9cbcb67f181151bf1e02578194c"
+        "motion_lib_sha256": "f43b423ac7bee93bceadcccdbfb755fae1452703c16edb887fb98f0b62d9bf16",
+        "source_csv_sha256": "6e5f9d30543275fc7fb820686944caed859b4eab6aa1378360c499dcc55afc6b"
+      }
+    },
+    {
+      "id": "shadow_dip_left_test_23",
+      "split": "test",
+      "kind": "shadow_dip",
+      "direction": "left",
+      "amplitude": 0.78,
+      "duration_s": 5.05,
+      "step_back_m": 0.142,
+      "step_width_m": 0.045,
+      "hold_s": 0.55,
+      "seed": 23,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 253,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.606
+        ],
+        "step_and_pivot": [
+          0.606,
+          1.414
+        ],
+        "descend": [
+          1.414,
+          2.424
+        ],
+        "hold": [
+          2.424,
+          2.974
+        ],
+        "recover": [
+          2.974,
+          4.343
+        ],
+        "settle": [
+          4.343,
+          5.05
+        ]
+      },
+      "ik_max_position_error_m": 0.0026075217848352643,
+      "ik_max_orientation_error_deg": 1.3764752452991096,
+      "files": {
+        "motion_lib": "test/shadow_dip_left_test_23.pkl",
+        "source_csv": "csv/test/shadow_dip_left_test_23.csv",
+        "motion_lib_sha256": "21e5da4b0a2baeb1f06580196a87a52991a20372ab6e0308ea024628c4fadf02",
+        "source_csv_sha256": "a2eb7405ab84e57d07d397da312f3b076ef3ada01c367826c47ba0f0bf6cd37e"
+      }
+    },
+    {
+      "id": "shadow_dip_right_test_24",
+      "split": "test",
+      "kind": "shadow_dip",
+      "direction": "right",
+      "amplitude": 0.86,
+      "duration_s": 4.95,
+      "step_back_m": 0.148,
+      "step_width_m": 0.058,
+      "hold_s": 0.51,
+      "seed": 24,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 249,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.594
+        ],
+        "step_and_pivot": [
+          0.594,
+          1.386
+        ],
+        "descend": [
+          1.386,
+          2.376
+        ],
+        "hold": [
+          2.376,
+          2.886
+        ],
+        "recover": [
+          2.886,
+          4.257
+        ],
+        "settle": [
+          4.257,
+          4.95
+        ]
+      },
+      "ik_max_position_error_m": 0.005466204665462524,
+      "ik_max_orientation_error_deg": 2.9171462203155363,
+      "files": {
+        "motion_lib": "test/shadow_dip_right_test_24.pkl",
+        "source_csv": "csv/test/shadow_dip_right_test_24.csv",
+        "motion_lib_sha256": "4fd83fc2f4dd9bf4b478b972a4491c2ac4fb2b3863f33e332ae9e2e9559bcd1d",
+        "source_csv_sha256": "fe3f3f8ad9a2f5d24b14a9f169d81b75f897b793856205c5d3464e4ecdba340a"
+      }
+    },
+    {
+      "id": "shadow_dip_left_test_25",
+      "split": "test",
+      "kind": "shadow_dip",
+      "direction": "left",
+      "amplitude": 0.98,
+      "duration_s": 5.45,
+      "step_back_m": 0.158,
+      "step_width_m": 0.047,
+      "hold_s": 0.65,
+      "seed": 25,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 273,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.654
+        ],
+        "step_and_pivot": [
+          0.654,
+          1.526
+        ],
+        "descend": [
+          1.526,
+          2.616
+        ],
+        "hold": [
+          2.616,
+          3.266
+        ],
+        "recover": [
+          3.266,
+          4.687
+        ],
+        "settle": [
+          4.687,
+          5.45
+        ]
+      },
+      "ik_max_position_error_m": 0.006122243392120507,
+      "ik_max_orientation_error_deg": 3.283545020177961,
+      "files": {
+        "motion_lib": "test/shadow_dip_left_test_25.pkl",
+        "source_csv": "csv/test/shadow_dip_left_test_25.csv",
+        "motion_lib_sha256": "6f3f0ab69f69a8254e95fe8e2eaffc8185b9bf663473b800d1312ad685716951",
+        "source_csv_sha256": "29e597b4354489b434a9d60063d40ae7c405931dc5489f803b6b14df30c6ce1d"
+      }
+    },
+    {
+      "id": "shadow_dip_right_test_26",
+      "split": "test",
+      "kind": "shadow_dip",
+      "direction": "right",
+      "amplitude": 0.9,
+      "duration_s": 4.85,
+      "step_back_m": 0.15,
+      "step_width_m": 0.062,
+      "hold_s": 0.56,
+      "seed": 26,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 243,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.582
+        ],
+        "step_and_pivot": [
+          0.582,
+          1.358
+        ],
+        "descend": [
+          1.358,
+          2.328
+        ],
+        "hold": [
+          2.328,
+          2.888
+        ],
+        "recover": [
+          2.888,
+          4.171
+        ],
+        "settle": [
+          4.171,
+          4.85
+        ]
+      },
+      "ik_max_position_error_m": 0.0066567046323804495,
+      "ik_max_orientation_error_deg": 3.568187806309022,
+      "files": {
+        "motion_lib": "test/shadow_dip_right_test_26.pkl",
+        "source_csv": "csv/test/shadow_dip_right_test_26.csv",
+        "motion_lib_sha256": "2a186cd65c1f9beac33aee3c6e869bd0a74011f05c10efd90096d7a271ee92c8",
+        "source_csv_sha256": "19b99cc95405f2e137f8e6417b43769540154859542e31536b6dc738ad105153"
       }
     }
   ]

@@ -15,8 +15,8 @@ cannot drift across machines.
 ## The five things only the entrant can do
 
 1. **Accept NVIDIA's terms in your own name.** Read the
-   [Omniverse Licence Agreement](https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-omniverse-license-agreement/),
-   [Isaac Sim additional terms](https://docs.isaacsim.omniverse.nvidia.com/latest/common/NVIDIA_Omniverse_License_Agreement.html),
+   [current Omniverse/AI product-specific terms](https://www.nvidia.com/en-us/agreements/enterprise-software/product-specific-terms-for-ai-products/),
+   [Isaac Sim Additional Software and Materials Licence](https://docs.isaacsim.omniverse.nvidia.com/latest/common/license-isaac-sim-additional.html),
    and [NVIDIA Software Licence Agreement](https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-software-license-agreement/).
    Then send this exact statement to the project operator:
 

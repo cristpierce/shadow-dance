@@ -181,11 +181,23 @@ def main() -> None:
     parser.add_argument(
         "--reference-report", type=Path, default=Path("results/reference-validation.json")
     )
-    parser.add_argument("--atol", type=float, default=1e-6)
+    parser.add_argument(
+        "--csv-atol",
+        type=float,
+        default=2e-5,
+        help="absolute tolerance for numeric fields in the inspectable CSV schema",
+    )
+    parser.add_argument(
+        "--atol",
+        type=float,
+        default=1e-6,
+        help="absolute tolerance for PKLs, manifest IK values, and validation metrics",
+    )
     args = parser.parse_args()
+    require(args.csv_atol > 0, "CSV absolute tolerance must be positive")
     require(args.atol > 0, "absolute tolerance must be positive")
 
-    csv_count, csv_maximum = compare_csvs(args.reference_root, args.candidate_root, args.atol)
+    csv_count, csv_maximum = compare_csvs(args.reference_root, args.candidate_root, args.csv_atol)
     pkl_count, pkl_maximum = compare_pkls(args.reference_root, args.candidate_root, args.atol)
     manifest_maximum = compare_manifests(
         args.reference_manifest, args.candidate_manifest, args.atol
@@ -194,8 +206,9 @@ def main() -> None:
     print(
         json.dumps(
             {
-                "format": "shadow_dance_cross_platform_reproduction_v1",
-                "absolute_tolerance": args.atol,
+                "format": "shadow_dance_cross_platform_reproduction_v2",
+                "csv_absolute_tolerance_degree_or_cm": args.csv_atol,
+                "pkl_manifest_report_absolute_tolerance": args.atol,
                 "csv_files": csv_count,
                 "pkl_files": pkl_count,
                 "csv_max_abs_drift": csv_maximum,

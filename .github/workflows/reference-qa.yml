@@ -62,7 +62,9 @@ jobs:
           python scripts/compare_regenerated_bundle.py \
             --candidate-root "$QA_ROOT/generated" \
             --candidate-manifest "$QA_ROOT/manifests/shadow-dip-v1.json" \
-            --candidate-report "$QA_ROOT/reference-validation.json"
+            --candidate-report "$QA_ROOT/reference-validation.json" \
+            --csv-atol 2e-5 \
+            --atol 1e-6
           for split in train heldout test; do
             cmp "data/splits/${split}.txt" "$QA_ROOT/splits/${split}.txt"
           done

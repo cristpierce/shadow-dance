@@ -23,11 +23,12 @@ test is the exact unsupported sequence. After selecting the checkpoint on separa
 validation motions, we opened an untouched final-test family. Across 12 matched test
 trials per policy (4 motions × 3 simulator seeds), stock SONIC completed **[x/12]**
 versus **[y/12]** for our selected checkpoint;
-local MPJPE changed from **[a] mm** to **[b] mm**. Stand/turn retention changed by
+local MPJPE changed from **[a] mm** to **[b] mm**. A 10-motion fundamentals suite,
+including real forward walking and heading turns in both directions, changed by
 **[z] points**, so the improvement is not purchased by discarding basic control.
 
-Our 26-sequence dataset is team-authored and reproducible: 12 training dips spanning
-direction, depth, tempo, hold, and step geometry; 6 conservative rehearsal motions;
+Our 30-sequence dataset is team-authored and reproducible: 12 training dips spanning
+direction, depth, tempo, hold, and step geometry; 10 conservative rehearsal motions;
 4 independently parameterized validation dips; and 4 independently parameterized
 final-test dips. MuJoCo inverse kinematics pins the feet against NVIDIA's official G1
 model. A public manifest records every specification, phase, upstream commit, IK

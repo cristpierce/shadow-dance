@@ -87,8 +87,8 @@ trap persist_failure EXIT
 find "${PROJECT_ROOT}/data/generated/train" -maxdepth 1 -type f -name 'retention_*.pkl' \
   -exec ln -sf '{}' "${RUNTIME_ROOT}/retention/" \;
 grep '^retention_' "${PROJECT_ROOT}/data/splits/train.txt" > "${RUNTIME_ROOT}/retention.txt"
-if [[ "$(wc -l < "${RUNTIME_ROOT}/retention.txt")" -ne 6 ]]; then
-  echo "Expected exactly six retention motion keys." >&2
+if [[ "$(wc -l < "${RUNTIME_ROOT}/retention.txt")" -ne 10 ]]; then
+  echo "Expected exactly ten retention motion keys." >&2
   exit 2
 fi
 
@@ -167,7 +167,7 @@ run_eval() {
 run_eval "${BASE_CHECKPOINT}" stock heldout "${PROJECT_ROOT}/data/generated/heldout" 4 42
 upload_path "${RUN_ROOT}/eval/stock-heldout-seed-42" eval/stock-heldout-seed-42
 upload_path "${RUN_ROOT}/summaries/stock-heldout-seed-42.json" summaries
-run_eval "${BASE_CHECKPOINT}" stock retention "${RUNTIME_ROOT}/retention" 6 42
+run_eval "${BASE_CHECKPOINT}" stock retention "${RUNTIME_ROOT}/retention" 10 42
 upload_path "${RUN_ROOT}/eval/stock-retention-seed-42" eval/stock-retention-seed-42
 upload_path "${RUN_ROOT}/summaries/stock-retention-seed-42.json" summaries
 novelty_status=0
@@ -236,7 +236,7 @@ for iterations in "${ladder_values[@]}"; do
     "eval/${label}-heldout-seed-42"
   upload_path "${RUN_ROOT}/summaries/${label}-heldout-seed-42.json" summaries
   run_eval "${candidate_checkpoint}" "${label}" retention \
-    "${RUNTIME_ROOT}/retention" 6 42
+    "${RUNTIME_ROOT}/retention" 10 42
   upload_path "${RUN_ROOT}/eval/${label}-retention-seed-42" \
     "eval/${label}-retention-seed-42"
   upload_path "${RUN_ROOT}/summaries/${label}-retention-seed-42.json" summaries

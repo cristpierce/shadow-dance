@@ -10,7 +10,7 @@
   },
   "license": "Apache-2.0",
   "contains_bones_seed": false,
-  "sequence_count": 26,
+  "sequence_count": 30,
   "splits": {
     "heldout": [
       "shadow_dip_left_heldout_19",
@@ -42,7 +42,11 @@
       "retention_sway_left",
       "retention_sway_right",
       "retention_torso_turn_left",
-      "retention_torso_turn_right"
+      "retention_torso_turn_right",
+      "retention_walk_left",
+      "retention_walk_right",
+      "retention_turn_left",
+      "retention_turn_right"
     ]
   },
   "sequences": [
@@ -1016,6 +1020,222 @@
         "source_csv": "csv/train/retention_torso_turn_right.csv",
         "motion_lib_sha256": "985805f65c64ffeb5f49e421952fa4630957023c97f912ff280ce91877969f27",
         "source_csv_sha256": "7abfbf3b87d597a0824c89eb402e0833436c3cded5449c4b1499c321052bddd3"
+      }
+    },
+    {
+      "id": "retention_walk_left",
+      "split": "train",
+      "kind": "walk",
+      "direction": "left",
+      "amplitude": 0.82,
+      "duration_s": 4.6,
+      "step_back_m": 0.21,
+      "step_width_m": 0.0,
+      "hold_s": 0.5,
+      "seed": 119,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 231,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.552
+        ],
+        "step_and_pivot": [
+          0.552,
+          1.288
+        ],
+        "descend": [
+          1.288,
+          2.208
+        ],
+        "hold": [
+          2.208,
+          2.708
+        ],
+        "recover": [
+          2.708,
+          3.956
+        ],
+        "settle": [
+          3.956,
+          4.6
+        ]
+      },
+      "ik_max_position_error_m": 7.631177048990192e-11,
+      "ik_max_orientation_error_deg": 2.4164085634061694e-09,
+      "files": {
+        "motion_lib": "train/retention_walk_left.pkl",
+        "source_csv": "csv/train/retention_walk_left.csv",
+        "motion_lib_sha256": "697d2cee51b600c8c7176cb099d2e98c91a4997adf57640a7e765417c710ee78",
+        "source_csv_sha256": "73a080de6c36fd68e862cba68e41d9b343d853a184a4bcf2f86a900149cfcb8a"
+      }
+    },
+    {
+      "id": "retention_walk_right",
+      "split": "train",
+      "kind": "walk",
+      "direction": "right",
+      "amplitude": 0.82,
+      "duration_s": 5.2,
+      "step_back_m": 0.2,
+      "step_width_m": 0.0,
+      "hold_s": 0.5,
+      "seed": 120,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 261,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.624
+        ],
+        "step_and_pivot": [
+          0.624,
+          1.456
+        ],
+        "descend": [
+          1.456,
+          2.496
+        ],
+        "hold": [
+          2.496,
+          2.996
+        ],
+        "recover": [
+          2.996,
+          4.472
+        ],
+        "settle": [
+          4.472,
+          5.2
+        ]
+      },
+      "ik_max_position_error_m": 1.3300332412711684e-10,
+      "ik_max_orientation_error_deg": 1.3768886026071876e-09,
+      "files": {
+        "motion_lib": "train/retention_walk_right.pkl",
+        "source_csv": "csv/train/retention_walk_right.csv",
+        "motion_lib_sha256": "aff9bf81233c7e32ab13d193c49ef3db66a7c11a190a00849255b5ef17efe95b",
+        "source_csv_sha256": "50062dcf248aea2ab89cded5ca46c0d03551d12b56c7221ae2e0139d4b1c27e7"
+      }
+    },
+    {
+      "id": "retention_turn_left",
+      "split": "train",
+      "kind": "turn",
+      "direction": "left",
+      "amplitude": 0.86,
+      "duration_s": 4.4,
+      "step_back_m": 0.0,
+      "step_width_m": 0.0,
+      "hold_s": 0.5,
+      "seed": 121,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 221,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.528
+        ],
+        "step_and_pivot": [
+          0.528,
+          1.232
+        ],
+        "descend": [
+          1.232,
+          2.112
+        ],
+        "hold": [
+          2.112,
+          2.612
+        ],
+        "recover": [
+          2.612,
+          3.784
+        ],
+        "settle": [
+          3.784,
+          4.4
+        ]
+      },
+      "ik_max_position_error_m": 7.525936122282129e-11,
+      "ik_max_orientation_error_deg": 3.749698006525352e-09,
+      "files": {
+        "motion_lib": "train/retention_turn_left.pkl",
+        "source_csv": "csv/train/retention_turn_left.csv",
+        "motion_lib_sha256": "e58700893f746e0f750652869541559787c35383a3976bc63b0450b8a52d5318",
+        "source_csv_sha256": "d8773debfd854b942e32b7d5560cbcf88cc8719e1be3a4ab4c0b942520fc7023"
+      }
+    },
+    {
+      "id": "retention_turn_right",
+      "split": "train",
+      "kind": "turn",
+      "direction": "right",
+      "amplitude": 0.94,
+      "duration_s": 4.6,
+      "step_back_m": 0.0,
+      "step_width_m": 0.0,
+      "hold_s": 0.5,
+      "seed": 122,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 231,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.552
+        ],
+        "step_and_pivot": [
+          0.552,
+          1.288
+        ],
+        "descend": [
+          1.288,
+          2.208
+        ],
+        "hold": [
+          2.208,
+          2.708
+        ],
+        "recover": [
+          2.708,
+          3.956
+        ],
+        "settle": [
+          3.956,
+          4.6
+        ]
+      },
+      "ik_max_position_error_m": 9.929036051279416e-11,
+      "ik_max_orientation_error_deg": 9.869153527360429e-10,
+      "files": {
+        "motion_lib": "train/retention_turn_right.pkl",
+        "source_csv": "csv/train/retention_turn_right.csv",
+        "motion_lib_sha256": "ed0e418de57973d3c8346370fbf23738c0af8a896826ff39f9fbedfe4f91cf27",
+        "source_csv_sha256": "8e0834568c9f01bcff6862d4ce7a61dfefb04fe6ce8d5008a4d65359b1388840"
       }
     },
     {

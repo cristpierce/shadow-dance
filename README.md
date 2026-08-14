@@ -35,8 +35,8 @@ before either policy is measured on the independent final-test family.
 
 | Gate | Artifact | State |
 |---|---|---|
-| Original data + provenance | `shadow-dip-v1` manifest, PKLs, and source CSVs | 26 sequences generated and hashed |
-| G1 limits / foot IK / support QA | `results/reference-validation.json` | 26/26 pass; 0 warnings |
+| Original data + provenance | `shadow-dip-v1` manifest, PKLs, and source CSVs | 30 sequences generated and hashed |
+| G1 limits / foot IK / support QA | `results/reference-validation.json` | 30/30 pass; 0 warnings |
 | Stock SONIC on validation moves | raw eval log + novelty report | Pending Isaac run |
 | Fine-tuned SONIC | independent 5/500/2,000 checkpoint ladder from pinned base | Pending Isaac run |
 | Fundamentals retention | identical stock/fine-tuned suite | Pending Isaac run |
@@ -52,10 +52,15 @@ kinematics solves each leg against the pinned NVIDIA G1 MJCF so planted feet sta
 planted. The generator produces:
 
 - 12 training dip variants across direction, depth, timing, hold, and step geometry;
-- 6 conservative stand/squat/sway/torso-turn rehearsal motions;
+- 10 conservative stand/squat/sway/torso-turn/forward-walk/heading-turn rehearsal motions;
 - 4 separately parameterized validation dips used for checkpoint selection;
 - 4 independently parameterized final-test dips opened only after selection; and
 - both transparent degree/centimetre CSV and SONIC motion-lib PKL forms.
+
+The locomotion references are measurable rather than label-only: the two walks move the
+root forward 16.4–17.2 cm, and the two heading turns finish 20.6–22.6° from the starting
+heading. They are a transparent local retention proxy; no official WBT-Bench score is
+claimed until the organizer's evaluator is actually run.
 
 Validation and final-test variants are never placed in the training directory. Final
 test is excluded from every training, novelty, early-stopping, and checkpoint-selection
@@ -96,7 +101,7 @@ The submission dataset will also be published as a versioned Hugging Face artifa
 
 These are measured from `results/reference-validation.json`, not policy results:
 
-| Check | Worst case across 26 sequences |
+| Check | Worst case across 30 sequences |
 |---|---:|
 | Foot IK position / orientation residual | 6.66 mm / 3.57° |
 | Joint-limit violation | 0 rad |
@@ -104,15 +109,16 @@ These are measured from `results/reference-validation.json`, not policy results:
 | Peak joint speed vs Isaac limit | 15.9% |
 | Peak joint acceleration | 54.71 rad/s² |
 | Floor penetration | 4.24 mm |
-| Planted-foot horizontal speed, p95 | 0.0106 m/s |
-| Two-foot support margin | +0.054 m minimum |
+| Planted-foot horizontal speed, p95 | 0.0556 m/s |
+| Two-foot support margin | +0.053 m minimum |
 | Deep-hold support margin | +0.072 m minimum |
 | Dynamic single-support margin | −0.029 m minimum |
 | MuJoCo self contacts | 0 |
 
-The negative instantaneous margin occurs during the moving-foot interval and is why
-the policy baseline remains a mandatory go/no-go gate; the planted deepest hold has a
-positive 7.24 cm quasi-static margin.
+The peak planted-foot-speed value comes from the owned forward-walk rehearsal. The
+negative instantaneous margin occurs during a moving-foot interval and is why the
+policy baseline remains a mandatory go/no-go gate; the hero's planted deepest hold has
+a positive 7.24 cm quasi-static margin.
 
 ## Train, compare, and export
 
@@ -153,7 +159,8 @@ The final headline will be populated only from frozen evaluation artifacts:
 
 > Across 12 untouched final-test trials (4 motions × 3 simulator seeds), stock SONIC completed `[x/12]`
 > trials and the selected fine-tuned checkpoint completed `[y/12]`; local MPJPE changed
-> from `[a]` to `[b]` mm while the stand/turn retention score changed by `[z]` points.
+> from `[a]` to `[b]` mm while the 10-motion fundamentals-retention score changed by
+> `[z]` points.
 
 Reference playback proves the target is kinematically coherent. It is not evidence that
 the policy can execute it. “Before” and “after” will always mean stock-policy and

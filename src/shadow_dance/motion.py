@@ -217,6 +217,17 @@ def _hero_upper_body_keyframes(amplitude: float, direction: str) -> np.ndarray:
 def _retention_keyframes(spec: SequenceSpec) -> np.ndarray:
     neutral = neutral_pose()
     target = neutral.copy()
+    if spec.kind == "walk":
+        sign = 1.0 if spec.direction == "left" else -1.0
+        first = neutral.copy()
+        second = neutral.copy()
+        # Mild contralateral arm swing makes the reference read as locomotion while
+        # foot placement remains entirely determined by the MuJoCo IK targets below.
+        first[15] -= 0.18 * sign
+        first[22] += 0.18 * sign
+        second[15] += 0.18 * sign
+        second[22] -= 0.18 * sign
+        return np.stack([neutral, first, first, second, second, neutral, neutral])
     if spec.kind == "squat":
         for offset in (0, 6):
             target[offset + 0] = -0.40
@@ -232,6 +243,10 @@ def _retention_keyframes(spec: SequenceSpec) -> np.ndarray:
         target[12] = 0.34 * sign
         target[17] = -0.22 * sign
         target[24] = 0.22 * sign
+    elif spec.kind == "turn":
+        # Root heading and sequential foot placement supply the actual turn. Preserve
+        # the neutral upper body so the rehearsal cannot introduce arm/torso contacts.
+        target = neutral.copy()
     elif spec.kind != "stand":
         raise ValueError(f"Unsupported sequence kind: {spec.kind}")
     return np.stack([neutral, neutral, target, target, target, neutral, neutral])
@@ -265,9 +280,17 @@ class G1Kinematics:
         self.base_qpos[:3] = [0.0, 0.0, 0.793]
         self.base_qpos[3:7] = [1.0, 0.0, 0.0, 0.0]
 
-    def set_state(self, root_xyz: np.ndarray, joints: np.ndarray) -> None:
+    def set_state(
+        self,
+        root_xyz: np.ndarray,
+        joints: np.ndarray,
+        root_quat_xyzw: np.ndarray | None = None,
+    ) -> None:
         self.data.qpos[:] = self.base_qpos
         self.data.qpos[:3] = root_xyz
+        if root_quat_xyzw is not None:
+            x, y, z, w = np.asarray(root_quat_xyzw, dtype=np.float64)
+            self.data.qpos[3:7] = [w, x, y, z]
         self.data.qpos[self.qpos_addr] = joints
         mujoco.mj_forward(self.model, self.data)
 
@@ -296,13 +319,14 @@ class G1Kinematics:
         target_position: np.ndarray,
         target_rotation: np.ndarray,
         initial: np.ndarray,
+        root_quat_xyzw: np.ndarray | None = None,
     ) -> tuple[np.ndarray, float, float]:
         indices = LEFT_LEG if side == "left" else RIGHT_LEG
 
         def residual(candidate: np.ndarray) -> np.ndarray:
             pose = all_joints.copy()
             pose[indices] = candidate
-            self.set_state(root_xyz, pose)
+            self.set_state(root_xyz, pose, root_quat_xyzw)
             position, rotation = self.foot_transform(side)
             position_error = position - target_position
             orientation_error = Rotation.from_matrix(target_rotation.T @ rotation).as_rotvec()
@@ -330,7 +354,7 @@ class G1Kinematics:
         solved = result.x
         pose = all_joints.copy()
         pose[indices] = solved
-        self.set_state(root_xyz, pose)
+        self.set_state(root_xyz, pose, root_quat_xyzw)
         position, rotation = self.foot_transform(side)
         pos_error = float(np.linalg.norm(position - target_position))
         orientation_delta = Rotation.from_matrix(target_rotation.T @ rotation).as_rotvec()
@@ -381,6 +405,8 @@ def generate_motion(
     right_targets = np.repeat(neutral_feet["right"][0][None, :], 7, axis=0)
     left_rotations = np.repeat(neutral_feet["left"][1][None, :, :], 7, axis=0)
     right_rotations = np.repeat(neutral_feet["right"][1][None, :, :], 7, axis=0)
+    root_yaw_keys = np.zeros(7, dtype=np.float64)
+    swing_intervals: list[tuple[str, float, float, float]] = []
 
     if spec.kind == "shadow_dip":
         depth = 0.150 * spec.amplitude
@@ -406,8 +432,66 @@ def generate_motion(
         root_keys[2:5, 2] -= 0.105 * spec.amplitude
     elif spec.kind == "sway":
         root_keys[2:5, 1] += 0.025 * sign
+    elif spec.kind == "walk":
+        step = spec.step_back_m * spec.amplitude
+        lead_side = spec.direction
+        trail_side = "right" if lead_side == "left" else "left"
+        lead_targets = left_targets if lead_side == "left" else right_targets
+        trail_targets = right_targets if lead_side == "left" else left_targets
+        lead_targets[2:, 0] += step
+        trail_targets[5:, 0] += step
+
+        # Shift over the planted foot before each swing, then finish with the pelvis
+        # translated by the same amount as both feet. This is a two-foot forward step,
+        # not floor-skating or an in-place leg animation.
+        first_support_y = -0.090 if lead_side == "left" else 0.090
+        second_support_y = -first_support_y
+        root_keys[:, 0] += step * np.asarray([0.0, 0.06, 0.24, 0.55, 0.88, 0.90, 1.0])
+        root_keys[:, 1] += np.asarray(
+            [0.0, first_support_y, first_support_y, 0.0, second_support_y, second_support_y, 0.0]
+        )
+        root_keys[1:6, 2] -= 0.012
+        swing_intervals.extend(
+            [
+                (lead_side, key_times[1], key_times[2], 0.045 * spec.amplitude),
+                (trail_side, key_times[4], key_times[5], 0.042 * spec.amplitude),
+            ]
+        )
+    elif spec.kind == "turn":
+        yaw = math.radians(24.0) * sign * spec.amplitude
+        root_yaw_keys = yaw * np.asarray([0.0, 0.0, 0.0, 0.50, 0.55, 1.0, 1.0])
+        feet_center = 0.5 * (neutral_feet["left"][0] + neutral_feet["right"][0])
+        for index, key_yaw in enumerate(root_yaw_keys):
+            rotation = Rotation.from_euler("z", key_yaw).as_matrix()
+            root_keys[index, :2] = (feet_center + rotation @ (neutral_root - feet_center))[:2]
+
+        lead_side = spec.direction
+        trail_side = "right" if lead_side == "left" else "left"
+        final_rotation = Rotation.from_euler("z", yaw).as_matrix()
+        for side, positions, orientations, landing_index in (
+            ("left", left_targets, left_rotations, 2 if lead_side == "left" else 5),
+            ("right", right_targets, right_rotations, 2 if lead_side == "right" else 5),
+        ):
+            final_position = feet_center + final_rotation @ (neutral_feet[side][0] - feet_center)
+            positions[landing_index:] = final_position
+            orientations[landing_index:] = final_rotation @ neutral_feet[side][1]
+        lead_final = feet_center + final_rotation @ (neutral_feet[lead_side][0] - feet_center)
+        trail_neutral = neutral_feet[trail_side][0]
+        root_keys[1:3, :2] += 0.95 * (trail_neutral - neutral_root)[:2]
+        root_keys[4:6, :2] += 0.95 * (lead_final - root_keys[5])[:2]
+        root_keys[1:6, 2] -= 0.010
+        swing_intervals.extend(
+            [
+                (lead_side, key_times[1], key_times[2], 0.035 * spec.amplitude),
+                (trail_side, key_times[4], key_times[5], 0.035 * spec.amplitude),
+            ]
+        )
 
     roots = _interpolate_keyframes(times, key_times, root_keys)
+    root_yaws = _interpolate_keyframes(times, key_times, root_yaw_keys[:, None])[:, 0]
+    root_quats = Rotation.from_rotvec(
+        np.column_stack([np.zeros_like(root_yaws), np.zeros_like(root_yaws), root_yaws])
+    ).as_quat()
     left_position_series = _interpolate_keyframes(times, key_times, left_targets)
     right_position_series = _interpolate_keyframes(times, key_times, right_targets)
     moving_side = None
@@ -473,6 +557,13 @@ def generate_motion(
                 progress = (time_s - return_start) / (return_landing - return_start)
                 lift = 0.040 * spec.amplitude * 16.0 * progress**2 * (1.0 - progress) ** 2
             moving_series[frame, 2] += lift
+    elif swing_intervals:
+        for side, start, end, height in swing_intervals:
+            series = left_position_series if side == "left" else right_position_series
+            for frame, time_s in enumerate(times):
+                if start <= time_s <= end:
+                    progress = (time_s - start) / (end - start)
+                    series[frame, 2] += height * 16.0 * progress**2 * (1.0 - progress) ** 2
 
     max_pos_error = 0.0
     max_ori_error = 0.0
@@ -490,6 +581,7 @@ def generate_motion(
                 target_positions[frame],
                 rotations[side][frame],
                 previous[indices],
+                root_quats[frame],
             )
             pose[indices] = solved
             previous[indices] = solved
@@ -499,14 +591,13 @@ def generate_motion(
         previous = pose
 
     pose_aa = np.zeros((len(times), 30, 3), dtype=np.float32)
+    pose_aa[:, 0, :] = Rotation.from_quat(root_quats).as_rotvec().astype(np.float32)
     pose_aa[:, 1:, :] = DOF_AXIS[None, :, :] * joints[:, :, None]
-    root_rot = np.zeros((len(times), 4), dtype=np.float32)
-    root_rot[:, 3] = 1.0  # xyzw identity
     entry = {
         "root_trans_offset": roots.astype(np.float32),
         "pose_aa": pose_aa,
         "dof": joints.astype(np.float32),
-        "root_rot": root_rot,
+        "root_rot": root_quats.astype(np.float32),
         "smpl_joints": np.zeros((len(times), 24, 3), dtype=np.float32),
         "fps": fps,
     }
@@ -582,6 +673,32 @@ def default_specs() -> list[SequenceSpec]:
         )
         counter += 1
 
+    # WBT-Bench explicitly checks walking and heading turns. These owned rehearsal
+    # motions preserve those fundamentals without adding restricted BONES-SEED data.
+    # They do not consume the numeric counter so the frozen hero IDs remain 19--26.
+    for index, (kind, direction, amplitude, duration, step) in enumerate(
+        [
+            ("walk", "left", 0.82, 4.60, 0.21),
+            ("walk", "right", 0.82, 5.20, 0.20),
+            ("turn", "left", 0.86, 4.40, 0.0),
+            ("turn", "right", 0.94, 4.60, 0.0),
+        ]
+    ):
+        specs.append(
+            SequenceSpec(
+                id=f"retention_{kind}_{direction}",
+                split="train",
+                kind=kind,
+                direction=direction,
+                amplitude=amplitude,
+                duration_s=duration,
+                step_back_m=step,
+                step_width_m=0.0,
+                hold_s=0.5,
+                seed=100 + counter + index,
+            )
+        )
+
     for direction, amplitude, duration, step, hold in [
         ("left", 0.82, 4.65, 0.135, 0.47),
         ("right", 0.82, 4.75, 0.135, 0.49),
@@ -642,13 +759,20 @@ def write_motion_csv(path: Path, entry: dict[str, Any]) -> None:
         *[f"{name}_dof" for name in JOINT_NAMES],
     ]
     root_cm = np.asarray(entry["root_trans_offset"]) * 100.0
+    root_euler_deg = Rotation.from_quat(np.asarray(entry["root_rot"])).as_euler("xyz", degrees=True)
+    root_euler_deg[np.abs(root_euler_deg) < 5e-8] = 0.0
     joints_deg = np.degrees(np.asarray(entry["dof"]))
     with path.open("w", newline="", encoding="utf-8") as stream:
         writer = csv.writer(stream, lineterminator="\n")
         writer.writerow(header)
         for frame in range(len(joints_deg)):
             writer.writerow(
-                [frame, *root_cm[frame].round(7), 0.0, 0.0, 0.0, *joints_deg[frame].round(7)]
+                [
+                    frame,
+                    *root_cm[frame].round(7),
+                    *root_euler_deg[frame].round(7),
+                    *joints_deg[frame].round(7),
+                ]
             )
 
 

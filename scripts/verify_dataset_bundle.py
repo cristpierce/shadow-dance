@@ -103,7 +103,7 @@ def main() -> None:
         failures.append("manifest sequence_count does not match sequences array")
     if manifest.get("splits") != computed_splits:
         failures.append("manifest splits do not match sequence order and membership")
-    expected_split_counts = {"train": 18, "heldout": 4, "test": 4}
+    expected_split_counts = {"train": 22, "heldout": 4, "test": 4}
     observed_split_counts = {name: len(values) for name, values in computed_splits.items()}
     if observed_split_counts != expected_split_counts:
         failures.append(

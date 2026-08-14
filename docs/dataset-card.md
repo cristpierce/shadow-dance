@@ -10,7 +10,7 @@ controlled variation and provenance over volume.
 |---|---|
 | Robot | Unitree G1, 29 DOF |
 | Reference rate | 50 Hz |
-| Train | 12 Shadow Partner Dip variants + 6 conservative rehearsal motions |
+| Train | 12 Shadow Partner Dip variants + 10 conservative rehearsal motions |
 | Selection-validation (`heldout`) | 4 Shadow Partner Dip variants |
 | Untouched final test | 4 independently parameterized Shadow Partner Dip variants |
 | Human footage | None |
@@ -23,13 +23,24 @@ controlled variation and provenance over volume.
 Team-authored keyframes specify the arm-frame narrative and root path. For every frame,
 bounded nonlinear least squares solves the two six-DOF legs against foot position and
 orientation targets in NVIDIA's pinned G1 MJCF. A moving foot follows a smooth lift arc
-during the step and is fixed through the deepest hold. All interpolation uses a
-C2-continuous smootherstep curve.
+during the step and is fixed through the deepest hold. The rehearsal suite includes
+two-foot forward translations and sequential-foot heading turns with non-identity root
+quaternions; these are actual locomotion references rather than in-place gestures. All
+interpolation uses a C2-continuous smootherstep curve.
+
+At the frozen parameters, the walk roots advance 16.4 cm and 17.2 cm, while the turn
+roots finish at 20.64° and 22.56° absolute heading change. These kinematic measurements
+describe the reference data only; policy tracking remains a separate evaluation.
 
 The final manifest records the specification, source type, upstream commit, phase
 windows, IK residual, file paths, and SHA-256 for every sequence. CSV uses the public
 Bones-style column convention only as an interoperable schema; it contains no Bones
 data.
+
+Both an identity-heading hero and a non-identity-heading turn are round-tripped through
+NVIDIA's pinned CSV converter in the test suite. The validator also hard-fails any PKL
+whose root axis-angle in `pose_aa` disagrees with `root_rot`, preventing a visually
+plausible CSV from hiding an internally inconsistent SONIC motion library.
 
 ## Splits and leakage
 
@@ -72,9 +83,9 @@ Passing reference QA means the desired trajectory is coherent enough to attempt 
 simulation. It does not prove a SONIC policy can track it. That requires the separate
 stock and fine-tuned evaluations.
 
-At the frozen revision, all 26 sequences pass with zero warnings. Worst cases across
+At the frozen revision, all 30 sequences pass with zero warnings. Worst cases across
 the complete set are 6.66 mm / 3.57° foot-IK residual, 4.24 mm floor penetration,
-15.9% of the Isaac joint-speed limit, 54.71 rad/s² joint acceleration, +5.41 cm
+15.9% of the Isaac joint-speed limit, 54.71 rad/s² joint acceleration, +5.32 cm
 two-foot support margin, +7.24 cm deep-hold support margin, and zero self contacts.
 The complete per-sequence values—not only these extrema—are in
 `results/reference-validation.json`.
@@ -90,6 +101,6 @@ without further testing.
 
 Use the commands in the root README. The authoritative machine-readable record is
 `data/manifests/shadow-dip-v1.json`; it is regenerated rather than manually edited. A
-clean isolated generation reproduced all 52 CSV/PKL payloads byte-for-byte and the
+clean isolated generation reproduced all 60 CSV/PKL payloads byte-for-byte and the
 manifest SHA-256 is
-`3b7d91fbc4ec46c6591be3c583fba3dfbc9174045d3adb9eb8d0aa52a9abc3f0`.
+`1b2045380e09e6276c5ac4ff4c2bb1c7bd5903a974940f9928d7351b5f90a5d1`.

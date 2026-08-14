@@ -22,7 +22,8 @@ The entry succeeds only if all of the following are true:
 
 1. Stock SONIC shows a measured novelty gap on the frozen selection-validation family.
 2. A fine-tuned checkpoint materially improves that family under preregistered gates.
-3. Stand/turn retention remains within the preregistered regression bounds.
+3. The 10-motion stand/squat/sway/walk/turn fundamentals suite remains within the
+   preregistered regression bounds.
 4. The frozen winner improves an independently parameterized final-test family across
    three simulator seeds.
 5. The exact selected checkpoint exports as a coherent five-graph SONIC ONNX bundle and
@@ -33,12 +34,12 @@ new skill and training stops. If no candidate clears the gates, no winner is pub
 
 ## 2. Owned data contract
 
-`shadow-dip-v1` contains 26 team-authored procedural G1 sequences:
+`shadow-dip-v1` contains 30 team-authored procedural G1 sequences:
 
 | Split | Count | Purpose |
 |---|---:|---|
 | Train hero dips | 12 | Direction, amplitude, tempo, hold, and step-geometry variation |
-| Train rehearsal | 6 | Stand, squat, sway, and torso-turn retention rehearsal |
+| Train rehearsal | 10 | Stand, squat, sway, torso turn, forward walk, and heading turn |
 | Selection validation | 4 | Novelty gate and candidate selection only |
 | Final test | 4 | First policy evaluation after the winner is frozen |
 

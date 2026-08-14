@@ -634,7 +634,8 @@ outputs:
 > We taught SONIC a five-second **Shadow Partner Dip**—dance frame, split-stance pivot,
 > unsupported off-axis dip, held beat, and controlled recovery. Across the same 12
 > untouched final-test trials, stock SONIC completed `[x/12]` and our fine-tuned policy
-> completed `[y/12]`, while stand/turn retention changed by `[z]` percentage points.
+> completed `[y/12]`, while the 10-motion fundamentals-retention result changed by
+> `[z]` percentage points.
 
 Avoid claiming real-robot validation unless Ultimate Bots actually runs it. Say
 “designed for G1 and validated in simulation.”
@@ -825,22 +826,33 @@ The following updates supersede earlier references to a single “held-out” he
   short simulation demo and stock before/after, and judges Ambition, Execution, Data
   craft, and Reproducibility. Execution explicitly includes reliability across runs;
   finalists are also evaluated by the organizers in simulation and on league robots.
-- The frozen owned dataset now contains **26** motions: 18 training/rehearsal,
-  4 selection-validation (`heldout`), and 4 final-test (`test`). All 26 pass the
+- The frozen owned dataset now contains **30** motions: 22 training/rehearsal,
+  4 selection-validation (`heldout`), and 4 final-test (`test`). All 30 pass the
   committed MuJoCo reference validator with zero warnings.
 - Across the full frozen set, worst measured reference values are 6.66 mm foot-IK
   position residual, 3.57° orientation residual, 15.9% of the Isaac joint-speed limit,
-  54.71 rad/s² peak joint acceleration, 4.24 mm floor penetration, +5.41 cm minimum
+  54.71 rad/s² peak joint acceleration, 4.24 mm floor penetration, +5.32 cm minimum
   two-foot support margin, +7.24 cm deep-hold support margin, and zero self contacts.
   The deepest family member drops the pelvis 14.7 cm and reaches 0.49 rad (28.1°) of
   waist roll while remaining inside the pinned G1 joint envelope.
-- A clean isolated regeneration produced the same 52 CSV/PKL payloads and the same
-  manifest bytes (SHA-256 `3b7d91fbc4ec46c6591be3c583fba3dfbc9174045d3adb9eb8d0aa52a9abc3f0`),
-  then independently passed all 26 validator cases. This is the local reproducibility
+- A clean isolated regeneration produced the same 60 CSV/PKL payloads and the same
+  manifest bytes (SHA-256 `1b2045380e09e6276c5ac4ff4c2bb1c7bd5903a974940f9928d7351b5f90a5d1`),
+  then independently passed all 30 validator cases. This is the local reproducibility
   proof for the strengthened reference geometry.
 - The final four motions use independent amplitude, duration, hold, back-step, width,
   direction, and seed specifications. They are not copied into the training or
   selection-validation directories.
+- The official WBT-Bench description explicitly checks walking and turning fundamentals,
+  not only hero tracking penalties. Four owned rehearsal motions therefore add a
+  two-foot forward walk and a sequential-foot heading turn in both lead directions.
+  Their root translation/heading and foot placements are solved through the same pinned
+  G1 model. The frozen walk roots advance 16.4–17.2 cm and the turns finish with
+  20.64–22.56° absolute heading change. No BONES-SEED motion or derivative enters the
+  dataset, and these local references are not presented as an official WBT-Bench score.
+- A non-identity-heading converter test exposed and fixed a dual-representation issue:
+  SONIC requires root rotation in both `root_rot` quaternion form and the root slot of
+  `pose_aa`. The generator now emits both consistently, NVIDIA's pinned converter
+  round-trips the turn within 2e-6, and the reference validator hard-fails future drift.
 - The pinned NPA/SkyPilot operator environment passes its local status and verification
   checks. The digest-pinned L40S SONIC image materializes into a no-compute SkyPilot
   task contract. No Nebius authentication or posted challenge credit has been observed
@@ -891,7 +903,7 @@ The following updates supersede earlier references to a single “held-out” he
   selected policies. Report all 12 trials per policy, per-motion reliability, and the
   macro mean of per-motion local MPJPE. Bind both the motion and seed inventories into
   `final-comparison.json`.
-- Keep the 18-motion training set unchanged after the test freeze. If the stock novelty
+- Keep the 22-motion training set unchanged after the test freeze. If the stock novelty
   gate fails, do not repurpose the test data; stop and preregister a separate harder
   target before generating or training anything new.
 - Prefer the on-demand L40S direct-image workflow for deadline reliability and rendering

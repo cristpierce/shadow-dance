@@ -21,6 +21,10 @@ MOTIONS = {
         "retention_sway_right",
         "retention_torso_turn_left",
         "retention_torso_turn_right",
+        "retention_walk_left",
+        "retention_walk_right",
+        "retention_turn_left",
+        "retention_turn_right",
     ],
     "test": [
         "shadow_dip_left_test_23",
@@ -114,7 +118,7 @@ def test_eval_summary_and_checkpoint_selection(tmp_path: Path) -> None:
         tmp_path,
         "stock-retention",
         "retention",
-        metric_payload(terminations=[False] * 6, mpjpe_l=20),
+        metric_payload(terminations=[False] * 10, mpjpe_l=20),
         label="stock",
     )
     tuned_held = write_summary(
@@ -128,7 +132,7 @@ def test_eval_summary_and_checkpoint_selection(tmp_path: Path) -> None:
         tmp_path,
         "tuned-retention",
         "retention",
-        metric_payload(terminations=[False] * 6, mpjpe_l=21),
+        metric_payload(terminations=[False] * 10, mpjpe_l=21),
         label="stage-500",
     )
     novelty = tmp_path / "novelty.json"
@@ -333,7 +337,7 @@ def test_model_publisher_dry_run_requires_valid_release(tmp_path: Path) -> None:
         "stock-retention-seed-42",
         "stock",
         "retention",
-        metric_payload(terminations=[False] * 6, mpjpe_l=20),
+        metric_payload(terminations=[False] * 10, mpjpe_l=20),
     )
     selected_heldout_summary = bound_summary(
         "stage-500-heldout-seed-42",
@@ -345,7 +349,7 @@ def test_model_publisher_dry_run_requires_valid_release(tmp_path: Path) -> None:
         "stage-500-retention-seed-42",
         "stage-500",
         "retention",
-        metric_payload(terminations=[False] * 6, mpjpe_l=21),
+        metric_payload(terminations=[False] * 10, mpjpe_l=21),
     )
     stage_5_heldout_summary = bound_summary(
         "stage-5-heldout-seed-42",
@@ -357,7 +361,7 @@ def test_model_publisher_dry_run_requires_valid_release(tmp_path: Path) -> None:
         "stage-5-retention-seed-42",
         "stage-5",
         "retention",
-        metric_payload(terminations=[False] * 6, mpjpe_l=20),
+        metric_payload(terminations=[False] * 10, mpjpe_l=20),
     )
     stage_2000_heldout_summary = bound_summary(
         "stage-2000-heldout-seed-42",
@@ -369,7 +373,7 @@ def test_model_publisher_dry_run_requires_valid_release(tmp_path: Path) -> None:
         "stage-2000-retention-seed-42",
         "stage-2000",
         "retention",
-        metric_payload(terminations=[False, False, False, False, True, True], mpjpe_l=25),
+        metric_payload(terminations=[False] * 8 + [True] * 2, mpjpe_l=25),
     )
 
     def candidate_record(
@@ -382,7 +386,7 @@ def test_model_publisher_dry_run_requires_valid_release(tmp_path: Path) -> None:
         retention_mpjpe: float,
     ) -> dict:
         heldout_rate = heldout_successes / 4
-        retention_rate = retention_successes / 6
+        retention_rate = retention_successes / 10
         success_delta = heldout_rate
         mpjpe_improvement = 1.0 - heldout_mpjpe / 80.0
         retention_success_delta = retention_rate - 1.0
@@ -403,7 +407,7 @@ def test_model_publisher_dry_run_requires_valid_release(tmp_path: Path) -> None:
                 "mpjpe_l": heldout_mpjpe,
             },
             "retention": {
-                "motion_count": 6,
+                "motion_count": 10,
                 "success_count": retention_successes,
                 "success_rate": retention_rate,
                 "mpjpe_l": retention_mpjpe,
@@ -422,7 +426,7 @@ def test_model_publisher_dry_run_requires_valid_release(tmp_path: Path) -> None:
         checkpoint_bytes=b"stage-5-checkpoint",
         heldout_successes=0,
         heldout_mpjpe=79.0,
-        retention_successes=6,
+        retention_successes=10,
         retention_mpjpe=20.0,
     )
     candidate = candidate_record(
@@ -430,7 +434,7 @@ def test_model_publisher_dry_run_requires_valid_release(tmp_path: Path) -> None:
         checkpoint_bytes=(release / "last.pt").read_bytes(),
         heldout_successes=4,
         heldout_mpjpe=28.0,
-        retention_successes=6,
+        retention_successes=10,
         retention_mpjpe=21.0,
     )
     stage_2000_candidate = candidate_record(
@@ -438,7 +442,7 @@ def test_model_publisher_dry_run_requires_valid_release(tmp_path: Path) -> None:
         checkpoint_bytes=b"stage-2000-checkpoint",
         heldout_successes=1,
         heldout_mpjpe=70.0,
-        retention_successes=4,
+        retention_successes=8,
         retention_mpjpe=25.0,
     )
     selection = {
@@ -458,8 +462,8 @@ def test_model_publisher_dry_run_requires_valid_release(tmp_path: Path) -> None:
             "mpjpe_l": 80.0,
         },
         "stock_retention": {
-            "motion_count": 6,
-            "success_count": 6,
+            "motion_count": 10,
+            "success_count": 10,
             "success_rate": 1.0,
             "mpjpe_l": 20.0,
         },

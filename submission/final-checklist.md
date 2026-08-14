@@ -22,7 +22,8 @@
 - [ ] Final headline comes from test motions first opened after the winner was frozen.
 - [ ] Stock and selected policy each have all 12 final trials (4 motions × 3 seeds).
 - [ ] `final-comparison.json` hash-binds test summaries to `selection.json`.
-- [ ] Stand/turn retention is disclosed.
+- [ ] The complete 10-motion fundamentals-retention result is disclosed, including
+  forward walking and heading turns in both directions.
 - [ ] Uncut repeated attempts accompany the edited comparison.
 - [ ] `video-manifest.json` verifies the reference, all matched stock/selected source
   clips, display seed, final metrics report, and edited video hash.

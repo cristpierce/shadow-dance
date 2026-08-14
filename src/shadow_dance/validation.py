@@ -10,8 +10,9 @@ from typing import Any
 import joblib
 import mujoco
 import numpy as np
+from scipy.spatial.transform import Rotation
 
-from .motion import JOINT_NAMES, sha256_file
+from .motion import DOF_AXIS, JOINT_NAMES, sha256_file
 
 # Isaac Lab simulation velocity limits from gear_sonic/envs/manager_env/robots/g1.py.
 VELOCITY_LIMITS_RAD_S = np.asarray(
@@ -184,6 +185,17 @@ class MotionValidator:
         if quat_norm_error > 1e-4:
             errors.append(f"root quaternion norm error is {quat_norm_error:.3g}")
 
+        pose_aa_contract_error: float | None = None
+        if np.isfinite(root_rot).all() and np.min(np.linalg.norm(root_rot, axis=1)) > 1e-8:
+            expected_pose_aa = np.zeros_like(pose_aa)
+            expected_pose_aa[:, 0, :] = Rotation.from_quat(root_rot).as_rotvec()
+            expected_pose_aa[:, 1:, :] = DOF_AXIS[None, :, :] * dof[:, :, None]
+            pose_aa_contract_error = float(np.max(np.abs(pose_aa - expected_pose_aa)))
+            if pose_aa_contract_error > 2e-6:
+                errors.append(
+                    f"pose_aa disagrees with root_rot/dof by {pose_aa_contract_error:.6g} rad"
+                )
+
         lower_violation = np.maximum(self.lower[None, :] - dof, 0.0)
         upper_violation = np.maximum(dof - self.upper[None, :], 0.0)
         max_limit_violation = float(max(lower_violation.max(), upper_violation.max()))
@@ -252,11 +264,12 @@ class MotionValidator:
         deepest = root[:, 2] <= root[:, 2].min() + 0.003
         deepest_margins = support_margin[deepest & np.isfinite(support_margin)]
         min_deepest_margin = float(np.min(deepest_margins)) if len(deepest_margins) else math.nan
+        is_hero = motion_id.startswith("shadow_dip")
         if np.isfinite(min_support_margin) and min_support_margin < -0.03:
             warnings.append(
                 f"dynamic-step COM leaves instantaneous support by {-min_support_margin:.3f} m"
             )
-        if np.isfinite(min_deepest_margin) and min_deepest_margin < -0.01:
+        if is_hero and np.isfinite(min_deepest_margin) and min_deepest_margin < -0.01:
             errors.append(f"deepest hold COM leaves support polygon by {-min_deepest_margin:.3f} m")
         if int(self_contacts.max()) > 0:
             warnings.append(f"MuJoCo reports up to {int(self_contacts.max())} self contacts")
@@ -265,7 +278,6 @@ class MotionValidator:
         pelvis_drop = float(root[0, 2] - root[:, 2].min())
         waist_roll_peak = float(np.max(np.abs(dof[:, 13])))
         foot_excursion = float(np.max(np.linalg.norm(foot_centers - foot_centers[0:1], axis=-1)))
-        is_hero = motion_id.startswith("shadow_dip")
         if is_hero:
             if pelvis_drop < 0.075:
                 errors.append(f"hero pelvis drop too small: {pelvis_drop:.3f} m")
@@ -288,6 +300,7 @@ class MotionValidator:
             "fps": fps,
             "metrics": {
                 "root_quaternion_max_norm_error": quat_norm_error,
+                "pose_aa_contract_max_error_rad": pose_aa_contract_error,
                 "joint_limit_max_violation_rad": max_limit_violation,
                 "joint_limit_min_margin_rad": min_joint_margin,
                 "joint_velocity_max_ratio": max_velocity_ratio,

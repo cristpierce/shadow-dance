@@ -2,8 +2,8 @@
   "schema_version": 1,
   "dataset_dir": "data/generated",
   "mjcf": "gear_sonic/data/assets/robot_description/mjcf/g1_29dof_rev_1_0.xml",
-  "sequence_count": 26,
-  "passed": 26,
+  "sequence_count": 30,
+  "passed": 30,
   "failed": 0,
   "warning_count": 0,
   "overall_pass": true,
@@ -26,6 +26,7 @@
       "fps": 50,
       "metrics": {
         "root_quaternion_max_norm_error": 0.0,
+        "pose_aa_contract_max_error_rad": 0.0,
         "joint_limit_max_violation_rad": 0.0,
         "joint_limit_min_margin_rad": 0.020000004696845985,
         "joint_velocity_max_ratio": 0.14912009239196777,
@@ -65,6 +66,7 @@
       "fps": 50,
       "metrics": {
         "root_quaternion_max_norm_error": 0.0,
+        "pose_aa_contract_max_error_rad": 0.0,
         "joint_limit_max_violation_rad": 0.0,
         "joint_limit_min_margin_rad": 0.020000004696845985,
         "joint_velocity_max_ratio": 0.15572764873504638,
@@ -104,6 +106,7 @@
       "fps": 50,
       "metrics": {
         "root_quaternion_max_norm_error": 0.0,
+        "pose_aa_contract_max_error_rad": 0.0,
         "joint_limit_max_violation_rad": 0.0,
         "joint_limit_min_margin_rad": 0.020000004696845985,
         "joint_velocity_max_ratio": 0.1461119294166565,
@@ -143,6 +146,7 @@
       "fps": 50,
       "metrics": {
         "root_quaternion_max_norm_error": 0.0,
+        "pose_aa_contract_max_error_rad": 0.0,
         "joint_limit_max_violation_rad": 0.0,
         "joint_limit_min_margin_rad": 0.020000004696845985,
         "joint_velocity_max_ratio": 0.15113406181335448,
@@ -182,6 +186,7 @@
       "fps": 50,
       "metrics": {
         "root_quaternion_max_norm_error": 0.0,
+        "pose_aa_contract_max_error_rad": 0.0,
         "joint_limit_max_violation_rad": 0.0,
         "joint_limit_min_margin_rad": 0.020000004696845985,
         "joint_velocity_max_ratio": 0.1375445008277893,
@@ -221,6 +226,7 @@
       "fps": 50,
       "metrics": {
         "root_quaternion_max_norm_error": 0.0,
+        "pose_aa_contract_max_error_rad": 0.0,
         "joint_limit_max_violation_rad": 0.0,
         "joint_limit_min_margin_rad": 0.019999986095428413,
         "joint_velocity_max_ratio": 0.15727856159210205,
@@ -260,6 +266,7 @@
       "fps": 50,
       "metrics": {
         "root_quaternion_max_norm_error": 0.0,
+        "pose_aa_contract_max_error_rad": 0.0,
         "joint_limit_max_violation_rad": 0.0,
         "joint_limit_min_margin_rad": 0.020000004696845985,
         "joint_velocity_max_ratio": 0.144780433177948,
@@ -299,6 +306,7 @@
       "fps": 50,
       "metrics": {
         "root_quaternion_max_norm_error": 0.0,
+        "pose_aa_contract_max_error_rad": 0.0,
         "joint_limit_max_violation_rad": 0.0,
         "joint_limit_min_margin_rad": 0.020000004696845985,
         "joint_velocity_max_ratio": 0.15939221382141114,
@@ -338,6 +346,7 @@
       "fps": 50,
       "metrics": {
         "root_quaternion_max_norm_error": 0.0,
+        "pose_aa_contract_max_error_rad": 0.0,
         "joint_limit_max_violation_rad": 0.0,
         "joint_limit_min_margin_rad": 0.2617999999996215,
         "joint_velocity_max_ratio": 0.09421616792678833,
@@ -377,6 +386,7 @@
       "fps": 50,
       "metrics": {
         "root_quaternion_max_norm_error": 0.0,
+        "pose_aa_contract_max_error_rad": 0.0,
         "joint_limit_max_violation_rad": 0.0,
         "joint_limit_min_margin_rad": 0.2618,
         "joint_velocity_max_ratio": 9.5367431640625e-08,
@@ -416,6 +426,7 @@
       "fps": 50,
       "metrics": {
         "root_quaternion_max_norm_error": 0.0,
+        "pose_aa_contract_max_error_rad": 0.0,
         "joint_limit_max_violation_rad": 0.0,
         "joint_limit_min_margin_rad": 0.2214600644290447,
         "joint_velocity_max_ratio": 0.011056470709878046,
@@ -455,6 +466,7 @@
       "fps": 50,
       "metrics": {
         "root_quaternion_max_norm_error": 0.0,
+        "pose_aa_contract_max_error_rad": 0.0,
         "joint_limit_max_violation_rad": 0.0,
         "joint_limit_min_margin_rad": 0.2214600644290447,
         "joint_velocity_max_ratio": 0.011056470709878046,
@@ -494,6 +506,7 @@
       "fps": 50,
       "metrics": {
         "root_quaternion_max_norm_error": 0.0,
+        "pose_aa_contract_max_error_rad": 0.0,
         "joint_limit_max_violation_rad": 0.0,
         "joint_limit_min_margin_rad": 0.2618,
         "joint_velocity_max_ratio": 0.031046966090798378,
@@ -533,6 +546,7 @@
       "fps": 50,
       "metrics": {
         "root_quaternion_max_norm_error": 0.0,
+        "pose_aa_contract_max_error_rad": 0.0,
         "joint_limit_max_violation_rad": 0.0,
         "joint_limit_min_margin_rad": 0.2618,
         "joint_velocity_max_ratio": 0.031046966090798378,
@@ -563,6 +577,166 @@
       }
     },
     {
+      "id": "retention_turn_left",
+      "pass": true,
+      "errors": [],
+      "warnings": [],
+      "frames": 221,
+      "duration_s": 4.4,
+      "fps": 50,
+      "metrics": {
+        "root_quaternion_max_norm_error": 5.960464477539063e-08,
+        "pose_aa_contract_max_error_rad": 2.9802322387695312e-08,
+        "joint_limit_max_violation_rad": 0.0,
+        "joint_limit_min_margin_rad": 0.05986919395923612,
+        "joint_velocity_max_ratio": 0.0746801495552063,
+        "joint_acceleration_peak_rad_s2": 19.31498146057129,
+        "pelvis_drop_m": 0.009999990463256836,
+        "waist_roll_peak_rad": 0.0,
+        "foot_excursion_m": 0.044272965440256586,
+        "foot_height_max_m": 0.030100014899925764,
+        "floor_penetration_max_m": 3.1113497792056855e-08,
+        "planted_foot_speed_p95_m_s": 0.022563866437042564,
+        "quasistatic_support_margin_min_m": -0.003075721815141508,
+        "quasistatic_support_margin_min_time_s": 2.92,
+        "support_feet_at_minimum": 1,
+        "two_foot_support_margin_min_m": 0.05321064896546321,
+        "deepest_hold_support_margin_min_m": -0.003075721815141508,
+        "self_contact_count_max": 0,
+        "endpoint_joint_rms_rad": 1.2797807565175423e-16
+      },
+      "file": "train/retention_turn_left.pkl",
+      "sha256": "e58700893f746e0f750652869541559787c35383a3976bc63b0450b8a52d5318",
+      "manifest_checks": {
+        "motion_path_matches": true,
+        "motion_sha256_matches": true,
+        "ik_position_within_8mm": true,
+        "ik_orientation_within_5deg": true,
+        "source_csv_exists": true,
+        "source_csv_sha256_matches": true
+      }
+    },
+    {
+      "id": "retention_turn_right",
+      "pass": true,
+      "errors": [],
+      "warnings": [],
+      "frames": 231,
+      "duration_s": 4.6,
+      "fps": 50,
+      "metrics": {
+        "root_quaternion_max_norm_error": 5.960464477539063e-08,
+        "pose_aa_contract_max_error_rad": 2.9802322387695312e-08,
+        "joint_limit_max_violation_rad": 0.0,
+        "joint_limit_min_margin_rad": 0.05812057249546049,
+        "joint_velocity_max_ratio": 0.07664449810981751,
+        "joint_acceleration_peak_rad_s2": 20.04973602294922,
+        "pelvis_drop_m": 0.009999990463256836,
+        "waist_roll_peak_rad": 0.0,
+        "foot_excursion_m": 0.048340337201540656,
+        "foot_height_max_m": 0.03290001348234446,
+        "floor_penetration_max_m": 3.03898121667423e-08,
+        "planted_foot_speed_p95_m_s": 0.02001959238581456,
+        "quasistatic_support_margin_min_m": -0.0036905856145260357,
+        "quasistatic_support_margin_min_time_s": 3.02,
+        "support_feet_at_minimum": 1,
+        "two_foot_support_margin_min_m": 0.05321106702348006,
+        "deepest_hold_support_margin_min_m": -0.0036905856145260357,
+        "self_contact_count_max": 0,
+        "endpoint_joint_rms_rad": 3.973712796978191e-17
+      },
+      "file": "train/retention_turn_right.pkl",
+      "sha256": "ed0e418de57973d3c8346370fbf23738c0af8a896826ff39f9fbedfe4f91cf27",
+      "manifest_checks": {
+        "motion_path_matches": true,
+        "motion_sha256_matches": true,
+        "ik_position_within_8mm": true,
+        "ik_orientation_within_5deg": true,
+        "source_csv_exists": true,
+        "source_csv_sha256_matches": true
+      }
+    },
+    {
+      "id": "retention_walk_left",
+      "pass": true,
+      "errors": [],
+      "warnings": [],
+      "frames": 231,
+      "duration_s": 4.6,
+      "fps": 50,
+      "metrics": {
+        "root_quaternion_max_norm_error": 0.0,
+        "pose_aa_contract_max_error_rad": 0.0,
+        "joint_limit_max_violation_rad": 0.0,
+        "joint_limit_min_margin_rad": 0.10646883540153501,
+        "joint_velocity_max_ratio": 0.114690101146698,
+        "joint_acceleration_peak_rad_s2": 32.81529235839844,
+        "pelvis_drop_m": 0.012000024318695068,
+        "waist_roll_peak_rad": 0.0,
+        "foot_excursion_m": 0.17220001329416246,
+        "foot_height_max_m": 0.036899982336066346,
+        "floor_penetration_max_m": 2.9930119136573063e-08,
+        "planted_foot_speed_p95_m_s": 0.05563209721467021,
+        "quasistatic_support_margin_min_m": -0.017942002720915125,
+        "quasistatic_support_margin_min_time_s": 3.02,
+        "support_feet_at_minimum": 1,
+        "two_foot_support_margin_min_m": 0.06517481886839727,
+        "deepest_hold_support_margin_min_m": -0.017942002720915125,
+        "self_contact_count_max": 0,
+        "endpoint_joint_rms_rad": 2.497921337276613e-17
+      },
+      "file": "train/retention_walk_left.pkl",
+      "sha256": "697d2cee51b600c8c7176cb099d2e98c91a4997adf57640a7e765417c710ee78",
+      "manifest_checks": {
+        "motion_path_matches": true,
+        "motion_sha256_matches": true,
+        "ik_position_within_8mm": true,
+        "ik_orientation_within_5deg": true,
+        "source_csv_exists": true,
+        "source_csv_sha256_matches": true
+      }
+    },
+    {
+      "id": "retention_walk_right",
+      "pass": true,
+      "errors": [],
+      "warnings": [],
+      "frames": 261,
+      "duration_s": 5.2,
+      "fps": 50,
+      "metrics": {
+        "root_quaternion_max_norm_error": 0.0,
+        "pose_aa_contract_max_error_rad": 0.0,
+        "joint_limit_max_violation_rad": 0.0,
+        "joint_limit_min_margin_rad": 0.10653714232444761,
+        "joint_velocity_max_ratio": 0.09651564359664917,
+        "joint_acceleration_peak_rad_s2": 24.591463088989258,
+        "pelvis_drop_m": 0.012000024318695068,
+        "waist_roll_peak_rad": 0.0,
+        "foot_excursion_m": 0.16400001218599683,
+        "foot_height_max_m": 0.03689998342784742,
+        "floor_penetration_max_m": 3.091011663985954e-08,
+        "planted_foot_speed_p95_m_s": 0.05072466737451586,
+        "quasistatic_support_margin_min_m": -0.018052732426545412,
+        "quasistatic_support_margin_min_time_s": 3.36,
+        "support_feet_at_minimum": 1,
+        "two_foot_support_margin_min_m": 0.06584836550176118,
+        "deepest_hold_support_margin_min_m": -0.018052732426545412,
+        "self_contact_count_max": 0,
+        "endpoint_joint_rms_rad": 9.199731546427975e-18
+      },
+      "file": "train/retention_walk_right.pkl",
+      "sha256": "aff9bf81233c7e32ab13d193c49ef3db66a7c11a190a00849255b5ef17efe95b",
+      "manifest_checks": {
+        "motion_path_matches": true,
+        "motion_sha256_matches": true,
+        "ik_position_within_8mm": true,
+        "ik_orientation_within_5deg": true,
+        "source_csv_exists": true,
+        "source_csv_sha256_matches": true
+      }
+    },
+    {
       "id": "shadow_dip_left_train_01",
       "pass": true,
       "errors": [],
@@ -572,6 +746,7 @@
       "fps": 50,
       "metrics": {
         "root_quaternion_max_norm_error": 0.0,
+        "pose_aa_contract_max_error_rad": 0.0,
         "joint_limit_max_violation_rad": 0.0,
         "joint_limit_min_margin_rad": 0.020000004696845985,
         "joint_velocity_max_ratio": 0.12200616598129273,
@@ -611,6 +786,7 @@
       "fps": 50,
       "metrics": {
         "root_quaternion_max_norm_error": 0.0,
+        "pose_aa_contract_max_error_rad": 0.0,
         "joint_limit_max_violation_rad": 0.0,
         "joint_limit_min_margin_rad": 0.020000004696845985,
         "joint_velocity_max_ratio": 0.1335939049720764,
@@ -650,6 +826,7 @@
       "fps": 50,
       "metrics": {
         "root_quaternion_max_norm_error": 0.0,
+        "pose_aa_contract_max_error_rad": 0.0,
         "joint_limit_max_violation_rad": 0.0,
         "joint_limit_min_margin_rad": 0.020000004696845985,
         "joint_velocity_max_ratio": 0.14489755630493165,
@@ -689,6 +866,7 @@
       "fps": 50,
       "metrics": {
         "root_quaternion_max_norm_error": 0.0,
+        "pose_aa_contract_max_error_rad": 0.0,
         "joint_limit_max_violation_rad": 0.0,
         "joint_limit_min_margin_rad": 0.020000004696845985,
         "joint_velocity_max_ratio": 0.15381097793579102,
@@ -728,6 +906,7 @@
       "fps": 50,
       "metrics": {
         "root_quaternion_max_norm_error": 0.0,
+        "pose_aa_contract_max_error_rad": 0.0,
         "joint_limit_max_violation_rad": 0.0,
         "joint_limit_min_margin_rad": 0.020000004696845985,
         "joint_velocity_max_ratio": 0.14851622581481932,
@@ -767,6 +946,7 @@
       "fps": 50,
       "metrics": {
         "root_quaternion_max_norm_error": 0.0,
+        "pose_aa_contract_max_error_rad": 0.0,
         "joint_limit_max_violation_rad": 0.0,
         "joint_limit_min_margin_rad": 0.020000004696845985,
         "joint_velocity_max_ratio": 0.15736401081085205,
@@ -806,6 +986,7 @@
       "fps": 50,
       "metrics": {
         "root_quaternion_max_norm_error": 0.0,
+        "pose_aa_contract_max_error_rad": 0.0,
         "joint_limit_max_violation_rad": 0.0,
         "joint_limit_min_margin_rad": 0.020000004696845985,
         "joint_velocity_max_ratio": 0.12200616598129273,
@@ -845,6 +1026,7 @@
       "fps": 50,
       "metrics": {
         "root_quaternion_max_norm_error": 0.0,
+        "pose_aa_contract_max_error_rad": 0.0,
         "joint_limit_max_violation_rad": 0.0,
         "joint_limit_min_margin_rad": 0.020000004696845985,
         "joint_velocity_max_ratio": 0.1335939049720764,
@@ -884,6 +1066,7 @@
       "fps": 50,
       "metrics": {
         "root_quaternion_max_norm_error": 0.0,
+        "pose_aa_contract_max_error_rad": 0.0,
         "joint_limit_max_violation_rad": 0.0,
         "joint_limit_min_margin_rad": 0.020000004696845985,
         "joint_velocity_max_ratio": 0.14489755630493165,
@@ -923,6 +1106,7 @@
       "fps": 50,
       "metrics": {
         "root_quaternion_max_norm_error": 0.0,
+        "pose_aa_contract_max_error_rad": 0.0,
         "joint_limit_max_violation_rad": 0.0,
         "joint_limit_min_margin_rad": 0.020000004696845985,
         "joint_velocity_max_ratio": 0.15090011358261107,
@@ -962,6 +1146,7 @@
       "fps": 50,
       "metrics": {
         "root_quaternion_max_norm_error": 0.0,
+        "pose_aa_contract_max_error_rad": 0.0,
         "joint_limit_max_violation_rad": 0.0,
         "joint_limit_min_margin_rad": 0.020000004696845985,
         "joint_velocity_max_ratio": 0.15189566612243652,
@@ -1001,6 +1186,7 @@
       "fps": 50,
       "metrics": {
         "root_quaternion_max_norm_error": 0.0,
+        "pose_aa_contract_max_error_rad": 0.0,
         "joint_limit_max_violation_rad": 0.0,
         "joint_limit_min_margin_rad": 0.020000004696845985,
         "joint_velocity_max_ratio": 0.15510849952697753,

@@ -1,6 +1,6 @@
 # SuperSONIC submission progress
 
-**Last updated:** 2026-08-14 14:45 PT
+**Last updated:** 2026-08-14 15:40 PT
 **Branch:** `feature/supersonic-submission`
 **Deadline:** 2026-08-16 23:59 PT
 
@@ -19,13 +19,14 @@ status here must remain truthful.
   `c374bae5b9039cd0ee71377e654d11ce1bc69e1d`.
 - [x] Implemented generator, MuJoCo IK, frozen split contract, validator, reference
   renderer, training/eval/render/export wrappers, and ONNX checker.
-- [x] Generated the complete 26-sequence `shadow-dip-v1` set: 18 train/rehearsal,
+- [x] Generated the complete 30-sequence `shadow-dip-v1` set: 22 train/rehearsal,
   4 independently parameterized selection-validation hero motions, and 4 independently
   parameterized final-test hero motions.
-- [x] Passed 26/26 hard reference checks with zero warnings; independently round-tripped
-  the CSV schema through NVIDIA's upstream converter; visually inspected the hero hold.
-- [x] Added Linux CI that regenerates and validates the complete set from the pinned
-  NVIDIA checkout.
+- [x] Passed 30/30 hard reference checks with zero warnings; independently round-tripped
+  both identity and non-identity-heading CSVs through NVIDIA's upstream converter;
+  visually inspected the hero hold.
+- [x] Added Linux CI that regenerates, validates, and byte-compares the complete set
+  from the pinned NVIDIA checkout.
 - [x] Committed and pushed the implementation to `cristpierce/shadow-dance` and opened
   [upstream PR #1](https://github.com/Durp06/shadow-dance/pull/1).
 - [x] Passed the complete public Linux CI run, including NVIDIA Git LFS assets:
@@ -41,17 +42,21 @@ status here must remain truthful.
   ONNX Runtime verification, release hashes, and optional Hugging Face publication.
 - [x] Added three-seed final evaluation: 12 untouched trials per policy with exact
   motion/seed inventories and source-summary hashes bound into the final comparison.
-- [x] Freshly regenerated all 26 motions in an isolated directory: the manifest and all
-  52 CSV/PKL payloads are byte-identical; the QA report is identical except for its
-  recorded temporary output path.
+- [x] Freshly regenerated all 30 motions in an isolated directory: the manifest and all
+  60 CSV/PKL payloads are byte-identical; the QA report is identical after normalizing
+  its recorded temporary dataset and manifest paths.
 - [x] Strengthened the hero geometry to a 14.7 cm pelvis drop and 28.1-degree waist
-  roll while retaining 26/26 clean reference checks and zero warnings.
+  roll while retaining 30/30 clean reference checks and zero warnings.
+- [x] Added owned forward-walk and true heading-turn references for both lead directions,
+  closing the official WBT fundamentals gap without importing restricted BONES-SEED data.
+- [x] Verified the public dataset publisher in fail-closed dry-run mode: 68 files,
+  30 PKLs, 3,731,981 bytes, and manifest/validation hashes bound into the plan.
 - [x] Confirmed the motion converter, G1 MJCF, training entrypoint, evaluation entrypoint,
   and configuration used by the dataset are compatible with the SONIC commit embedded
   in the pinned cloud image; the only motion-loader delta is post-load memory cleanup.
 - [x] Expanded the frozen ladder from debug-only budgets to independent 5/500/2,000
   iteration candidates while preserving the 8-hour and approximately $13.98 worker cap.
-- [x] Passed 11/11 local tests against the pinned NVIDIA converter/MJCF plus Ruff, Bash,
+- [x] Passed 12/12 local tests against the pinned NVIDIA converter/MJCF plus Ruff, Bash,
   YAML, dataset-inventory, publication dry-run, and read-only cloud-plan checks.
 - [x] Added a deterministic target/before/after video builder and a publication gate
   that hashes every uncut source clip, the frozen comparison, and edited output.

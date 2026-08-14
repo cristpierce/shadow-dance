@@ -1,6 +1,6 @@
 # Data layout
 
-`generated/csv/` contains the 26 team-authored source trajectories in an inspectable
+`generated/csv/` contains the 30 team-authored source trajectories in an inspectable
 degree/centimetre schema. `manifests/shadow-dip-v1.json` is authoritative for split,
 provenance, phase timing, parameters, IK residuals, and hashes. `splits/` is a simple
 loader-friendly index.
@@ -18,5 +18,7 @@ shadow-validate --sonic-root C:\path\to\GR00T-WholeBodyControl
 The eventual Hugging Face dataset revision will contain the same PKLs plus this source
 and metadata. Compare every checksum to the manifest before training. The frozen
 manifest SHA-256 is
-`3b7d91fbc4ec46c6591be3c583fba3dfbc9174045d3adb9eb8d0aa52a9abc3f0`; a clean local
-regeneration reproduced the manifest and all 52 CSV/PKL files byte-for-byte.
+`1b2045380e09e6276c5ac4ff4c2bb1c7bd5903a974940f9928d7351b5f90a5d1`; a clean local
+regeneration reproduced the manifest and all 60 CSV/PKL files byte-for-byte. The
+committed validation report SHA-256 is
+`5aedeedee8d775c34c0b5c67f235591829da281cfa9385b8b8a15b8c10a6b999`.

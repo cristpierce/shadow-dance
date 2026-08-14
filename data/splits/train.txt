@@ -16,3 +16,7 @@ retention_sway_left
 retention_sway_right
 retention_torso_turn_left
 retention_torso_turn_right
+retention_walk_left
+retention_walk_right
+retention_turn_left
+retention_turn_right

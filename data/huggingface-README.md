@@ -13,15 +13,16 @@ tags:
 
 # Shadow Partner Dip v1
 
-Twenty-six team-authored synthetic Unitree G1 motion references for the Ultimate Bots
-SuperSONIC challenge: 12 parameterized partnerless dip training variants, 6 conservative
-rehearsal motions, 4 selection-validation dips, and 4 untouched final-test dips.
+Thirty team-authored synthetic Unitree G1 motion references for the Ultimate Bots
+SuperSONIC challenge: 12 parameterized partnerless dip training variants, 10 conservative
+rehearsal motions (including forward walk and true heading turn in both directions),
+4 selection-validation dips, and 4 untouched final-test dips.
 
 The archive includes SONIC motion-lib PKLs, transparent source CSVs, fixed split lists,
 the full provenance/hash manifest, and the frozen MuJoCo validation report. No
 BONES-SEED motion, third-party video, or human biometric data is included.
 
-Reference QA at the published revision: 26/26 pass, zero warnings, no joint-limit
+Reference QA at the published revision: 30/30 pass, zero warnings, no joint-limit
 violation or MuJoCo self-contact, worst foot IK residual 6.66 mm / 3.57 degrees, and a
 positive 7.24 cm minimum quasi-static support margin during the deepest hold. See the
 validation JSON for every metric and the GitHub repository for generation code and

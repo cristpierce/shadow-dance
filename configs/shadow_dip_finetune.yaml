@@ -40,6 +40,6 @@ selection_thresholds:
   max_retention_mpjpe_increase_fraction: 0.15
 selection_rule: >-
   Maximize selection-validation hero completion and minimize local MPJPE; reject a
-  checkpoint unless it clears the frozen hero-improvement and stand/turn-retention
+  checkpoint unless it clears the frozen hero-improvement and 10-motion fundamentals
   thresholds. Freeze the winner before evaluating stock and selected policies on the
   untouched final-test split.

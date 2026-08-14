@@ -38,11 +38,31 @@ def test_generated_hero_passes_hard_validation() -> None:
     assert generated.ik_max_orientation_error_deg < 3.0
 
 
-def test_csv_round_trip_matches_upstream_converter(tmp_path: Path) -> None:
+@pytest.mark.parametrize(
+    "spec",
+    [
+        SequenceSpec(
+            id="shadow_dip_roundtrip",
+            split="test",
+            amplitude=0.62,
+            duration_s=3.0,
+            hold_s=0.3,
+        ),
+        SequenceSpec(
+            id="retention_turn_roundtrip",
+            split="train",
+            kind="turn",
+            direction="right",
+            amplitude=0.86,
+            duration_s=3.4,
+            step_back_m=0.0,
+            hold_s=0.3,
+        ),
+    ],
+    ids=("hero", "heading-turn"),
+)
+def test_csv_round_trip_matches_upstream_converter(tmp_path: Path, spec: SequenceSpec) -> None:
     mjcf = _mjcf()
-    spec = SequenceSpec(
-        id="shadow_dip_roundtrip", split="test", amplitude=0.62, duration_s=3.0, hold_s=0.3
-    )
     generated = generate_motion(spec, G1Kinematics(mjcf))
     csv_path = tmp_path / f"{spec.id}.csv"
     write_motion_csv(csv_path, generated.entry)
@@ -57,3 +77,10 @@ def test_csv_round_trip_matches_upstream_converter(tmp_path: Path) -> None:
     for field in ("root_trans_offset", "pose_aa", "dof", "root_rot", "smpl_joints"):
         assert np.allclose(converted[field], generated.entry[field], atol=2e-6), field
     assert converted["fps"] == generated.entry["fps"] == 50
+
+    if spec.kind == "turn":
+        inconsistent = {**generated.entry, "pose_aa": generated.entry["pose_aa"].copy()}
+        inconsistent["pose_aa"][:, 0, :] = 0.0
+        result = MotionValidator(mjcf).validate_entry(spec.id, inconsistent)
+        assert not result["pass"]
+        assert any("pose_aa disagrees" in error for error in result["errors"])

@@ -52,7 +52,7 @@ status here must remain truthful.
 - [x] Added owned forward-walk and true heading-turn references for both lead directions,
   closing the official WBT fundamentals gap without importing restricted BONES-SEED data.
 - [x] Verified the public dataset publisher in fail-closed dry-run mode: 68 files,
-  30 PKLs, 3,731,981 bytes, and manifest/validation hashes bound into the plan.
+  30 PKLs, 3,732,169 bytes, and manifest/validation hashes bound into the plan.
 - [x] Confirmed the motion converter, G1 MJCF, training entrypoint, evaluation entrypoint,
   and configuration used by the dataset are compatible with the SONIC commit embedded
   in the pinned cloud image; the only motion-loader delta is post-load memory cleanup.

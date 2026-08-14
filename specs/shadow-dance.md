@@ -1,8 +1,13 @@
 # Shadow Dance — Ghost Trial 03 (SuperSONIC Challenge)
 
-**Status:** design approved, not started
+> **August 13 update:** use the
+> [deadline-focused submission improvement plan](../docs/research/2026-08-13-supersonic-submission-improvement-plan.md)
+> as the current source of truth where it conflicts with this original design, especially
+> for data format, BONES-SEED usage, evidence gates, and schedule.
+
+**Status:** 22-sequence synthetic reference set and QA complete; stock-policy baseline pending Isaac
 **Deadline:** Aug 16 2026, 11:59 PM PDT — **internal target: submit Aug 15**
-**Track:** Performance Arts (portal currently defaults to Martial Arts — must change)
+**Track:** Performance Arts (confirmed in the portal on August 13)
 **Entry:** one hero move + full phrase demo
 
 ---

@@ -1,0 +1,14 @@
+# Exact local environment used for the frozen reference QA on 2026-08-13.
+# Install the project first with: python -m pip install -e ".[dev]"
+Python==3.13.7
+imageio==2.37.4
+imageio-ffmpeg==0.6.0
+joblib==1.5.3
+mujoco==3.11.0
+numpy==2.5.2
+pandas==3.0.5
+pillow==12.3.0
+pytest==8.4.2
+PyYAML==6.0.3
+ruff==0.16.3
+scipy==1.18.0

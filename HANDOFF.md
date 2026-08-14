@@ -1,7 +1,12 @@
 # Handoff — read this first
 
-Continuing work started on the Mac mini (session `ddf7a70f`, Aug 2 2026).
-Design is approved. Read [`specs/shadow-dance.md`](specs/shadow-dance.md) — it's the source of truth.
+> **August 13 update:** the deadline-focused
+> [submission improvement plan](docs/research/2026-08-13-supersonic-submission-improvement-plan.md)
+> supersedes this document where they conflict, especially on paired SMPL, BONES-SEED,
+> local hardware, and schedule assumptions.
+
+Continuing work started on the Mac mini (session `ddf7a70f`, Aug 2 2026). This file is
+the original handoff and remains useful historical context.
 
 ## What this is
 

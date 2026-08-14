@@ -1,0 +1,63 @@
+name: Reference motion QA
+
+on:
+  push:
+    branches: [main, "feature/**"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out Shadow Dance
+        uses: actions/checkout@v4
+
+      - name: Check out pinned GR00T Whole-Body Control
+        uses: actions/checkout@v4
+        with:
+          repository: NVlabs/GR00T-WholeBodyControl
+          ref: c374bae5b9039cd0ee71377e654d11ce1bc69e1d
+          path: external/GR00T-WholeBodyControl
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install reference toolchain
+        run: python -m pip install -e ".[dev]"
+
+      - name: Lint and test
+        env:
+          SONIC_ROOT: ${{ github.workspace }}/external/GR00T-WholeBodyControl
+        run: |
+          ruff check src scripts tests
+          pytest -q
+
+      - name: Regenerate and validate the complete frozen set
+        env:
+          QA_ROOT: ${{ runner.temp }}/shadow-qa
+          SONIC_ROOT: ${{ github.workspace }}/external/GR00T-WholeBodyControl
+        run: |
+          shadow-generate \
+            --sonic-root "$SONIC_ROOT" \
+            --output "$QA_ROOT/generated" \
+            --manifest "$QA_ROOT/manifests/shadow-dip-v1.json"
+          shadow-validate \
+            --sonic-root "$SONIC_ROOT" \
+            --dataset "$QA_ROOT/generated" \
+            --manifest "$QA_ROOT/manifests/shadow-dip-v1.json" \
+            --report "$QA_ROOT/reference-validation.json"
+
+      - name: Upload QA report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: reference-validation
+          path: ${{ runner.temp }}/shadow-qa/reference-validation.json
+          if-no-files-found: error

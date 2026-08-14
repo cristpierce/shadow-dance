@@ -16,21 +16,27 @@ does not and cannot relicense the third-party components this project
 depends on, several of which are more restrictive:
 
   NVIDIA GR00T-WholeBodyControl / GEAR-SONIC
-      Apache-2.0. Compatible. Model checkpoints may carry separate terms —
-      check the model card before redistributing weights.
+      Source code is Apache-2.0. Model checkpoints and derivative weights use the
+      NVIDIA Open Model License. Distribution of a fine-tuned checkpoint or ONNX
+      derivative must include that agreement and this notice:
+      "Licensed by NVIDIA Corporation under the NVIDIA Open Model License."
 
   SMPL body model
-      NON-COMMERCIAL licence, held by Max Planck. SMPL-derived motion data
-      may NOT be redistributed commercially. This constrains what can be
-      published in the dataset deliverable.
+      Relevant only if actual SMPL assets or data are added. The deadline plan uses
+      SONIC's supported dummy-SMPL path. Review the applicable Max Planck terms
+      before distributing any SMPL model files or SMPL-derived data.
 
   BONES-SEED (bones-studio/seed)
-      Check dataset terms before redistributing any derived clips. Motions
-      sampled from it appear in the fine-tune mix.
+      Not part of the default deadline dataset. Its license limits eligibility,
+      prohibits redistribution of the raw dataset, and requires specified public
+      attribution. Do not use or distribute BONES data unless eligibility and the
+      intended treatment of restricted inputs are confirmed.
 
   NVIDIA Omniverse / Isaac Sim
       Governed by the NVIDIA Omniverse Licence Agreement, accepted at
       install time. Not redistributed here.
 
-Captured performance footage in this project is original work by the
-authors. No third-party dance video is used.
+The committed `shadow-dip-v1` source trajectories are team-authored synthetic data; no
+captured performance footage, BONES-SEED motion, or third-party dance video is included.
+Before adding any new source, verify consent, ownership, retargeter terms, and every
+asset listed in the dataset manifest.

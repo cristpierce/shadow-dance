@@ -1,0 +1,21 @@
+# Reproducibility record for the shell wrappers; the upstream Hydra config remains
+# `manager/universal_token/all_modes/sonic_release` at the pinned commit.
+project: shadow-dance
+dataset: shadow-dip-v1
+upstream_commit: c374bae5b9039cd0ee71377e654d11ce1bc69e1d
+base_checkpoint: nvidia/GEAR-SONIC/sonic_release/last.pt
+config: manager/universal_token/all_modes/sonic_release
+reference_mode: g1
+smpl_motion_file: dummy
+seed: 42
+learning_rate: 2.0e-5
+checkpoint_ladder_iterations: [5, 25, 100, 250, 500]
+first_cloud_run:
+  gpu: NVIDIA-L40S
+  num_envs: 1024
+  headless: true
+  use_wandb: false
+selection_rule: >-
+  Maximize held-out hero completion and minimize local MPJPE; reject a checkpoint if
+  stand/turn retention regresses materially. Continue past a ladder gate only when the
+  frozen held-out score improves.

@@ -64,10 +64,10 @@ that the target is coherent; it is never presented as policy execution.
 - Runtime: `npa-sonic:0.1.2` L40S image at digest
   `sha256:bdf81f5b7f1c879ac920df53588a15129b2ac71d9492e8c2fc34ce636a5373fb`.
 - Runtime SONIC commit: `0a87181c9106d0e49293400714b157676e0ec664`.
-- Candidate budgets: independent 5, 500, and 2,000 iteration fine-tunes from the same base.
+- Candidate budgets: independent 5, 500, and 4,000 iteration fine-tunes from the same base.
 - Seed for selection evaluation: 42.
 - No W&B dependency, no hidden data, and no training/test overlap.
-- One on-demand Nebius L40S worker with an 8-hour hard wall-time guard.
+- One on-demand Nebius L40S worker with a 10-hour hard wall-time guard.
 
 The five-iteration run is also the data/environment smoke. Each surviving candidate is
 packaged with its original config and checkpoint hash before evaluation. Longer stages
@@ -131,8 +131,8 @@ source clip, the final comparison, and the edited output.
 
 ## 6. Compute and failure policy
 
-The exact target currently prices at $1.747 per L40S worker-hour on demand. The 8-hour
-worker ceiling is about $13.98 before the small controller cost, leaving room inside a
+The exact target currently prices at $1.747 per L40S worker-hour on demand. The 10-hour
+worker ceiling is about $17.47 before the small controller cost, leaving room inside a
 $50 challenge credit for one diagnosed recovery run. On-demand is preferred near the
 deadline because interruption would cost more evidence time than spot savings justify.
 

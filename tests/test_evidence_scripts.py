@@ -363,15 +363,15 @@ def test_model_publisher_dry_run_requires_valid_release(tmp_path: Path) -> None:
         "retention",
         metric_payload(terminations=[False] * 10, mpjpe_l=20),
     )
-    stage_2000_heldout_summary = bound_summary(
-        "stage-2000-heldout-seed-42",
-        "stage-2000",
+    stage_4000_heldout_summary = bound_summary(
+        "stage-4000-heldout-seed-42",
+        "stage-4000",
         "heldout",
         metric_payload(terminations=[False, True, True, True], mpjpe_l=70),
     )
-    stage_2000_retention_summary = bound_summary(
-        "stage-2000-retention-seed-42",
-        "stage-2000",
+    stage_4000_retention_summary = bound_summary(
+        "stage-4000-retention-seed-42",
+        "stage-4000",
         "retention",
         metric_payload(terminations=[False] * 8 + [True] * 2, mpjpe_l=25),
     )
@@ -437,9 +437,9 @@ def test_model_publisher_dry_run_requires_valid_release(tmp_path: Path) -> None:
         retention_successes=10,
         retention_mpjpe=21.0,
     )
-    stage_2000_candidate = candidate_record(
-        "stage-2000",
-        checkpoint_bytes=b"stage-2000-checkpoint",
+    stage_4000_candidate = candidate_record(
+        "stage-4000",
+        checkpoint_bytes=b"stage-4000-checkpoint",
         heldout_successes=1,
         heldout_mpjpe=70.0,
         retention_successes=8,
@@ -469,7 +469,7 @@ def test_model_publisher_dry_run_requires_valid_release(tmp_path: Path) -> None:
         },
         "selection_seed": 42,
         "novelty_gate_pass": True,
-        "candidates": [stage_5_candidate, candidate, stage_2000_candidate],
+        "candidates": [stage_5_candidate, candidate, stage_4000_candidate],
         "selected": candidate,
         "sources": {
             "stock_heldout": {
@@ -517,21 +517,21 @@ def test_model_publisher_dry_run_requires_valid_release(tmp_path: Path) -> None:
                         ).hexdigest(),
                     },
                 },
-                "stage-2000": {
+                "stage-4000": {
                     "heldout": {
-                        "label": "stage-2000",
+                        "label": "stage-4000",
                         "split": "heldout",
-                        "path": "summaries/stage-2000-heldout-seed-42.json",
+                        "path": "summaries/stage-4000-heldout-seed-42.json",
                         "sha256": hashlib.sha256(
-                            stage_2000_heldout_summary.read_bytes()
+                            stage_4000_heldout_summary.read_bytes()
                         ).hexdigest(),
                     },
                     "retention": {
-                        "label": "stage-2000",
+                        "label": "stage-4000",
                         "split": "retention",
-                        "path": "summaries/stage-2000-retention-seed-42.json",
+                        "path": "summaries/stage-4000-retention-seed-42.json",
                         "sha256": hashlib.sha256(
-                            stage_2000_retention_summary.read_bytes()
+                            stage_4000_retention_summary.read_bytes()
                         ).hexdigest(),
                     },
                 },

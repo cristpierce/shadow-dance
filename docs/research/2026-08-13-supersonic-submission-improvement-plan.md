@@ -670,7 +670,7 @@ Avoid claiming real-robot validation unless Ultimate Bots actually runs it. Say
 - Capture/generate the small amplitude/tempo/direction set and owned fundamentals.
 - Validate every motion and freeze train/validation/test manifests.
 - Save stock baseline metrics and renders before training.
-- Run the 5/500/2,000 checkpoint ladder.
+- Run the 5/500/4,000 checkpoint ladder.
 - Evaluate held-out hero plus stand/walk/turn; choose whether to continue or fix data.
 
 ### August 15 — complete and submit early
@@ -802,6 +802,18 @@ the portal/Discord immediately:
   claimed 100% completion only after appending a 100-frame landing-recovery segment and
   selecting among recovery checkpoints. Shadow Dance therefore treats full recovery
   and success as hard gates, while progress and MPJPE remain diagnostics.
+- A second public challenge repository appeared on August 14:
+  [`qjwdlwjdl/G1-Taiji-Form-final`](https://github.com/qjwdlwjdl/G1-Taiji-Form-final)
+  at commit `8f93718f3572c2a657ac1b21b4f45c7837a77016`. It enters Martial Arts rather
+  than Shadow Dance's Performance Arts track, so it is a quality comparator rather
+  than a direct track rival. Its public writeup claims a 25.1-second Kimodo Tai Chi
+  sequence, a 4,000-iteration 2,048-environment first stage, and another 3,500
+  iterations of two-GPU root-focused refinement, reaching full completion and
+  34.3 mm local MPJPE. At the inspected commit, the public tree contained documentation
+  and before/after MP4s but no policy, raw motion, metric JSON, or repository license;
+  those absences do not rule out private portal artifacts. The useful planning signal is
+  that another serious entrant also spent materially more than 2,000 iterations on a
+  clean whole-body result.
 - The strategic response is not a late switch to an acrobatic skill. Shadow Dance must
   make the unsupported off-axis hold and recovery visually unmistakable, then win the
   evidence categories with an exact stock baseline, frozen validation/test separation,
@@ -903,7 +915,7 @@ The following updates supersede earlier references to a single “held-out” he
   `gpu-l40s-a_1gpu-16vcpu-64gb` target at $1.747/hour on demand and $0.848/hour spot,
   consistent with [Nebius component pricing](https://docs.nebius.com/compute/resources/pricing).
   At the on-demand price, $50 covers about 28.6 VM-hours before storage/controller
-  costs; the configured eight-hour attempt cap is about $13.98.
+  costs; the configured ten-hour attempt cap is about $17.47.
 - The official Nebius Linux/amd64 CLI binary was installed from the vendor object-store
   release path and verified as version `0.12.254` (83,198,114 bytes). Profile/config
   inspection then failed closed because no `~/.nebius/config.yaml` exists. This proves
@@ -932,15 +944,17 @@ The following updates supersede earlier references to a single “held-out” he
   gate fails, do not repurpose the test data; stop and preregister a separate harder
   target before generating or training anything new.
 - Prefer the on-demand L40S direct-image workflow for deadline reliability and rendering
-  support. The frozen run is exactly 5/500/2,000 iterations with 64 environments for
+  support. The frozen run is exactly 5/500/4,000 iterations with 64 environments for
   the smoke and 512 for the two main candidates. This supersedes the initial
   5/25/100 debug-scale ladder: NVIDIA documents 100 iterations as a local debug run,
-  while the public challenge-targeted `ultimate-bots-G1` evidence reports 2,000
-  iterations at 512 environments in 9,544.61 seconds. Independent candidates retain a
-  clean same-base comparison, and the 8-hour worker guard still leaves substantial
-  time around that public benchmark. Any longer ladder requires a new versioned
+  while the public challenge-targeted `ultimate-bots-G1` evidence reports that its
+  2,000-iteration, 512-environment first run still had a mean episode length of only
+  44.17 frames and an 85.98% end-effector termination rate. The later public Tai Chi
+  entry reports 7,500 total refinement iterations on two L40S GPUs. Independent
+  candidates retain a clean same-base comparison, and the 10-hour worker guard gives
+  the 4,000-step candidate room to finish on one L40S. Any longer ladder requires a new versioned
   protocol decision before the untouched test is opened; it is not silently enabled.
-- Enforce an eight-hour worker timeout with a 15-minute recovery window and tear down
+- Enforce a ten-hour worker timeout with a 15-minute recovery window and tear down
   the small jobs controller after terminal status. This bounds a stuck attempt while
   retaining enough of the $50 credit for one evidence-driven retry.
 - Treat synthetic kinematic preview footage only as an explanation of the target.

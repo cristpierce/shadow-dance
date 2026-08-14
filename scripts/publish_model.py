@@ -17,7 +17,7 @@ from summarize_eval import summarize as summarize_raw_metrics
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 EXPECTED_SELECTION_SEED = 42
 EXPECTED_TEST_SEEDS = (101, 202, 303)
-EXPECTED_CANDIDATE_LABELS = {"stage-5", "stage-500", "stage-2000"}
+EXPECTED_CANDIDATE_LABELS = {"stage-5", "stage-500", "stage-4000"}
 
 
 def read_json(path: Path) -> dict[str, Any]:

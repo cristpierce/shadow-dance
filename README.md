@@ -40,7 +40,7 @@ before either policy is measured on the independent final-test family.
 | Original data + provenance | [`shadow-dip-v1.0.0`](https://github.com/cristpierce/shadow-dance/releases/tag/shadow-dip-v1.0.0) manifest, PKLs, and source CSVs | 30 sequences generated, hashed, and public |
 | G1 limits / foot IK / support QA | `results/reference-validation.json` | 30/30 pass; 0 warnings |
 | Stock SONIC on validation moves | raw eval log + novelty report | Pending Isaac run |
-| Fine-tuned SONIC | independent 5/500/2,000 checkpoint ladder from pinned base | Pending Isaac run |
+| Fine-tuned SONIC | independent 5/500/4,000 checkpoint ladder from pinned base | Pending Isaac run |
 | Fundamentals retention | identical stock/fine-tuned suite | Pending Isaac run |
 | Untouched final test | 4 motions × 3 seeds per policy, bound to frozen selection | Pending checkpoint selection |
 | Deployable policy | checked ONNX graphs + hashes | Pending selected checkpoint |
@@ -143,7 +143,7 @@ bash scripts/train.sh
 MOTION_KEYS_FILE=data/splits/heldout.txt NUM_ENVS=4 SEED=42 \
   bash scripts/evaluate.sh /workspace/sonic_release/last.pt stock data/generated/heldout
 MOTION_KEYS_FILE=data/splits/heldout.txt NUM_ENVS=4 SEED=42 \
-  bash scripts/evaluate.sh /workspace/outputs/.../last.pt stage-2000 data/generated/heldout
+  bash scripts/evaluate.sh /workspace/outputs/.../last.pt stage-4000 data/generated/heldout
 
 # Locked-camera policy output and ONNX export
 MOTION_KEYS_FILE=data/splits/test.txt NUM_ENVS=4 SEED=303 \
@@ -154,7 +154,7 @@ bash scripts/export_onnx.sh /workspace/outputs/.../last.pt data/generated/test
 python scripts/verify_artifacts.py /workspace/outputs/.../exported
 ```
 
-The checkpoint ladder is bounded by the 8-hour cloud wall-time guard and stops if no
+The checkpoint ladder is bounded by the 10-hour cloud wall-time guard and stops if no
 candidate clears the preregistered novelty, improvement, and retention gates. It is not
 an instruction to burn the full credit allocation. Exact parameters and the selection
 rule are in [configs/shadow_dip_finetune.yaml](configs/shadow_dip_finetune.yaml).

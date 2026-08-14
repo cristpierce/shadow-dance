@@ -5,7 +5,7 @@
 **Rule:** do not start paid compute until the immutable inputs, storage, and licences
 below all pass.
 
-This is the operator handoff for the stock baseline, novelty gate, 5/500/2,000 checkpoint
+This is the operator handoff for the stock baseline, novelty gate, 5/500/4,000 checkpoint
 ladder, selection-validation and retention evaluation, untouched final testing, policy
 renders, ONNX validation, S3 evidence, and optional Hugging Face model publication. The
 final test repeats all four motions under three independent simulator seeds for each
@@ -67,7 +67,7 @@ the WSL VM has 15 GiB RAM. NVIDIA's current
 recommend at least 32 GB RAM and 16 GB GPU VRAM for full Isaac Sim workflows, with more
 for training. The laptop is therefore below the supported floor. After the named EULA
 acceptance, it may be used only as a best-effort 16-environment headless smoke fallback;
-do not plan the 500/2,000-iteration evidence run around it or download Isaac beforehand.
+do not plan the 500/4,000-iteration evidence run around it or download Isaac beforehand.
 
 ## 1. Install the operator environment in WSL2
 
@@ -258,10 +258,11 @@ npa workbench workflow submit \
 
 On-demand L40S is the reliability default because the deadline is close and rendering
 needs RT-capable hardware. The frozen run uses 64 environments for the 5-iteration smoke
-and 512 for the 500/2,000 candidates. This is calibrated against a public
+and 512 for the 500/4,000 candidates. This is calibrated against a public
 challenge-targeted run that reported 2,000 iterations in 9,544.61 seconds at 512
-environments. A longer ladder requires a separately versioned protocol decision; the
-current job never enables it implicitly. A rolling `last.pt` is atomically refreshed
+environments, then needed further curriculum work before claiming full completion. A
+longer ladder requires a separately versioned protocol decision; the current job never
+enables it implicitly. A rolling `last.pt` is atomically refreshed
 every five iterations, while regular numbered checkpoints are suppressed to avoid
 uploading tens of gigabytes of redundant optimizer state.
 `--controller-backend nebius` uses NPA's small `cpu-e2_2vcpu-8gb` fallback controller;
@@ -278,9 +279,9 @@ Recheck the live SkyPilot catalog before launch:
 On August 14, the pinned catalog priced the requested
 `gpu-l40s-a_1gpu-16vcpu-64gb` at **$1.747/hour on demand** (matching Nebius's
 [component pricing](https://docs.nebius.com/compute/resources/pricing)). At that price,
-$50 is about 28.6 instance-hours. The task has an immutable eight-hour wall-time guard,
-so one attempt is capped near **$13.98** of VM compute before minor disk/object-storage
-costs; an eight-hour 2-vCPU/8-GB controller is roughly another $0.40. This leaves room
+$50 is about 28.6 instance-hours. The task has an immutable ten-hour wall-time guard,
+so one attempt is capped near **$17.47** of VM compute before minor disk/object-storage
+costs; a ten-hour 2-vCPU/8-GB controller is roughly another $0.50. This leaves room
 for diagnosis and a deliberate retry. The timeout sends `TERM`, allows 15 minutes for
 the pipeline's hash-skipping recovery sync, and then exits `124` if still running.
 
@@ -298,7 +299,7 @@ best-effort `failure-recovery/` upload on nonzero exit.
 |---:|---|---|
 | `0` | Selected checkpoint, renders, ONNX, S3 evidence, and requested HF publish passed | Verify public files and prepare the portal |
 | `3` | Stock SONIC cleared both preregistered novelty thresholds | Do not call it a new skill; revise/freeze a harder hero target |
-| `4` | No 5/500/2,000 candidate improved hero while retaining fundamentals | Inspect stage summaries; justify a longer ladder or revise data |
+| `4` | No 5/500/4,000 candidate improved hero while retaining fundamentals | Inspect stage summaries; justify a longer ladder or revise data |
 | `78` | EULA variables absent or not exactly `YES` | Obtain named entrant acceptance; do not bypass |
 | other | Platform, download, simulator, training, evaluation, export, or publication failure | Classify from the last log and persisted stage before retrying |
 
@@ -331,7 +332,7 @@ After a successful run, the S3 prefix contains:
 ```text
 baseline/                       stock raw metrics and summaries
 baseline/novelty.json           preregistered stock novelty decision
-train/stage-{5,500,2000}/       training logs and rolling checkpoints as produced
+train/stage-{5,500,4000}/       training logs and rolling checkpoints as produced
 checkpoints/stage-*/            packaged checkpoint + config + hash
 eval/                           validation, retention, and final-test raw metrics
 summaries/                      per-seed scorecards plus repeated-test aggregates

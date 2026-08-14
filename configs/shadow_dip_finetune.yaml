@@ -17,12 +17,12 @@ reference_mode: g1
 smpl_motion_file: dummy
 training_seed: 42
 actor_learning_rate: 2.0e-5
-checkpoint_ladder_iterations: [5, 500, 2000]
+checkpoint_ladder_iterations: [5, 500, 4000]
 smoke_num_envs: 64
 main_num_envs: 512
 regular_checkpoint_frequency: 1000000
 rolling_checkpoint_frequency: 5
-max_walltime: 8h
+max_walltime: 10h
 selection_seed: 42
 final_test_seeds: [101, 202, 303]
 render_seed: 303

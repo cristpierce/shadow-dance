@@ -56,9 +56,9 @@ status here must remain truthful.
 - [x] Confirmed the motion converter, G1 MJCF, training entrypoint, evaluation entrypoint,
   and configuration used by the dataset are compatible with the SONIC commit embedded
   in the pinned cloud image; the only motion-loader delta is post-load memory cleanup.
-- [x] Expanded the frozen ladder from debug-only budgets to independent 5/500/2,000
-  iteration candidates while preserving the 8-hour and approximately $13.98 worker cap.
-- [x] Passed 12/12 local tests against the pinned NVIDIA converter/MJCF plus Ruff, Bash,
+- [x] Expanded the frozen ladder from debug-only budgets to independent 5/500/4,000
+  iteration candidates with a 10-hour and approximately $17.47 worker cap.
+- [x] Passed 13/13 local tests against the pinned NVIDIA converter/MJCF plus Ruff, Bash,
   YAML, dataset-inventory, publication dry-run, and read-only cloud-plan checks.
 - [x] Added a deterministic target/before/after video builder and a publication gate
   that hashes every uncut source clip, the frozen comparison, and edited output.
@@ -106,7 +106,7 @@ status here must remain truthful.
 2. Materialize the no-compute plan, then run the Isaac sample smoke and stock validation
    baseline once NVIDIA acceptance and Nebius authentication are present.
 3. Go/no-go novelty decision; adjust the target if stock already succeeds.
-4. Run the 5/500/2,000 checkpoint ladder with validation and retention at each gate.
+4. Run the 5/500/4,000 checkpoint ladder with validation and retention at each gate.
 5. Freeze the winner, open the untouched test split, export, validate, render, hash,
    and publish the selected checkpoint.
 6. Replace every bracketed submission value from raw evidence, verify public links,

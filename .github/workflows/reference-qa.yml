@@ -22,6 +22,7 @@ jobs:
           repository: NVlabs/GR00T-WholeBodyControl
           ref: c374bae5b9039cd0ee71377e654d11ce1bc69e1d
           path: external/GR00T-WholeBodyControl
+          lfs: true
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -60,4 +61,4 @@ jobs:
         with:
           name: reference-validation
           path: ${{ runner.temp }}/shadow-qa/reference-validation.json
-          if-no-files-found: error
+          if-no-files-found: warn

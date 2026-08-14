@@ -9,6 +9,7 @@
 - [ ] Project name saved.
 - [ ] Final writeup saved with no brackets.
 - [ ] Canonical GitHub link points to merged current commit.
+- [x] Public fork fallback points to the complete current commit on default `main`.
 - [ ] Public Hugging Face ONNX/model link saved.
 - [ ] Public Hugging Face dataset link saved.
 - [ ] Stock/fine-tuned simulation video link saved.

@@ -48,8 +48,9 @@ cannot drift across machines.
    name.** The
    current account has read-only access to `Durp06/shadow-dance`; the working changes are
    in [PR #1](https://github.com/Durp06/shadow-dance/pull/1). A registered team member
-   must provide the exact teammate name shown in the portal before the final copy is
-   frozen.
+   must confirm whether the portal displays `Myles`, `Myles Shetty`, or another exact
+   registered form before the final copy is frozen. The repository and historical
+   handoff identify the teammate as Myles Shetty (`Durp06`).
 
 5. **Publish the real policy comparison and submit the portal entry.** A signed-in team
    member must upload the final hash-verified simulator video to YouTube if the portal

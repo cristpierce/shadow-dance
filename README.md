@@ -198,8 +198,9 @@ docs/cloud-runbook.md   exact no-compute plan, launch, recovery, and publication
 ## Team
 
 Team **SELTZER** (two members). Repository implementation and submission coordination:
-Pierce Crist (`cristpierce`) and teammate. The final portal copy will name both members
-exactly as registered before submission.
+Pierce Crist (`cristpierce`) and Myles Shetty (`Durp06`). The portal currently exposes
+only the teammate initial in the supplied screenshot, so both display names must still
+be checked exactly as registered before submission.
 
 ## Challenge acknowledgement
 

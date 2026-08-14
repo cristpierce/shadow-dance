@@ -48,7 +48,8 @@ derived data was used in our independently authored dataset.
 
 ## Loadout links
 
-- GitHub: `https://github.com/Durp06/shadow-dance`
+- GitHub if upstream PR #1 is merged: `https://github.com/Durp06/shadow-dance`
+- Ready public fallback if it is not merged: `https://github.com/cristpierce/shadow-dance`
 - Dataset (Hugging Face): `[PUBLIC_DATASET_URL]`
 - ONNX policy/model card (Hugging Face): `[PUBLIC_MODEL_URL]`
 - Before/after simulation video: `[PUBLIC_VIDEO_URL]`

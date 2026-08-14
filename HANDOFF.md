@@ -1,6 +1,9 @@
-# Handoff — read this first
+# Historical handoff — superseded
 
-> **August 13 update:** the deadline-focused
+> **Do not execute this document as the current plan.** Use
+> [PROGRESS.md](PROGRESS.md) for live status and
+> [docs/cloud-runbook.md](docs/cloud-runbook.md) for the verified operator commands.
+> The August 13 deadline-focused
 > [submission improvement plan](docs/research/2026-08-13-supersonic-submission-improvement-plan.md)
 > supersedes this document where they conflict, especially on paired SMPL, BONES-SEED,
 > local hardware, and schedule assumptions.

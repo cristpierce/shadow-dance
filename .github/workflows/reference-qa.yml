@@ -59,17 +59,22 @@ jobs:
         env:
           QA_ROOT: ${{ runner.temp }}/shadow-qa
         run: |
-          diff -rq data/generated "$QA_ROOT/generated"
-          cmp data/manifests/shadow-dip-v1.json \
-            "$QA_ROOT/manifests/shadow-dip-v1.json"
+          python scripts/compare_regenerated_bundle.py \
+            --candidate-root "$QA_ROOT/generated" \
+            --candidate-manifest "$QA_ROOT/manifests/shadow-dip-v1.json" \
+            --candidate-report "$QA_ROOT/reference-validation.json"
           for split in train heldout test; do
             cmp "data/splits/${split}.txt" "$QA_ROOT/splits/${split}.txt"
           done
 
-      - name: Upload QA report
+      - name: Upload QA evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: reference-validation
-          path: ${{ runner.temp }}/shadow-qa/reference-validation.json
+          path: |
+            ${{ runner.temp }}/shadow-qa/reference-validation.json
+            ${{ runner.temp }}/shadow-qa/manifests
+            ${{ runner.temp }}/shadow-qa/splits
+            ${{ runner.temp }}/shadow-qa/generated
           if-no-files-found: warn

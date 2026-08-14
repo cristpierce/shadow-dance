@@ -25,8 +25,9 @@ status here must remain truthful.
 - [x] Passed 30/30 hard reference checks with zero warnings; independently round-tripped
   both identity and non-identity-heading CSVs through NVIDIA's upstream converter;
   visually inspected the hero hold.
-- [x] Added Linux CI that regenerates, validates, and byte-compares the complete set
-  from the pinned NVIDIA checkout.
+- [x] Added Linux CI that regenerates and validates from the pinned NVIDIA checkout,
+  then checks exact inventories/schemas/splits and cross-platform numeric equivalence
+  of every CSV/PKL field at `1e-6` absolute tolerance.
 - [x] Committed and pushed the implementation to `cristpierce/shadow-dance` and opened
   [upstream PR #1](https://github.com/Durp06/shadow-dance/pull/1).
 - [x] Passed the complete public Linux CI run, including NVIDIA Git LFS assets:

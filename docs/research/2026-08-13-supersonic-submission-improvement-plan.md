@@ -853,6 +853,17 @@ The following updates supersede earlier references to a single “held-out” he
   SONIC requires root rotation in both `root_rot` quaternion form and the root slot of
   `pose_aa`. The generator now emits both consistently, NVIDIA's pinned converter
   round-trips the turn within 2e-6, and the reference validator hard-fails future drift.
+- Public Ubuntu/Python 3.11 regeneration passed all 12 tests and all 30 validator cases
+  with zero warnings. Comparing its QA report with the frozen Windows/Python 3.13 report
+  showed a maximum metric difference of `2.11e-8`, but platform floating-point details
+  still change some last CSV digits and therefore compressed PKL hashes. The public gate
+  consequently enforces exact path/schema/dtype/split contracts plus `1e-6` maximum
+  numeric drift, while the published artifacts themselves remain bound to exact SHA-256.
+- The workstation's RTX 5070 Ti Laptop GPU is visible inside WSL2 (12,227 MiB VRAM),
+  with 15 GiB VM RAM and ample disk. NVIDIA's current Isaac Lab requirements call for
+  at least 16 GB VRAM and 32 GB RAM for full Isaac Sim workflows. Local execution is a
+  best-effort 16-environment smoke contingency after EULA acceptance, not a credible
+  replacement for the L40S training/evidence run.
 - The pinned NPA/SkyPilot operator environment passes its local status and verification
   checks. The digest-pinned L40S SONIC image materializes into a no-compute SkyPilot
   task contract. No Nebius authentication or posted challenge credit has been observed

@@ -49,6 +49,16 @@ cannot drift across machines.
 
 Everything else in this runbook is automated or already prepared.
 
+### Local GPU contingency
+
+This workstation exposes an RTX 5070 Ti Laptop GPU with 12,227 MiB VRAM to WSL2, but
+the WSL VM has 15 GiB RAM. NVIDIA's current
+[Isaac Lab requirements](https://isaac-sim.github.io/IsaacLab/develop/source/setup/installation/index.html#system-requirements)
+recommend at least 32 GB RAM and 16 GB GPU VRAM for full Isaac Sim workflows, with more
+for training. The laptop is therefore below the supported floor. After the named EULA
+acceptance, it may be used only as a best-effort 16-environment headless smoke fallback;
+do not plan the 500/2,000-iteration evidence run around it or download Isaac beforehand.
+
 ## 1. Install the operator environment in WSL2
 
 NPA supports Windows through WSL2, not native Windows. Keep its checkout under the

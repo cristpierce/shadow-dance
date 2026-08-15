@@ -12,7 +12,7 @@ final test repeats all four motions under three independent simulator seeds for 
 policy. The job is intentionally one serial task so the checkpoint and evidence chain
 cannot drift across machines.
 
-## The five things only the entrant can do
+## The six things only the entrant can do
 
 1. **Accept NVIDIA's terms in your own name.** Read the
    [current Omniverse/AI product-specific terms](https://www.nvidia.com/en-us/agreements/enterprise-software/product-specific-terms-for-ai-products/),
@@ -38,7 +38,7 @@ cannot drift across machines.
    a shell command argument. Run `.venv\Scripts\hf.exe auth login` interactively in the
    Windows project, and let WSL `npa configure` store/resolve `HF_TOKEN` through its
    protected credential prompt for cloud publication. Use a token authorized to create
-   and update the two public repositories (a download-only token is insufficient). The
+   and update the two public repositories (a download-only token is insufficient).
    Confirm the intended Hugging Face handle; no public `cristpierce` profile or repos
    were visible through the public API on August 14. If that namespace is created, the
    dataset and final model defaults are `cristpierce/shadow-dip-v1` and
@@ -52,7 +52,19 @@ cannot drift across machines.
    registered form before the final copy is frozen. The repository and historical
    handoff identify the teammate as Myles Shetty (`Durp06`).
 
-5. **Publish the real policy comparison and submit the portal entry.** A signed-in team
+5. **Obtain the organizer's WBT-Bench package.** The public challenge page says it
+   opened in late July, but no package or command appears in the supplied portal
+   resources or the current public NVIDIA/Nebius repositories. Send this in the
+   challenge Discord help desk:
+
+   > Team SELTZER is submitting Shadow Dance in Performance Arts. Could an organizer
+   > share the current Trial 03 WBT-Bench package, exact scoring command, and accepted
+   > report format? The public brief says it opened in late July, but the portal resource
+   > cards currently expose Studio, SONIC, the training guide, BONES-SEED, and Nebius
+   > without a WBT-Bench link. We will label our owned walk/turn retention suite as a
+   > proxy unless we can run the official package.
+
+6. **Publish the real policy comparison and submit the portal entry.** A signed-in team
    member must upload the final hash-verified simulator video to YouTube if the portal
    requires that host, check every public link while logged out, and change the Ultimate
    Bots entry from `DRAFT` to submitted. The kinematic reference video is not a substitute.

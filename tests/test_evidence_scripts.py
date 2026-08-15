@@ -677,6 +677,7 @@ def test_model_publisher_dry_run_requires_valid_release(tmp_path: Path) -> None:
                 "edited_comparison": True,
                 "reference_is_policy_output": False,
                 "source_policy_runs_uncut": True,
+                "selected_label": "stage-500",
                 "render_seed": 303,
                 "final_comparison": {
                     "path": "final-comparison.json",
@@ -739,6 +740,28 @@ def test_model_publisher_dry_run_requires_valid_release(tmp_path: Path) -> None:
         text=True,
     )
     assert json.loads(report.read_text(encoding="utf-8"))["selected_label"] == "stage-500"
+
+    video_manifest_path = media / "video-manifest.json"
+    original_video_manifest = video_manifest_path.read_bytes()
+    forged_video_manifest = json.loads(original_video_manifest)
+    forged_video_manifest["selected_label"] = "stage-4000"
+    video_manifest_path.write_text(json.dumps(forged_video_manifest), encoding="utf-8")
+    failed = subprocess.run(
+        [
+            sys.executable,
+            str(ROOT / "scripts" / "publish_model.py"),
+            "--run-root",
+            str(tmp_path),
+            "--repo-id",
+            "example/shadow-dance",
+            "--dry-run",
+        ],
+        capture_output=True,
+        text=True,
+    )
+    assert failed.returncode != 0
+    assert "video evidence checkpoint label differs" in failed.stderr
+    video_manifest_path.write_bytes(original_video_manifest)
 
     original_selection = selection_path.read_bytes()
     forged_selection = json.loads(original_selection)

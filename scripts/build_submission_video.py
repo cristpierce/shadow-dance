@@ -21,6 +21,7 @@ HEADER_HEIGHT = 92
 FOOTER_HEIGHT = 86
 PANEL_WIDTH = CANVAS_WIDTH // 2
 PANEL_HEIGHT = CANVAS_HEIGHT - HEADER_HEIGHT - FOOTER_HEIGHT
+EXPECTED_CANDIDATE_LABELS = {"stage-5", "stage-500", "stage-4000"}
 
 
 def sha256(path: Path) -> str:
@@ -62,8 +63,9 @@ def load_comparison(path: Path) -> dict[str, Any]:
         raise ValueError("stock and selected motion counts differ")
     if payload["stock"]["seed_count"] != payload["selected"]["seed_count"]:
         raise ValueError("stock and selected seed counts differ")
-    if not str(payload.get("selected_label", "")):
-        raise ValueError("final comparison has no selected checkpoint label")
+    selected_label = str(payload.get("selected_label", ""))
+    if selected_label not in EXPECTED_CANDIDATE_LABELS:
+        raise ValueError("final comparison has no valid frozen checkpoint label")
     return payload
 
 
@@ -190,6 +192,7 @@ def comparison_frame(
     clip_index: int,
     clip_count: int,
     motion_id: str,
+    selected_label: str,
     render_seed: int,
     stock_ended: bool,
     selected_ended: bool,
@@ -206,7 +209,7 @@ def comparison_frame(
     draw.text((28, 25), "BEFORE | STOCK SONIC", font=font(29, bold=True), fill="#ffb1a9")
     draw.text(
         (PANEL_WIDTH + 28, 25),
-        "AFTER | SELECTED CHECKPOINT",
+        f"AFTER | {selected_label.upper()}",
         font=font(29, bold=True),
         fill="#8ff0b7",
     )
@@ -311,7 +314,15 @@ def encode(
 
     try:
         for _ in range(round(output_fps * 2.0)):
-            append(title_card(comparison, subtitle="THE UNSUPPORTED PARTNER DIP"))
+            append(
+                title_card(
+                    comparison,
+                    subtitle=(
+                        "THE UNSUPPORTED PARTNER DIP | "
+                        f"{comparison['selected_label'].upper()}"
+                    ),
+                )
+            )
 
         reference_reader = imageio.get_reader(reference)
         try:
@@ -368,6 +379,7 @@ def encode(
                             clip_index=pair_index,
                             clip_count=len(pairs),
                             motion_id=motion_ids[pair_index - 1],
+                            selected_label=comparison["selected_label"],
                             render_seed=render_seed,
                             stock_ended=stock_done,
                             selected_ended=selected_done,
@@ -433,6 +445,7 @@ def main() -> int:
         "edited_comparison": True,
         "reference_is_policy_output": False,
         "source_policy_runs_uncut": True,
+        "selected_label": comparison["selected_label"],
         "render_seed": args.render_seed,
         "final_comparison": {
             "path": args.comparison.name,

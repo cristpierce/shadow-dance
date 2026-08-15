@@ -870,9 +870,10 @@ The following updates supersede earlier references to a single “held-out” he
   SONIC requires root rotation in both `root_rot` quaternion form and the root slot of
   `pose_aa`. The generator now emits both consistently, NVIDIA's pinned converter
   round-trips the turn within 2e-6, and the reference validator hard-fails future drift.
-- Public Ubuntu/Python 3.11 regeneration passed all 12 tests and all 30 validator cases
+- The final August 14 public Ubuntu/Python 3.11 regeneration passed all 13 tests and all
+  30 validator cases
   with zero warnings in
-  [run 31848829025](https://github.com/cristpierce/shadow-dance/actions/runs/31848829025).
+  [run 31851632473](https://github.com/cristpierce/shadow-dance/actions/runs/31851632473).
   Against the frozen Windows/Python 3.13 bundle, maximum drift was `1e-5` in the
   inspectable degree/centimetre CSV representation, `1.20e-7` in the SONIC PKLs,
   `3.72e-9` in manifest IK values, and `2.11e-8` in validation metrics. The public gate
@@ -960,6 +961,35 @@ The following updates supersede earlier references to a single “held-out” he
 - Treat synthetic kinematic preview footage only as an explanation of the target.
   Submission “before” and “after” footage must remain real stock-policy and selected-
   policy simulator output.
+
+## August 14 late public-source recheck
+
+- The official challenge page still says the practice motion set and WBT-Bench “opens
+  late July,” but the signed-in portal resource cards captured August 13 expose Studio,
+  SONIC code, the training guide, BONES-SEED, and Nebius only. An August 14 exact-name
+  GitHub code search returned zero `WBT-Bench` hits; the current NVIDIA `main` and
+  `gear-sonic` trees and current Nebius `main` tree expose no matching package. This is
+  evidence of public unavailability, not proof that the organizers did not post it in
+  Discord. The entrant should request the organizer link; until then, the owned
+  10-motion fundamentals suite remains explicitly a proxy and is never reported as an
+  official WBT-Bench score.
+- Nebius `main` at commit `9b3fbe506bba63c5715541258499ae2db7b0f6c5` (August 14)
+  still records the L40S `npa-sonic:0.1.2` digest as
+  `sha256:bdf81f5b7f1c879ac920df53588a15129b2ac71d9492e8c2fc34ce636a5373fb`,
+  matching the frozen Shadow Dance contract. Its public runbook continues to prefer
+  L40S for Isaac rendering-capable validation. This strengthens the image pin without
+  changing the already reviewed execution path near the deadline.
+- The local read-only SkyPilot catalog lists multiple one-GPU L40S shapes in
+  `eu-north1`. The 16-vCPU/64-GB fit remains `$1.747/hour`; larger compatible shapes
+  range upward from that price. The task requests `L40S:1`, 16 CPUs, and 64 GB rather
+  than hard-coding a provider instance type, preserving scheduler choice while the
+  ten-hour wall-time remains the spend guard. Catalog presence does not prove live
+  quota or capacity.
+- The newly visible public Tai Chi video comparator uses separate 25.08-second,
+  1920×1088, 25-fps before and after clips. Shadow Dance keeps its shorter matched
+  side-by-side presentation because it makes timing differences, early terminations,
+  and the stock/fine-tuned contrast easier to judge, while publishing the uncut sources
+  separately.
 
 ## Primary sources
 

@@ -467,6 +467,8 @@ def validate_video_evidence(
         or manifest.get("source_policy_runs_uncut") is not True
     ):
         raise ValueError("video evidence does not preserve the target/source disclosure contract")
+    if manifest.get("selected_label") != comparison.get("selected_label"):
+        raise ValueError("video evidence checkpoint label differs from final comparison")
     render_seed = manifest.get("render_seed")
     if not isinstance(render_seed, int) or render_seed not in test_seeds:
         raise ValueError("video display seed is not in the final-test seed inventory")

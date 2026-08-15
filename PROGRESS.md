@@ -1,6 +1,6 @@
 # SuperSONIC submission progress
 
-**Last updated:** 2026-08-14 16:10 PT
+**Last updated:** 2026-08-14 16:57 PT
 **Branch:** `feature/supersonic-submission`
 **Deadline:** 2026-08-16 23:59 PT
 
@@ -58,16 +58,18 @@ status here must remain truthful.
   in the pinned cloud image; the only motion-loader delta is post-load memory cleanup.
 - [x] Expanded the frozen ladder from debug-only budgets to independent 5/500/4,000
   iteration candidates with a 10-hour and approximately $17.47 worker cap.
-- [x] Passed 13/13 local tests against the pinned NVIDIA converter/MJCF plus Ruff, Bash,
+- [x] Passed 14/14 local tests against the pinned NVIDIA converter/MJCF plus Ruff, Bash,
   YAML, dataset-inventory, publication dry-run, and read-only cloud-plan checks.
 - [x] Added a deterministic target/before/after video builder and a publication gate
   that hashes every uncut source clip, the frozen comparison, and edited output.
 - [x] Installed and verified official Nebius CLI `0.12.254` for Linux/amd64; no profile,
   cloud authentication, or paid resource was created.
-- [x] Passed the final public Ubuntu/Python 3.11 evidence run: 12/12 tests, 30/30
-  regenerated reference validations, zero warnings, and exact inventory/schema/split
-  plus cross-platform numeric reproduction checks
-  ([run 31848829025](https://github.com/cristpierce/shadow-dance/actions/runs/31848829025)).
+- [x] Passed the frozen training contract's public Ubuntu/Python 3.11 evidence run:
+  13/13 tests, 30/30 regenerated reference validations, zero warnings, and exact
+  inventory/schema/split plus cross-platform numeric reproduction checks
+  ([run 31851632473](https://github.com/cristpierce/shadow-dance/actions/runs/31851632473)).
+  The same workflow reruns on every push; use the repository's Actions status for the
+  post-documentation/video-label commit rather than treating this run ID as mutable.
 - [x] Published the immutable public
   [Shadow Dip v1.0.0 reference release](https://github.com/cristpierce/shadow-dance/releases/tag/shadow-dip-v1.0.0)
   with GitHub-verified asset digests, full generated data, QA report, provenance, and a
@@ -88,6 +90,9 @@ status here must remain truthful.
   storage credentials, and L40S quota. The pinned CLI itself is installed.
 - [ ] Hugging Face account/handle confirmation, write-capable authentication, and
   creation of public dataset/model repositories.
+- [ ] Organizer WBT-Bench package or Discord release link. The official page still
+  promises it, but no public package was discoverable in the challenge portal resources,
+  NVIDIA/Nebius repositories, or exact-name GitHub search as of August 14.
 - [ ] A working browser session for authenticated Ultimate Bots portal actions, or
   manual portal entry by a team member using the prepared copy and links.
 - [ ] Teammate's exact registered name plus merge of the PR or write access for

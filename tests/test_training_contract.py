@@ -35,7 +35,11 @@ def test_frozen_training_contract_is_consistent() -> None:
 
     sys.path.insert(0, str(ROOT / "scripts"))
     try:
+        from build_submission_video import (
+            EXPECTED_CANDIDATE_LABELS as VIDEO_EXPECTED_CANDIDATE_LABELS,
+        )
         from publish_model import EXPECTED_CANDIDATE_LABELS
     finally:
         sys.path.pop(0)
     assert expected_labels == EXPECTED_CANDIDATE_LABELS
+    assert expected_labels == VIDEO_EXPECTED_CANDIDATE_LABELS

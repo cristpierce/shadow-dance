@@ -26,6 +26,9 @@
 - [ ] `final-comparison.json` hash-binds test summaries to `selection.json`.
 - [ ] The complete 10-motion fundamentals-retention result is disclosed, including
   forward walking and heading turns in both directions.
+- [ ] Run the official WBT-Bench package if organizers provide it; otherwise disclose
+  that it was unavailable and label the owned fundamentals suite as a proxy, never as
+  an official WBT-Bench score.
 - [ ] Uncut repeated attempts accompany the edited comparison.
 - [ ] `video-manifest.json` verifies the reference, all matched stock/selected source
   clips, display seed, final metrics report, and edited video hash.

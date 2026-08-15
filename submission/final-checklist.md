@@ -14,7 +14,8 @@
 - [ ] Public Hugging Face dataset link saved.
 - [ ] Stock/fine-tuned simulation video link saved.
 - [ ] Entry status changed from DRAFT to submitted before 2026-08-16 23:59 PT.
-- [x] Immutable public reference-dataset fallback release exists and works logged out.
+- [x] Immutable public reference-dataset fallback release works anonymously: both
+  assets return HTTP 200 with matching SHA-256, and the archive inventory was inspected.
 
 ## Evidence
 

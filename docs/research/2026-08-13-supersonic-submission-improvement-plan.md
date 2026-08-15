@@ -990,6 +990,18 @@ The following updates supersede earlier references to a single “held-out” he
   side-by-side presentation because it makes timing differences, early terminations,
   and the stock/fine-tuned contrast easier to judge, while publishing the uncut sources
   separately.
+- An August 14 anonymous-access audit used no GitHub CLI authentication. The public API,
+  raw `main` README, PR #1, and both release downloads returned successfully at commit
+  `f0786729907cc7cd6b18fa6b004d418ec48a40e7`. The downloaded archive and reference
+  video matched their published SHA-256 values. The archive contains 70 regular files:
+  30 source CSVs, 30 SONIC PKLs, the manifest and validation JSONs, three split lists,
+  three Markdown documents, `LICENSE`, and `NOTICE`. The Hugging Face publisher's
+  68-file inventory is deliberately two files smaller because it maps one dataset
+  README and omits the archive-only `data/README.md` and `docs/dataset-card.md`; the
+  motion and evidence inventories are identical. The anonymously downloaded preview
+  decodes as H.264/YUV420p, 640×480, 50 fps, and 5.26 seconds. This proves public
+  accessibility and packaging integrity without turning the preview into policy
+  evidence.
 
 ## Primary sources
 

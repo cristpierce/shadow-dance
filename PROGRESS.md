@@ -1,6 +1,6 @@
 # SuperSONIC submission progress
 
-**Last updated:** 2026-08-14 17:11 PT
+**Last updated:** 2026-08-14 17:22 PT
 **Branch:** `feature/supersonic-submission`
 **Deadline:** 2026-08-16 23:59 PT
 
@@ -74,6 +74,11 @@ status here must remain truthful.
   [Shadow Dip v1.0.0 reference release](https://github.com/cristpierce/shadow-dance/releases/tag/shadow-dip-v1.0.0)
   with GitHub-verified asset digests, full generated data, QA report, provenance, and a
   clearly labelled non-policy kinematic preview.
+- [x] Reverified the public fallback without GitHub authentication: fork `main`, PR #1,
+  raw README, release metadata, and both release downloads are anonymously readable;
+  downloaded asset hashes match; the archive contains 30 CSVs, 30 PKLs, both JSON
+  evidence files, all three split lists, documentation, `LICENSE`, and `NOTICE`; and the
+  reference MP4 decodes as H.264/YUV420p at 640×480, 50 fps, and 5.26 seconds.
 - [x] Finished the diff/security review, pushed the frozen implementation, and updated
   [upstream PR #1](https://github.com/Durp06/shadow-dance/pull/1).
 

@@ -13,8 +13,11 @@ from urllib.parse import urlparse
 
 import yaml
 
-EXPECTED_IMAGE_DIGEST = "sha256:bdf81f5b7f1c879ac920df53588a15129b2ac71d9492e8c2fc34ce636a5373fb"
-EXPECTED_REGISTRY_PATTERN = re.compile(r"cr\.eu-north1\.nebius\.cloud/[A-Za-z0-9._-]+")
+EXPECTED_IMAGE_DIGEST = "sha256:c9ba0996b28f54b013e36da689638b386a7ef9c0c8c4413fc4b3c72ff1a808bb"
+EXPECTED_REGISTRY = "ghcr.io/nebius/nebius-physical-ai"
+EXPECTED_ACCELERATOR = "RTXPRO-6000-BLACKWELL-SERVER-EDITION:1"
+EXPECTED_IMAGE_VARIANT = "sonic-k8s-host-mounted"
+EXPECTED_GPU_TARGET = "gpu-rtx6000"
 SECRET_ENV_KEYS = {
     "AWS_ACCESS_KEY_ID",
     "AWS_SECRET_ACCESS_KEY",
@@ -38,6 +41,10 @@ def main() -> int:
     parser.add_argument("--image", required=True)
     parser.add_argument("--submission-commit", required=True)
     parser.add_argument("--evidence-s3-uri", required=True)
+    parser.add_argument(
+        "--s3-endpoint", default="https://storage.us-central1.nebius.cloud"
+    )
+    parser.add_argument("--region", default="us-central1")
     parser.add_argument("--hf-model-repo", default="")
     parser.add_argument("--output", type=Path)
     parser.add_argument("--require-launchable", action="store_true")
@@ -48,8 +55,8 @@ def main() -> int:
     if not re.fullmatch(r"[0-9a-fA-F]{40}", args.submission_commit):
         raise ValueError("submission commit must be a full 40-character Git SHA")
     registry = args.registry.rstrip("/")
-    if not EXPECTED_REGISTRY_PATTERN.fullmatch(registry):
-        raise ValueError("registry must be an eu-north1 Nebius container registry")
+    if registry != EXPECTED_REGISTRY:
+        raise ValueError(f"registry must be the public SONIC mirror {EXPECTED_REGISTRY}")
     expected_image = f"{registry}/npa-sonic@{EXPECTED_IMAGE_DIGEST}"
     if args.image != expected_image:
         raise ValueError("policy image must be the configured npa-sonic registry path and digest")
@@ -58,6 +65,15 @@ def main() -> int:
         raise ValueError("evidence destination must be an s3:// URI")
     if parsed_s3.path.rstrip("/").split("/")[-1] != args.run_id:
         raise ValueError("evidence S3 prefix must end with the run ID")
+    parsed_endpoint = urlparse(args.s3_endpoint)
+    if (
+        parsed_endpoint.scheme != "https"
+        or not re.fullmatch(
+            r"storage\.[a-z0-9-]+\.nebius\.cloud", parsed_endpoint.netloc
+        )
+        or parsed_endpoint.path not in {"", "/"}
+    ):
+        raise ValueError("S3 endpoint must be a regional Nebius HTTPS endpoint")
 
     try:
         from npa.workbench.sonic.workflow import (
@@ -69,25 +85,28 @@ def main() -> int:
             "Run this with the pinned NPA environment; see docs/cloud-runbook.md"
         ) from exc
 
+    launchable = (
+        os.environ.get("ENTRANT_NVIDIA_EULA_ACCEPTED", "") == "YES"
+        and os.environ.get("ACCEPT_EULA", "") == "Y"
+    )
     eula_values = {
-        "OMNI_KIT_ACCEPT_EULA": os.environ.get("OMNI_KIT_ACCEPT_EULA", "NOT_ACCEPTED"),
-        "ISAACSIM_ACCEPT_EULA": os.environ.get("ISAACSIM_ACCEPT_EULA", "NOT_ACCEPTED"),
+        "ENTRANT_NVIDIA_EULA_ACCEPTED": "YES" if launchable else "",
+        "ACCEPT_EULA": "Y" if launchable else "",
     }
-    launchable = all(value == "YES" for value in eula_values.values())
     plan = materialize_sonic_workflow(
         args.workflow,
         run_id=args.run_id,
         registry=registry,
         image=args.image,
         registry_auth=False,
-        gpu_target="l40s",
-        s3_endpoint="https://storage.eu-north1.nebius.cloud",
+        gpu_target=EXPECTED_GPU_TARGET,
+        image_variant=EXPECTED_IMAGE_VARIANT,
+        s3_endpoint=args.s3_endpoint,
         s3_bucket=parsed_s3.netloc,
         s3_prefix=parsed_s3.path.lstrip("/"),
-        accelerators="L40S:1",
-        cloud="nebius",
-        region="eu-north1",
-        use_spot=False,
+        accelerators=EXPECTED_ACCELERATOR,
+        cloud="kubernetes",
+        region=args.region,
         env_overrides={
             "POLICY_IMAGE": args.image,
             "SUBMISSION_COMMIT": args.submission_commit.lower(),
@@ -96,6 +115,7 @@ def main() -> int:
             "HF_MODEL_REPO": args.hf_model_repo,
             **eula_values,
         },
+        accept_eula=launchable,
     )
     unresolved = unresolved_submit_placeholders(plan.yaml_text)
     if unresolved:
@@ -109,13 +129,15 @@ def main() -> int:
     expected_envs = {
         "POLICY_IMAGE": args.image,
         "SONIC_PAYLOAD_MODE": "direct",
+        "SONIC_GPU_TYPE": EXPECTED_GPU_TARGET,
+        "SONIC_IMAGE_VARIANT": EXPECTED_IMAGE_VARIANT,
         "SUBMISSION_REPO": "https://github.com/cristpierce/shadow-dance.git",
         "SUBMISSION_COMMIT": args.submission_commit.lower(),
         "RUN_ID": args.run_id,
         "EVIDENCE_S3_URI": args.evidence_s3_uri.rstrip("/"),
-        "LADDER": "5,500,4000",
-        "STAGE_WALLTIME_BUDGET_SECONDS": "5:900,500:3600,4000:21600",
-        "TRAINING_TIMEOUT_SECONDS": "5:600,500:3000,4000:19800",
+        "LADDER": "5,250,500,4000",
+        "STAGE_WALLTIME_BUDGET_SECONDS": "5:900,250:1800,500:3600,4000:21600",
+        "TRAINING_TIMEOUT_SECONDS": "5:600,250:1500,500:3000,4000:19800",
         "SUBMISSION_DEADLINE_UTC": "2026-08-17T06:59:00Z",
         "FINALIZATION_RESERVE_SECONDS": "7200",
         "PORTAL_RESERVE_SECONDS": "2700",
@@ -131,7 +153,7 @@ def main() -> int:
         "RENDER_SEED": "303",
         "HF_MODEL_REPO": args.hf_model_repo,
         "HF_DATASET_REPO": "cristpierce/shadow-dip-v1",
-        "S3_ENDPOINT_URL": "https://storage.eu-north1.nebius.cloud",
+        "S3_ENDPOINT_URL": args.s3_endpoint,
         **eula_values,
     }
     for key, expected in expected_envs.items():
@@ -142,13 +164,10 @@ def main() -> int:
     if resources.get("image_id") != f"docker:{args.image}":
         raise ValueError("materialized task does not use the exact direct runtime image")
     expected_resources = {
-        "cloud": "nebius",
-        "region": "eu-north1",
-        "accelerators": "L40S:1",
+        "cloud": "kubernetes",
+        "accelerators": EXPECTED_ACCELERATOR,
         "cpus": 16,
         "memory": 64,
-        "disk_size": 200,
-        "use_spot": False,
     }
     for key, expected in expected_resources.items():
         if resources.get(key) != expected:
@@ -190,6 +209,8 @@ def main() -> int:
         "cloud": plan.cloud,
         "region": plan.region,
         "accelerators": plan.accelerators,
+        "gpu_target": plan.gpu_target,
+        "image_variant": plan.image_variant,
         "policy_image": plan.policy_image,
         "submission_commit": args.submission_commit.lower(),
         "evidence_s3_uri": args.evidence_s3_uri.rstrip("/"),

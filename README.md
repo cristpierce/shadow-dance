@@ -40,7 +40,7 @@ before either policy is measured on the independent final-test family.
 | Original data + provenance | [`shadow-dip-v1.0.0`](https://github.com/cristpierce/shadow-dance/releases/tag/shadow-dip-v1.0.0) manifest, PKLs, and source CSVs | 30 sequences generated, hashed, and public |
 | G1 limits / foot IK / support QA | `results/reference-validation.json` | 30/30 pass; 0 warnings |
 | Stock SONIC on validation moves | raw eval log + novelty report | Pending Isaac run |
-| Fine-tuned SONIC | deadline-planned 5/500/4,000 checkpoint ladder from pinned base | Pending Isaac run |
+| Fine-tuned SONIC | deadline-planned 5/250/500/4,000 checkpoint ladder from pinned base | Pending Isaac run |
 | Fundamentals retention | identical stock/fine-tuned suite | Pending Isaac run |
 | Untouched final test | 4 motions × 3 seeds per policy, bound to frozen selection | Pending checkpoint selection |
 | Deployable policy | checked ONNX graphs + hashes | Pending selected checkpoint |

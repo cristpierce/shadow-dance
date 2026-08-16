@@ -9,7 +9,7 @@ ROOT = Path(__file__).parents[1]
 
 
 def test_frozen_training_contract_is_consistent() -> None:
-    expected_iterations = [5, 500, 4000]
+    expected_iterations = [5, 250, 500, 4000]
     expected_ladder = ",".join(map(str, expected_iterations))
     expected_labels = {f"stage-{iteration}" for iteration in expected_iterations}
     expected_walltime = "10h"
@@ -22,8 +22,18 @@ def test_frozen_training_contract_is_consistent() -> None:
     )
     assert config["checkpoint_ladder_iterations"] == expected_iterations
     assert config["max_walltime"] == expected_walltime
-    assert config["stage_walltime_budget_seconds"] == {5: 900, 500: 3600, 4000: 21600}
-    assert config["training_timeout_seconds"] == {5: 600, 500: 3000, 4000: 19800}
+    assert config["stage_walltime_budget_seconds"] == {
+        5: 900,
+        250: 1800,
+        500: 3600,
+        4000: 21600,
+    }
+    assert config["training_timeout_seconds"] == {
+        5: 600,
+        250: 1500,
+        500: 3000,
+        4000: 19800,
+    }
     assert config["submission_deadline_utc"] == "2026-08-17T06:59:00Z"
     assert config["finalization_reserve_seconds"] == 7200
     assert config["portal_reserve_seconds"] == 2700
@@ -31,13 +41,33 @@ def test_frozen_training_contract_is_consistent() -> None:
     assert str(workflow["envs"]["LADDER"]) == expected_ladder
     assert str(workflow["envs"]["MAX_WALLTIME"]) == expected_walltime
     assert workflow["envs"]["STAGE_WALLTIME_BUDGET_SECONDS"] == (
-        "5:900,500:3600,4000:21600"
+        "5:900,250:1800,500:3600,4000:21600"
     )
-    assert workflow["envs"]["TRAINING_TIMEOUT_SECONDS"] == "5:600,500:3000,4000:19800"
+    assert workflow["envs"]["TRAINING_TIMEOUT_SECONDS"] == (
+        "5:600,250:1500,500:3000,4000:19800"
+    )
     assert workflow["envs"]["SUBMISSION_DEADLINE_UTC"] == "2026-08-17T06:59:00Z"
     assert str(workflow["envs"]["FINALIZATION_RESERVE_SECONDS"]) == "7200"
     assert str(workflow["envs"]["PORTAL_RESERVE_SECONDS"]) == "2700"
     assert str(workflow["envs"]["MAX_WALLTIME_SECONDS"]) == "36000"
+    assert workflow["resources"] == {
+        "cloud": "kubernetes",
+        "accelerators": "RTXPRO-6000-BLACKWELL-SERVER-EDITION:1",
+        "cpus": 16,
+        "memory": 64,
+        "image_id": "docker:${POLICY_IMAGE}",
+    }
+    assert workflow["envs"]["SONIC_GPU_TYPE"] == "gpu-rtx6000"
+    assert workflow["envs"]["SONIC_IMAGE_VARIANT"] == "sonic-k8s-host-mounted"
+    assert workflow["envs"]["ACCEPT_EULA"] == "${ACCEPT_EULA}"
+    assert workflow["envs"]["ENTRANT_NVIDIA_EULA_ACCEPTED"] == (
+        "${ENTRANT_NVIDIA_EULA_ACCEPTED}"
+    )
+    assert config["runtime_image_digest"] == (
+        "sha256:c9ba0996b28f54b013e36da689638b386a7ef9c0c8c4413fc4b3c72ff1a808bb"
+    )
+    assert config["cloud"]["gpu_target"] == "gpu-rtx6000"
+    assert config["cloud"]["backend"] == "kubernetes"
 
     pipeline = (ROOT / "scripts" / "cloud_pipeline.sh").read_text(encoding="utf-8")
     materializer = (ROOT / "scripts" / "materialize_cloud_plan.py").read_text(
@@ -47,6 +77,12 @@ def test_frozen_training_contract_is_consistent() -> None:
     assert f'"LADDER": "{expected_ladder}"' in materializer
     assert f'"MAX_WALLTIME": "{expected_walltime}"' in materializer
     assert '"SUBMISSION_DEADLINE_UTC": "2026-08-17T06:59:00Z"' in materializer
+    assert 'EXPECTED_IMAGE_VARIANT = "sonic-k8s-host-mounted"' in materializer
+    assert 'EXPECTED_GPU_TARGET = "gpu-rtx6000"' in materializer
+    assert 'os.environ.get("ACCEPT_EULA", "") == "Y"' in materializer
+    assert 'os.environ.get("ENTRANT_NVIDIA_EULA_ACCEPTED", "") == "YES"' in (
+        materializer
+    )
 
     sys.path.insert(0, str(ROOT / "scripts"))
     try:

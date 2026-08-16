@@ -37,7 +37,12 @@ download before training. The model is governed by the NVIDIA Open Model License
 
 ## Pinned cloud runtime
 
-- image: `npa-sonic:0.1.2`
-- L40S digest: `sha256:bdf81f5b7f1c879ac920df53588a15129b2ac71d9492e8c2fc34ce636a5373fb`
+- image: `ghcr.io/nebius/nebius-physical-ai/npa-sonic:cuda13-b300-0.1.2-k8s-runtime-sm80-sm90-sm100-sm103-sm120-20260803T034152Z`
+- OCI digest: `sha256:c9ba0996b28f54b013e36da689638b386a7ef9c0c8c4413fc4b3c72ff1a808bb`
+- variant: `sonic-k8s-host-mounted` on RTX PRO 6000 Blackwell Kubernetes
 - embedded SONIC commit: `0a87181c9106d0e49293400714b157676e0ec664`
-- NPA operator commit: `1e8acb921aa953c1e2ce018bcbc6417611768a16`
+- NPA operator commit: `43ffee689b02a117ff4eb2c32f7057b39bcef030`
+
+The former L40S image digest is intentionally excluded: current NPA marks that baked
+variant quarantined. The active image contains no Isaac payload and fetches it only at
+runtime after the entrant supplies `ACCEPT_EULA=Y`.

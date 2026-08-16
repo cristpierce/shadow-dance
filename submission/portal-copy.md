@@ -37,7 +37,7 @@ residual, and SHA-256. No BONES-SEED motion or third-party video is included.
 We fine-tuned the released `sonic_release/last.pt` checkpoint using its G1 reference
 encoder and upstream-supported dummy SMPL path. We evaluated stock and candidate
 checkpoints against the same frozen motions, selected from the completed
-**[COMPLETED_LADDER]** stages of a deadline-bounded 5/500/4,000 plan, exported the
+**[COMPLETED_LADDER]** stages of a deadline-bounded 5/250/500/4,000 plan, exported the
 selected G1 ONNX policy, and validated the graph and I/O in ONNX Runtime. The plan and
 outcome files disclose every omitted stage. Full commands, raw logs, configs,
 limitations, licenses, and uncut runs are in the repository.

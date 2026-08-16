@@ -1,6 +1,6 @@
 # SuperSONIC submission progress
 
-**Last updated:** 2026-08-16 13:26 PT
+**Last updated:** 2026-08-16 13:55 PT
 **Branch:** `feature/supersonic-submission`
 **Deadline:** 2026-08-16 23:59 PT
 
@@ -35,8 +35,9 @@ status here must remain truthful.
   [run 31775796089](https://github.com/cristpierce/shadow-dance/actions/runs/31775796089).
 - [x] Pinned the public SONIC base model revision, byte size, and SHA-256 independently
   from Hugging Face metadata.
-- [x] Pinned the NPA SONIC L40S image by digest and verified its direct-image SkyPilot
-  materialization locally without allocating compute.
+- [x] Replaced the now-quarantined NPA L40S image with the public active
+  `sonic-k8s-host-mounted` RTX PRO 6000 image, pinned its verified GHCR digest, updated
+  the operator to commit `43ffee6`, and retained a no-compute materialization gate.
 - [x] Installed and verified the pinned NPA/SkyPilot operator environment in WSL2,
   including the no-sudo bootstrap fallback required by this machine.
 - [x] Implemented a fail-closed cloud pipeline with incremental S3 recovery, novelty
@@ -56,8 +57,9 @@ status here must remain truthful.
 - [x] Confirmed the motion converter, G1 MJCF, training entrypoint, evaluation entrypoint,
   and configuration used by the dataset are compatible with the SONIC commit embedded
   in the pinned cloud image; the only motion-loader delta is post-load memory cleanup.
-- [x] Expanded the frozen ladder from debug-only budgets to independent 5/500/4,000
-  iteration candidates with a 10-hour and approximately $17.47 worker cap.
+- [x] Expanded the frozen ladder from debug-only budgets to independent
+  5/250/500/4,000 iteration candidates. The 250-stage fallback preserves a meaningful
+  late-deadline option while the 10-hour worker cap remains intact.
 - [x] Passed 14/14 local tests against the pinned NVIDIA converter/MJCF plus Ruff, Bash,
   YAML, dataset-inventory, publication dry-run, and read-only cloud-plan checks.
 - [x] Added a deterministic target/before/after video builder and a publication gate
@@ -82,7 +84,7 @@ status here must remain truthful.
 - [x] Finished the diff/security review, pushed the frozen implementation, and updated
   [upstream PR #1](https://github.com/Durp06/shadow-dance/pull/1).
 - [x] Added and locally verified a deadline-aware ladder plan. It preserves the full
-  5/500/4,000 protocol when time permits, freezes the largest honest prefix otherwise,
+  5/250/500/4,000 protocol when time permits, freezes the largest honest prefix otherwise,
   reserves two hours for final evidence plus 45 minutes for portal submission, and
   records any deadline or runtime truncation in hash-bound release evidence.
 - [x] Rechecked the official rules and public competitive field on deadline day. The
@@ -98,9 +100,11 @@ status here must remain truthful.
 ## External gates
 
 - [ ] Named acceptance of the three NVIDIA/Isaac licence agreements and authorization
-  for `OMNI_KIT_ACCEPT_EULA=YES` and `ISAACSIM_ACCEPT_EULA=YES`.
-- [ ] Interactive Nebius profile/login plus visible challenge credit, project, object
-  storage credentials, and L40S quota. The pinned CLI itself is installed.
+  for the documented run-scoped `ACCEPT_EULA=Y` value plus the project-owned
+  `ENTRANT_NVIDIA_EULA_ACCEPTED=YES` marker.
+- [ ] Interactive Nebius profile/login plus visible challenge credit, a `us-central1`
+  project, object-storage credentials, and RTX PRO 6000 Managed Kubernetes quota. The
+  current pinned CLI itself is installed.
 - [ ] Hugging Face account/handle confirmation, write-capable authentication, and
   creation of public dataset/model repositories.
 - [ ] Organizer WBT-Bench package or Discord release link. The official page still
@@ -125,9 +129,9 @@ status here must remain truthful.
    baseline once NVIDIA acceptance and Nebius authentication are present.
 3. Go/no-go novelty decision; adjust the target if stock already succeeds.
 4. Run the deadline-planned checkpoint ladder with validation and retention at each
-   gate. The full ladder must begin immediately; after the planner's 13:59 PT
-   full-ladder cutoff it truthfully falls back to 5/500, and it refuses a run that
-   cannot preserve finalization and portal reserves.
+   gate. The full-ladder post-baseline cutoff is 13:29 PT; the truthful prefixes then
+   fall to 5/250/500 until 19:29, 5/250 until 20:29, and smoke-only until 20:59. The
+   planner refuses any run that cannot preserve finalization and portal reserves.
 5. Freeze the winner, open the untouched test split, export, validate, render, hash,
    and publish the selected checkpoint.
 6. Replace every bracketed submission value from raw evidence, verify public links,

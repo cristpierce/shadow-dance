@@ -3,8 +3,11 @@
 project: shadow-dance
 dataset: shadow-dip-v1
 dataset_validation_upstream_commit: c374bae5b9039cd0ee71377e654d11ce1bc69e1d
-runtime_image: npa-sonic:0.1.2
-runtime_image_digest: sha256:bdf81f5b7f1c879ac920df53588a15129b2ac71d9492e8c2fc34ce636a5373fb
+runtime_image: >-
+  ghcr.io/nebius/nebius-physical-ai/npa-sonic:cuda13-b300-0.1.2-k8s-runtime-sm80-sm90-sm100-sm103-sm120-20260803T034152Z
+runtime_image_digest: sha256:c9ba0996b28f54b013e36da689638b386a7ef9c0c8c4413fc4b3c72ff1a808bb
+runtime_image_variant: sonic-k8s-host-mounted
+npa_operator_commit: 43ffee689b02a117ff4eb2c32f7057b39bcef030
 runtime_sonic_commit: 0a87181c9106d0e49293400714b157676e0ec664
 base_checkpoint: nvidia/GEAR-SONIC/sonic_release/last.pt
 base_model_revision: 9c0ff22b4ffec27c5392e8e284eb2f2df7a5b4e2
@@ -17,9 +20,9 @@ reference_mode: g1
 smpl_motion_file: dummy
 training_seed: 42
 actor_learning_rate: 2.0e-5
-checkpoint_ladder_iterations: [5, 500, 4000]
-stage_walltime_budget_seconds: {5: 900, 500: 3600, 4000: 21600}
-training_timeout_seconds: {5: 600, 500: 3000, 4000: 19800}
+checkpoint_ladder_iterations: [5, 250, 500, 4000]
+stage_walltime_budget_seconds: {5: 900, 250: 1800, 500: 3600, 4000: 21600}
+training_timeout_seconds: {5: 600, 250: 1500, 500: 3000, 4000: 19800}
 submission_deadline_utc: "2026-08-17T06:59:00Z"
 finalization_reserve_seconds: 7200
 portal_reserve_seconds: 2700
@@ -33,7 +36,11 @@ selection_seed: 42
 final_test_seeds: [101, 202, 303]
 render_seed: 303
 cloud:
-  gpu: NVIDIA-L40S
+  gpu: NVIDIA-RTX-PRO-6000-Blackwell
+  gpu_target: gpu-rtx6000
+  accelerator: RTXPRO-6000-BLACKWELL-SERVER-EDITION:1
+  backend: kubernetes
+  region: us-central1
   use_spot: false
   headless: true
   use_wandb: false

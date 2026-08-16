@@ -61,13 +61,15 @@ that the target is coherent; it is never presented as policy execution.
   `9c0ff22b4ffec27c5392e8e284eb2f2df7a5b4e2`.
 - Base checkpoint SHA-256:
   `e6bdab3f64a39336b3d41877d4f497d05f58af275f288ec0e6746c283ded8909`.
-- Runtime: `npa-sonic:0.1.2` L40S image at digest
-  `sha256:bdf81f5b7f1c879ac920df53588a15129b2ac71d9492e8c2fc34ce636a5373fb`.
+- Runtime: public NPA `sonic-k8s-host-mounted` image at digest
+  `sha256:c9ba0996b28f54b013e36da689638b386a7ef9c0c8c4413fc4b3c72ff1a808bb`.
 - Runtime SONIC commit: `0a87181c9106d0e49293400714b157676e0ec664`.
-- Candidate budgets: independent 5, 500, and 4,000 iteration fine-tunes from the same base.
+- Candidate budgets: independent 5, 250, 500, and 4,000 iteration fine-tunes from the
+  same base. The 250-stage candidate is the preregistered late-deadline fallback.
 - Seed for selection evaluation: 42.
 - No W&B dependency, no hidden data, and no training/test overlap.
-- One on-demand Nebius L40S worker with a 10-hour hard wall-time guard.
+- One on-demand Nebius RTX PRO 6000 Blackwell Kubernetes worker with a 10-hour hard
+  wall-time guard.
 
 The five-iteration run is also the data/environment smoke. Each surviving candidate is
 packaged with its original config and checkpoint hash before evaluation. Longer stages
@@ -131,10 +133,11 @@ source clip, the final comparison, and the edited output.
 
 ## 6. Compute and failure policy
 
-The exact target currently prices at $1.747 per L40S worker-hour on demand. The 10-hour
-worker ceiling is about $17.47 before the small controller cost, leaving room inside a
-$50 challenge credit for one diagnosed recovery run. On-demand is preferred near the
-deadline because interruption would cost more evidence time than spot savings justify.
+Nebius lists RTX PRO 6000 at $1.80 per GPU-hour on demand. The 10-hour GPU ceiling is
+therefore $18 before the cluster's small CPU-node, disk, and object-storage charges,
+leaving room inside a posted $50 challenge credit for the intended run. On-demand is
+preferred near the deadline because interruption would cost more evidence time than
+the preemptible discount saves.
 
 The workflow uploads checkpoints, configs, logs, summaries, and evidence incrementally
 to a run-scoped S3 prefix. On failure it uploads the recoverable state before exit. A

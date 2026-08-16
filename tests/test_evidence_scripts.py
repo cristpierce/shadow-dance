@@ -363,6 +363,18 @@ def test_model_publisher_dry_run_requires_valid_release(tmp_path: Path) -> None:
         "retention",
         metric_payload(terminations=[False] * 10, mpjpe_l=20),
     )
+    stage_250_heldout_summary = bound_summary(
+        "stage-250-heldout-seed-42",
+        "stage-250",
+        "heldout",
+        metric_payload(terminations=[False, False, True, True], mpjpe_l=50),
+    )
+    stage_250_retention_summary = bound_summary(
+        "stage-250-retention-seed-42",
+        "stage-250",
+        "retention",
+        metric_payload(terminations=[False] * 10, mpjpe_l=20.5),
+    )
     stage_4000_heldout_summary = bound_summary(
         "stage-4000-heldout-seed-42",
         "stage-4000",
@@ -429,6 +441,14 @@ def test_model_publisher_dry_run_requires_valid_release(tmp_path: Path) -> None:
         retention_successes=10,
         retention_mpjpe=20.0,
     )
+    stage_250_candidate = candidate_record(
+        "stage-250",
+        checkpoint_bytes=b"stage-250-checkpoint",
+        heldout_successes=2,
+        heldout_mpjpe=50.0,
+        retention_successes=10,
+        retention_mpjpe=20.5,
+    )
     candidate = candidate_record(
         "stage-500",
         checkpoint_bytes=(release / "last.pt").read_bytes(),
@@ -469,7 +489,12 @@ def test_model_publisher_dry_run_requires_valid_release(tmp_path: Path) -> None:
         },
         "selection_seed": 42,
         "novelty_gate_pass": True,
-        "candidates": [stage_5_candidate, candidate, stage_4000_candidate],
+        "candidates": [
+            stage_5_candidate,
+            stage_250_candidate,
+            candidate,
+            stage_4000_candidate,
+        ],
         "selected": candidate,
         "sources": {
             "stock_heldout": {
@@ -498,6 +523,24 @@ def test_model_publisher_dry_run_requires_valid_release(tmp_path: Path) -> None:
                         "path": "summaries/stage-5-retention-seed-42.json",
                         "sha256": hashlib.sha256(
                             stage_5_retention_summary.read_bytes()
+                        ).hexdigest(),
+                    },
+                },
+                "stage-250": {
+                    "heldout": {
+                        "label": "stage-250",
+                        "split": "heldout",
+                        "path": "summaries/stage-250-heldout-seed-42.json",
+                        "sha256": hashlib.sha256(
+                            stage_250_heldout_summary.read_bytes()
+                        ).hexdigest(),
+                    },
+                    "retention": {
+                        "label": "stage-250",
+                        "split": "retention",
+                        "path": "summaries/stage-250-retention-seed-42.json",
+                        "sha256": hashlib.sha256(
+                            stage_250_retention_summary.read_bytes()
                         ).hexdigest(),
                     },
                 },
@@ -560,24 +603,34 @@ def test_model_publisher_dry_run_requires_valid_release(tmp_path: Path) -> None:
     )
     ladder_plan = {
         "format": "shadow_dance_ladder_plan_v1",
-        "planned_candidate_iterations": [5, 500, 4000],
-        "scheduled_candidate_iterations": [5, 500, 4000],
+        "planned_candidate_iterations": [5, 250, 500, 4000],
+        "scheduled_candidate_iterations": [5, 250, 500, 4000],
         "omitted_candidate_iterations": [],
-        "stage_walltime_budget_seconds": {"5": 900, "500": 3600, "4000": 21600},
-        "training_timeout_seconds": {"5": 600, "500": 3000, "4000": 19800},
-        "computed_utc": "2026-08-16T20:59:00Z",
-        "run_started_utc": "2026-08-16T20:59:00Z",
+        "stage_walltime_budget_seconds": {
+            "5": 900,
+            "250": 1800,
+            "500": 3600,
+            "4000": 21600,
+        },
+        "training_timeout_seconds": {
+            "5": 600,
+            "250": 1500,
+            "500": 3000,
+            "4000": 19800,
+        },
+        "computed_utc": "2026-08-16T20:20:00Z",
+        "run_started_utc": "2026-08-16T20:20:00Z",
         "max_walltime_seconds": 36000,
-        "runtime_deadline_utc": "2026-08-17T06:59:00Z",
+        "runtime_deadline_utc": "2026-08-17T06:20:00Z",
         "submission_deadline_utc": "2026-08-17T06:59:00Z",
-        "seconds_until_deadline": 36000,
+        "seconds_until_deadline": 38340,
         "runtime_seconds_remaining": 36000,
         "finalization_reserve_seconds": 7200,
         "portal_reserve_seconds": 2700,
-        "submission_candidate_budget_available_seconds": 26100,
+        "submission_candidate_budget_available_seconds": 28440,
         "runtime_candidate_budget_available_seconds": 28800,
-        "candidate_budget_available_seconds": 26100,
-        "scheduled_candidate_budget_seconds": 26100,
+        "candidate_budget_available_seconds": 28440,
+        "scheduled_candidate_budget_seconds": 27900,
         "deadline_truncated": False,
         "launchable": True,
     }
@@ -592,8 +645,8 @@ def test_model_publisher_dry_run_requires_valid_release(tmp_path: Path) -> None:
                     "path": "ladder-plan.json",
                     "sha256": hashlib.sha256(ladder_plan_path.read_bytes()).hexdigest(),
                 },
-                "scheduled_candidate_iterations": [5, 500, 4000],
-                "completed_candidate_iterations": [5, 500, 4000],
+                "scheduled_candidate_iterations": [5, 250, 500, 4000],
+                "completed_candidate_iterations": [5, 250, 500, 4000],
                 "runtime_omitted_candidate_iterations": [],
                 "timed_out_candidate_iteration": None,
                 "deadline_truncated_before_run": False,

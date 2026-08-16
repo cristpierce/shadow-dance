@@ -1,27 +1,27 @@
-# Single L40S managed job for stock baseline, checkpoint ladder, evaluation, render,
-# and export. The SONIC image is the SkyPilot runtime itself, so NPA can inject a
-# short-lived Nebius registry pull token without exposing it in this file. Launch only
-# with the immutable values and explicit NVIDIA acceptance described in the runbook.
+# Single RTX PRO 6000 Kubernetes job for stock baseline, checkpoint ladder,
+# evaluation, render, and export. The active SONIC runtime-fetch image is public on
+# GHCR and contains no Isaac bytes; Isaac is acquired only after the entrant's explicit
+# run-scoped NVIDIA acceptance described in the runbook.
 name: shadow-dance-supersonic
 resources:
-  cloud: nebius
-  accelerators: L40S:1
+  cloud: kubernetes
+  accelerators: RTXPRO-6000-BLACKWELL-SERVER-EDITION:1
   cpus: 16
   memory: 64
-  disk_size: 200
   image_id: docker:${POLICY_IMAGE}
 envs:
-  # There is no confirmed public GHCR copy; supply the configured Nebius registry
-  # image through --image and --var POLICY_IMAGE=... at launch.
+  # Supply the digest-pinned public GHCR image through --image and --var at launch.
   POLICY_IMAGE: ${POLICY_IMAGE}
   SONIC_PAYLOAD_MODE: direct
+  SONIC_GPU_TYPE: gpu-rtx6000
+  SONIC_IMAGE_VARIANT: sonic-k8s-host-mounted
   SUBMISSION_REPO: https://github.com/cristpierce/shadow-dance.git
   SUBMISSION_COMMIT: ${SUBMISSION_COMMIT}
   RUN_ID: ${RUN_ID}
   EVIDENCE_S3_URI: ${EVIDENCE_S3_URI}
-  LADDER: 5,500,4000
-  STAGE_WALLTIME_BUDGET_SECONDS: 5:900,500:3600,4000:21600
-  TRAINING_TIMEOUT_SECONDS: 5:600,500:3000,4000:19800
+  LADDER: 5,250,500,4000
+  STAGE_WALLTIME_BUDGET_SECONDS: 5:900,250:1800,500:3600,4000:21600
+  TRAINING_TIMEOUT_SECONDS: 5:600,250:1500,500:3000,4000:19800
   SUBMISSION_DEADLINE_UTC: "2026-08-17T06:59:00Z"
   FINALIZATION_RESERVE_SECONDS: "7200"
   PORTAL_RESERVE_SECONDS: "2700"
@@ -37,9 +37,9 @@ envs:
   RENDER_SEED: "303"
   HF_MODEL_REPO: ${HF_MODEL_REPO}
   HF_DATASET_REPO: cristpierce/shadow-dip-v1
-  OMNI_KIT_ACCEPT_EULA: ${OMNI_KIT_ACCEPT_EULA}
-  ISAACSIM_ACCEPT_EULA: ${ISAACSIM_ACCEPT_EULA}
-  S3_ENDPOINT_URL: https://storage.eu-north1.nebius.cloud
+  ENTRANT_NVIDIA_EULA_ACCEPTED: ${ENTRANT_NVIDIA_EULA_ACCEPTED}
+  ACCEPT_EULA: ${ACCEPT_EULA}
+  S3_ENDPOINT_URL: ${S3_ENDPOINT_URL}
 setup: |
   set -euo pipefail
   command -v git >/dev/null

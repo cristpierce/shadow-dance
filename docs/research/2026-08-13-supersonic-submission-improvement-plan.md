@@ -670,7 +670,7 @@ Avoid claiming real-robot validation unless Ultimate Bots actually runs it. Say
 - Capture/generate the small amplitude/tempo/direction set and owned fundamentals.
 - Validate every motion and freeze train/validation/test manifests.
 - Save stock baseline metrics and renders before training.
-- Run the 5/500/4,000 checkpoint ladder.
+- Run the 5/250/500/4,000 checkpoint ladder.
 - Evaluate held-out hero plus stand/walk/turn; choose whether to continue or fix data.
 
 ### August 15 — complete and submit early
@@ -883,12 +883,13 @@ The following updates supersede earlier references to a single “held-out” he
   with 15 GiB VM RAM and ample disk. NVIDIA's current Isaac Lab requirements call for
   at least 16 GB VRAM and 32 GB RAM for full Isaac Sim workflows. Local execution is a
   best-effort 16-environment smoke contingency after EULA acceptance, not a credible
-  replacement for the L40S training/evidence run.
+  replacement for the supported cloud training/evidence run.
 - The pinned NPA/SkyPilot operator environment passes its local status and verification
-  checks. The digest-pinned L40S SONIC image materializes into a no-compute SkyPilot
-  task contract. No Nebius authentication or posted challenge credit has been observed
-  yet, so no paid GPU was allocated and no policy result is claimed.
-- At pinned NPA commit `1e8acb921aa953c1e2ce018bcbc6417611768a16`, the CLI's
+  checks. The digest-pinned public runtime-fetch SONIC image materializes into a
+  no-compute RTX PRO 6000 Kubernetes task contract. No Nebius authentication or posted
+  challenge credit has been observed yet, so no paid GPU was allocated and no policy
+  result is claimed.
+- At pinned NPA commit `43ffee689b02a117ff4eb2c32f7057b39bcef030`, the CLI's
   guaranteed no-submit `--plan-only` return path applies to `npa.workflow` specs, not
   generic SkyPilot YAML. Shadow Dance therefore uses a dedicated read-only call to the
   SONIC materializer with registry authentication disabled. This prevents a “planning”
@@ -944,8 +945,9 @@ The following updates supersede earlier references to a single “held-out” he
 - Keep the 22-motion training set unchanged after the test freeze. If the stock novelty
   gate fails, do not repurpose the test data; stop and preregister a separate harder
   target before generating or training anything new.
-- Prefer the on-demand L40S direct-image workflow for deadline reliability and rendering
-  support. The frozen run is exactly 5/500/4,000 iterations with 64 environments for
+- Prefer the active public runtime-fetch image on an on-demand RTX PRO 6000 Managed
+  Kubernetes node for deadline reliability and rendering support. The frozen run is
+  exactly 5/250/500/4,000 iterations with 64 environments for
   the smoke and 512 for the two main candidates. This supersedes the initial
   5/25/100 debug-scale ladder: NVIDIA documents 100 iterations as a local debug run,
   while the public challenge-targeted `ultimate-bots-G1` evidence reports that its
@@ -953,7 +955,7 @@ The following updates supersede earlier references to a single “held-out” he
   44.17 frames and an 85.98% end-effector termination rate. The later public Tai Chi
   entry reports 7,500 total refinement iterations on two L40S GPUs. Independent
   candidates retain a clean same-base comparison, and the 10-hour worker guard gives
-  the 4,000-step candidate room to finish on one L40S. Any longer ladder requires a new versioned
+  the 4,000-step candidate room to finish on one GPU. Any longer ladder requires a new versioned
   protocol decision before the untouched test is opened; it is not silently enabled.
 - Enforce a ten-hour worker timeout with a 15-minute recovery window and tear down
   the small jobs controller after terminal status. This bounds a stuck attempt while
@@ -979,6 +981,8 @@ The following updates supersede earlier references to a single “held-out” he
   matching the frozen Shadow Dance contract. Its public runbook continues to prefer
   L40S for Isaac rendering-capable validation. This strengthens the image pin without
   changing the already reviewed execution path near the deadline.
+  **Superseded August 16:** current NPA quarantines this exact baked digest; see the
+  deadline-day correction below.
 - The local read-only SkyPilot catalog lists multiple one-GPU L40S shapes in
   `eu-north1`. The 16-vCPU/64-GB fit remains `$1.747/hour`; larger compatible shapes
   range upward from that price. The task requests `L40S:1`, 16 CPUs, and 64 GB rather
@@ -1002,6 +1006,32 @@ The following updates supersede earlier references to a single “held-out” he
   decodes as H.264/YUV420p, 640×480, 50 fps, and 5.26 seconds. This proves public
   accessibility and packaging integrity without turning the preview into policy
   evidence.
+
+## August 16 deadline-day runtime correction
+
+- **Fact (current primary source):** Nebius NPA commit
+  [`43ffee689b02a117ff4eb2c32f7057b39bcef030`](https://github.com/nebius/nebius-physical-ai/commit/43ffee689b02a117ff4eb2c32f7057b39bcef030)
+  makes `sonic-k8s-host-mounted` the only active SONIC variant. Its
+  [image manifest](https://github.com/nebius/nebius-physical-ai/blob/43ffee689b02a117ff4eb2c32f7057b39bcef030/npa/src/npa/deploy/sonic_image_manifest.json)
+  marks the former L40S digest `bdf81f5...` quarantined because it inherits restricted
+  NVIDIA bytes and baked driver libraries. The resolver intentionally rejects it.
+- **Fact (independent locator check):** an anonymous OCI manifest request to GHCR on
+  August 16 resolved the public active tag to
+  `sha256:c9ba0996b28f54b013e36da689638b386a7ef9c0c8c4413fc4b3c72ff1a808bb`,
+  matching the current NPA manifest. No private registry credential is required.
+- **Fact (runtime contract):** the active image contains no Isaac payload and fetches
+  pinned Isaac Sim/Lab wheels only at runtime. Shadow Dance still requires the entrant's
+  named acceptance before setting the documented `ACCEPT_EULA=Y`; NPA's non-interactive
+  default is not treated as entrant consent.
+- **Fact (hardware and cost):** Nebius's current compute pricing lists RTX PRO 6000 only
+  in `us-central1`, at $1.80/GPU-hour on demand. Managed Kubernetes nodes use Compute
+  pricing. The existing ten-hour task guard therefore bounds the GPU component near
+  $18, excluding the small CPU node, storage, and disks.
+- **Decision:** migrate the launch contract, public documentation, reproducibility
+  record, and model card to the active RTX PRO 6000 Kubernetes image. Do not launch or
+  republish the retired L40S image. Keep 512 main environments: NVIDIA's 4,096 setting
+  is its full-scale example, while the 512 setting has same-challenge public timing and
+  is the defensible deadline/budget choice until a real GPU smoke says otherwise.
 
 ## August 16 deadline-day audit
 
@@ -1053,11 +1083,13 @@ deadline plan after the stock gate. Candidate budgets are 15 minutes for stage 5
 60 minutes for stage 500, and 6 hours for stage 4,000, followed by a two-hour evidence
 reserve and 45-minute portal reserve. The 4,000-stage training subprocess itself may
 run for at most 5.5 hours, matching the public 5.3-hour linear runtime evidence while
-leaving evaluation/upload margin. That makes 13:59 PT the mathematical latest
-post-baseline time for the full ladder, 19:59 PT for 5/500, and 20:59 PT for stage 5
-alone. Cold start and baseline work occur first, so actual launch must precede those
-times. The planner also enforces the remaining portion of the ten-hour worker cap after
-that pre-gate work. A later timeout is recorded and only fully completed candidates may
+leaving evaluation/upload margin. A preregistered 250-iteration candidate adds a
+meaningful late fallback with a 30-minute stage budget and 25-minute training timeout.
+That makes 13:29 PT the mathematical latest post-baseline time for the full ladder,
+19:29 PT through 500, 20:29 PT through 250, and 20:59 PT for stage 5 alone. Cold start
+and baseline work occur first, so actual launch must precede those times. The planner
+also enforces the remaining portion of the ten-hour worker cap after that pre-gate
+work. A later timeout is recorded and only fully completed candidates may
 be selected; partial weights are never renamed as a completed stage.
 
 This fallback changes compute breadth, not the frozen novelty/improvement/retention

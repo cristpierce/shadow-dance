@@ -219,6 +219,15 @@ CLI 0.12.254 2026-07-31T13-50-18Z`. The CLI has no `~/.nebius/config.yaml` profi
 so it cannot access or create cloud resources until the entrant completes the
 interactive profile/login step.
 
+Free operator prerequisites were completed on August 16 without touching an account:
+`~/.local/bin/nebius` resolves the existing CLI, Terraform 1.13.3 and kubectl 1.34.10
+were installed from checksum-verified upstream binaries, and user-local Ubuntu 24.04
+`socat` 1.8.0.0/`libwrap0` now satisfies SkyPilot's port-forward dependency. A fresh
+`npa skypilot verify` no longer reports a missing binary; Kubernetes is disabled only
+because no kubeconfig/context exists, and Nebius remains disabled for missing entrant
+authentication. Do not reinstall these tools or mistake their readiness for cloud
+readiness.
+
 Resolve the non-secret launch values from that configuration. The active SONIC image is
 public on GHCR, so no account-specific registry or image-pull secret is needed:
 

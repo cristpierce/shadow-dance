@@ -1,6 +1,6 @@
 # SuperSONIC submission progress
 
-**Last updated:** 2026-08-16 16:35 PT
+**Last updated:** 2026-08-16 16:42 PT
 **Branch:** `feature/supersonic-submission`
 **Deadline:** 2026-08-16 23:59 PT
 
@@ -146,6 +146,13 @@ status here must remain truthful.
   reports Nebius compute/storage disabled, and NPA preflight reports no S3 or Hugging
   Face credentials. The top-level SkyPilot `status: ok` only verifies the local
   installation and must not be treated as cloud readiness.
+- [x] Removed every free local operator-tool gap found by that probe. The existing
+  Nebius CLI 0.12.254 now resolves through `~/.local/bin`; checksum-verified Terraform
+  1.13.3 and kubectl 1.34.10 are installed there; and SkyPilot's `socat` requirement is
+  satisfied by user-local Ubuntu 24.04 `socat` 1.8.0.0 plus `libwrap0`. A fresh
+  SkyPilot verification now reaches the expected missing-kubeconfig/account gate rather
+  than a missing-tool gate. No account, cloud resource, licence variable, or charge was
+  created by this setup.
 
 ## Ready after entrant handoff
 

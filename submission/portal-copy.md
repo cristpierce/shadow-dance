@@ -5,7 +5,7 @@ link in a logged-out/clean session.
 
 ## Project name
 
-G1 Shadow Dance: The Unsupported Partner Dip
+G1 Shadow Dance
 
 ## Track
 
@@ -16,7 +16,9 @@ Performance Arts
 We taught NVIDIA SONIC a five-second **Shadow Partner Dip**: the G1 establishes an
 absent-partner ballroom frame, steps back and pivots, transfers its weight into a deep
 off-axis dip, holds the pose for a beat, and recovers without a partner, hand support,
-or floor contact.
+or floor contact. The authored target reaches a 14.7 cm pelvis drop and 28.1-degree
+waist roll; all 30 generated references pass the preregistered kinematic checks with
+zero self-contacts.
 
 This is not a generic “robot dances” entry. SONIC already knows broad dance motion. Our
 test is the exact unsupported sequence. After selecting the checkpoint on separate

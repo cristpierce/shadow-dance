@@ -19,6 +19,7 @@ envs:
   SUBMISSION_COMMIT: ${SUBMISSION_COMMIT}
   RUN_ID: ${RUN_ID}
   EVIDENCE_S3_URI: ${EVIDENCE_S3_URI}
+  LOCAL_ONLY: "0"
   LADDER: 5,250,500,4000
   STAGE_WALLTIME_BUDGET_SECONDS: 5:900,250:1800,500:3600,4000:21600
   TRAINING_TIMEOUT_SECONDS: 5:600,250:1500,500:3000,4000:19800
@@ -53,6 +54,7 @@ setup: |
   test "$(git rev-parse HEAD)" = "${SUBMISSION_COMMIT}"
   test "${SONIC_REPO_REF:-}" = 0a87181c9106d0e49293400714b157676e0ec664
   test "${NPA_IMAGE_PYTHON:-}" = /opt/npa/venv/bin/python
+  test "${LOCAL_ONLY:-}" = 0
   "${NPA_IMAGE_PYTHON}" -c 'import boto3, huggingface_hub, imageio, numpy, onnx, PIL'
   "${NPA_IMAGE_PYTHON}" scripts/verify_dataset_bundle.py
 run: |
@@ -61,6 +63,7 @@ run: |
   command -v timeout >/dev/null
   test -x /isaac-sim/python.sh
   test "${NPA_IMAGE_PYTHON:-}" = /opt/npa/venv/bin/python
+  test "${LOCAL_ONLY:-}" = 0
   test -x "${NPA_IMAGE_PYTHON}"
   export RUN_STARTED_UTC="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
   deadline_epoch="$(date -u -d "${SUBMISSION_DEADLINE_UTC}" +%s)"

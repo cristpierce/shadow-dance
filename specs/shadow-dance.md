@@ -148,9 +148,11 @@ rerun syncs unchanged hash-matching objects rather than duplicating them.
 Before Isaac starts, the workflow repairs a known property of the immutable NPA image:
 its Git-LFS-suppressed checkout contains pointer stubs for the G1 visual meshes required
 by the released SONIC URDF. Only the pinned G1 URDF/mesh subtree is fetched from the
-exact embedded SONIC commit. A content-bound report must prove 69 files, 68,378,071
+exact embedded SONIC commit. A content-bound report must prove 69 files, 68,376,574
 bytes, zero remaining pointers, all 67 URDF mesh references present, and canonical
-manifest SHA-256 `79fa6310cefeaf819c103e5c83c9c40c55ef71b28aace7bf9f8c116d4966d0c7`.
+manifest SHA-256 `4c7faab77116580265453eb4d15559e8e7e2ae43dfac3150a94150c6562399e3`.
+The checkout forces LF so a Windows `core.autocrlf` setting cannot change the runtime
+identity.
 No model-weight path is included.
 
 The workflow is not launchable until the entrant explicitly accepts the applicable

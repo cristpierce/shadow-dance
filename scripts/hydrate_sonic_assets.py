@@ -28,8 +28,8 @@ ASSET_ROOTS = (
     Path("gear_sonic/data/assets/robot_description/urdf/g1"),
 )
 EXPECTED_FILE_COUNT = 69
-EXPECTED_TOTAL_BYTES = 68_378_071
-EXPECTED_MANIFEST_SHA256 = "79fa6310cefeaf819c103e5c83c9c40c55ef71b28aace7bf9f8c116d4966d0c7"
+EXPECTED_TOTAL_BYTES = 68_376_574
+EXPECTED_MANIFEST_SHA256 = "4c7faab77116580265453eb4d15559e8e7e2ae43dfac3150a94150c6562399e3"
 EXPECTED_URDF_MESH_REFERENCES = 67
 COMMAND_TIMEOUT_SECONDS = 300
 LFS_POINTER_MAGIC = b"version https://git-lfs.github.com/spec/v1"
@@ -147,6 +147,10 @@ def checkout_assets(destination: Path) -> None:
         cwd=destination,
         env=env,
     )
+    # The runtime is Linux. Do not inherit a Windows user's core.autocrlf setting and
+    # silently attest a CRLF-expanded URDF with a platform-specific byte identity.
+    _run(["git", "config", "--local", "core.autocrlf", "false"], cwd=destination, env=env)
+    _run(["git", "config", "--local", "core.eol", "lf"], cwd=destination, env=env)
     _run(["git", "lfs", "install", "--local"], cwd=destination, env=env)
     _run(["git", "sparse-checkout", "init", "--cone"], cwd=destination, env=env)
     _run(

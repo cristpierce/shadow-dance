@@ -60,6 +60,7 @@ def test_frozen_training_contract_is_consistent() -> None:
     assert workflow["envs"]["SONIC_GPU_TYPE"] == "gpu-rtx6000"
     assert workflow["envs"]["SONIC_IMAGE_VARIANT"] == "sonic-k8s-host-mounted"
     assert workflow["envs"]["ACCEPT_EULA"] == "${ACCEPT_EULA}"
+    assert str(workflow["envs"]["LOCAL_ONLY"]) == "0"
     assert workflow["envs"]["ENTRANT_NVIDIA_EULA_ACCEPTED"] == (
         "${ENTRANT_NVIDIA_EULA_ACCEPTED}"
     )
@@ -76,6 +77,10 @@ def test_frozen_training_contract_is_consistent() -> None:
         in pipeline
     )
     assert "/opt/npa/sim/venv" not in pipeline
+    assert 'LOCAL_ONLY="${LOCAL_ONLY:-0}"' in pipeline
+    assert 'if [[ "${LOCAL_ONLY}" == "1" ]]' in pipeline
+    assert 'echo "local_only=${LOCAL_ONLY}"' in pipeline
+    assert 'sudo --non-interactive "${hydrate_args[@]}"' in pipeline
     workflow_text = (ROOT / "cloud" / "sky-shadow-dance.yaml").read_text(encoding="utf-8")
     assert "/opt/npa/venv/bin/python" in workflow_text
     assert 'test "${NPA_IMAGE_PYTHON:-}" = /opt/npa/venv/bin/python' in workflow_text
@@ -89,6 +94,7 @@ def test_frozen_training_contract_is_consistent() -> None:
     assert '"SUBMISSION_DEADLINE_UTC": "2026-08-17T06:59:00Z"' in materializer
     assert 'EXPECTED_IMAGE_VARIANT = "sonic-k8s-host-mounted"' in materializer
     assert 'EXPECTED_GPU_TARGET = "gpu-rtx6000"' in materializer
+    assert '"LOCAL_ONLY": "0"' in materializer
     assert 'os.environ.get("ACCEPT_EULA", "") == "Y"' in materializer
     assert 'os.environ.get("ENTRANT_NVIDIA_EULA_ACCEPTED", "") == "YES"' in (
         materializer

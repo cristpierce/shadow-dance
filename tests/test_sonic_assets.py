@@ -81,6 +81,8 @@ def test_checkout_is_pinned_sparse_and_forces_lfs_smudging(
         assets.SOURCE_REPO,
         ".",
     ]
+    assert ["git", "config", "--local", "core.autocrlf", "false"] in flattened
+    assert ["git", "config", "--local", "core.eol", "lf"] in flattened
     assert flattened[-1] == [
         "git",
         "checkout",
@@ -101,9 +103,9 @@ def test_pinned_asset_contract_matches_runtime_and_precedes_isaac() -> None:
     )
     assert config["runtime_sonic_commit"] == assets.SOURCE_REVISION
     assert assets.EXPECTED_FILE_COUNT == 69
-    assert assets.EXPECTED_TOTAL_BYTES == 68_378_071
+    assert assets.EXPECTED_TOTAL_BYTES == 68_376_574
     assert assets.EXPECTED_MANIFEST_SHA256 == (
-        "79fa6310cefeaf819c103e5c83c9c40c55ef71b28aace7bf9f8c116d4966d0c7"
+        "4c7faab77116580265453eb4d15559e8e7e2ae43dfac3150a94150c6562399e3"
     )
 
     pipeline = (ROOT / "scripts" / "cloud_pipeline.sh").read_text(encoding="utf-8")
@@ -112,6 +114,8 @@ def test_pinned_asset_contract_matches_runtime_and_precedes_isaac() -> None:
     isaac = pipeline.index("# Cold start downloads Isaac")
     assert hydration < base_model < isaac
     assert "base-model.sha256 sonic-assets.json" in pipeline
+    assert 'asset_parent="${SONIC_ROOT}/gear_sonic/data/assets/robot_description"' in pipeline
+    assert 'sudo --non-interactive "${hydrate_args[@]}"' in pipeline
 
 
 def test_asset_report_records_pinned_identity(

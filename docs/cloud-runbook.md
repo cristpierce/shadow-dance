@@ -79,12 +79,39 @@ Everything else in this runbook is automated or already prepared.
 ### Local GPU contingency
 
 This workstation exposes an RTX 5070 Ti Laptop GPU with 12,227 MiB VRAM to WSL2, but
-the WSL VM has 15 GiB RAM. NVIDIA's current
+the WSL VM has 15 GiB RAM. Its Windows NVIDIA driver is 577.13. NVIDIA's current
 [Isaac Lab requirements](https://isaac-sim.github.io/IsaacLab/develop/source/setup/installation/index.html#system-requirements)
-recommend at least 32 GB RAM and 16 GB GPU VRAM for full Isaac Sim workflows, with more
-for training. The laptop is therefore below the supported floor. After the named EULA
-acceptance, it may be used only as a best-effort 16-environment headless smoke fallback;
-do not plan the 500/4,000-iteration evidence run around it or download Isaac beforehand.
+recommend at least 32 GB RAM, 16 GB GPU VRAM, and driver 580.88 on Windows for full
+Isaac Sim workflows, with more for training. The laptop is therefore below all three
+supported floors. Docker Engine 29.1.3, Git LFS 3.4.1, NVIDIA Container Toolkit 1.19.1,
+and a public CUDA 12.8 GPU-container smoke are installed and working in WSL. The exact
+SONIC image carries CUDA 13/PyTorch 2.9, however, and its open-only GPU preflight is
+currently blocked by the container runtime with `unsatisfied condition: cuda>=13.0`.
+No image process or Isaac download begins. The workstation route therefore remains
+blocked until the entrant updates Windows to NVIDIA driver 580.88 or newer and reboots.
+Even then it is only a best-effort 4/8-environment headless fallback; do not plan the
+500/4,000-iteration evidence run around it.
+
+The guarded wrapper uses the same digest-pinned image and evidence pipeline as cloud,
+keeps results under `outputs/cloud/<run-id>`, and makes S3 a no-op only when
+`LOCAL_ONLY=1`. The managed YAML pins `LOCAL_ONLY=0` and checks it twice, so this
+contingency cannot silently weaken cloud durability. The wrapper also requires a clean
+checkout and never supplies either licence marker itself. Once the entrant has sent the
+exact acceptance statement above, run from WSL:
+
+```bash
+cd /mnt/c/Users/crist/dev/projects/shadow-dance
+export ACCEPT_EULA=Y
+export ENTRANT_NVIDIA_EULA_ACCEPTED=YES
+bash scripts/run_local_fallback.sh
+```
+
+The default local ladder is 5/250 iterations with 4 smoke environments and 8 main
+environments. The immutable Isaac 5.1 cache is held in Docker volume
+`shadow-dance-isaac-5-1-cache`; it contains entrant-fetched proprietary NVIDIA bytes
+after first use and must not be published or copied into the repository. If the exact
+image reports a CUDA-driver or Isaac startup incompatibility, stop rather than changing
+the digest or disabling a check: the RTX PRO 6000 managed route remains primary.
 
 ## 1. Install the operator environment in WSL2
 
@@ -177,11 +204,18 @@ exact digest: its upstream checkout exports `GIT_LFS_SKIP_SMUDGE=1` and then rem
 URDF's visual meshes as pointer stubs. `cloud_pipeline.sh` therefore runs
 `hydrate_sonic_assets.py` before base-model download and Isaac startup. It performs an
 anonymous sparse checkout at SONIC commit `0a87181...`, copies only the G1 URDF/mesh
-subtree, and fails closed unless all 69 files total 68,378,071 bytes, contain no LFS
+subtree, and fails closed unless all 69 files total 68,376,574 bytes, contain no LFS
 pointers, satisfy every URDF mesh reference, and match manifest SHA-256
-`79fa6310cefeaf819c103e5c83c9c40c55ef71b28aace7bf9f8c116d4966d0c7`. Do not bypass
-this gate. Its `sonic-assets.json` report is uploaded under the run's `evidence/` prefix;
+`4c7faab77116580265453eb4d15559e8e7e2ae43dfac3150a94150c6562399e3`. The checkout
+forces `core.autocrlf=false` and `core.eol=lf`; this is the Linux runtime identity, not
+a Windows worktree's CRLF-expanded URDF. Do not bypass this gate. Its
+`sonic-assets.json` report is uploaded under the run's `evidence/` prefix;
 the fetch includes no checkpoint/model-weight path and requires no Hugging Face token.
+The exact pulled digest declares `Config.User=root`, so its root-owned nested asset
+directory is writable during the current run. The reviewed Dockerfile can also be built
+with a non-root runtime user; the pipeline handles that variant by using its configured
+non-interactive `sudo` only for the pinned hydration command. It does not elevate
+training, evaluation, downloads of model weights, or publication.
 The active image's ordinary interpreter is `/opt/npa/venv/bin/python` (exported as
 `NPA_IMAGE_PYTHON`), while `/isaac-sim/python.sh` is the Isaac bootstrap shim. The task
 asserts both identities; `/opt/npa/sim/venv/bin/python` belongs to the retired baked

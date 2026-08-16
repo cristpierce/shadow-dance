@@ -136,9 +136,9 @@ chain.
 The pinned NPA image deliberately leaves Git LFS payloads out of its upstream checkout,
 which also leaves the G1 visual meshes as pointer stubs. Before downloading Isaac or
 starting evaluation, the cloud pipeline sparsely fetches only the G1 URDF/mesh subtree
-from the image's exact SONIC commit and verifies 69 files, 68,378,071 bytes, zero
+from the image's exact SONIC commit and verifies 69 files, 68,376,574 bytes, zero
 pointers, and canonical manifest SHA-256
-`79fa6310cefeaf819c103e5c83c9c40c55ef71b28aace7bf9f8c116d4966d0c7`. Model weights
+`4c7faab77116580265453eb4d15559e8e7e2ae43dfac3150a94150c6562399e3`. Model weights
 are excluded from that fetch; `sonic-assets.json` records the result.
 
 ```bash
@@ -192,6 +192,7 @@ src/shadow_dance/       generator, MuJoCo IK, validator, renderer
 data/                   provenance manifest, splits, dataset notes
 configs/                frozen experiment intent and checkpoint ladder
 scripts/                train, eval, render, export, artifact checks
+                        and guarded WSL/Docker fallback
 results/                raw/derived evaluation contract
 submission/             portal-ready copy and completion checklist
 docs/research/          dated challenge and strategy research

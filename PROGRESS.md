@@ -96,13 +96,29 @@ status here must remain truthful.
 
 - [x] Audited the active image's OCI build history and found its G1 visual meshes were
   Git LFS pointer stubs. Added a pre-Isaac, model-weight-excluding sparse hydration gate
-  pinned to the embedded SONIC commit, with exact 69-file/68,378,071-byte/manifest-hash
+  pinned to the embedded SONIC commit, with exact 69-file/68,376,574-byte/manifest-hash
   attestation. Proved the finalized empty-root hydration (17.3 seconds, anonymous) and
-  cached revalidation; the full local suite now passes 28 tests with 3 licensed-runtime
+  cached revalidation; the full local suite now passes 30 tests with 3 licensed-runtime
   skips. A failed checkout also leaves a structured recovery report for evidence upload.
 - [x] Corrected the cloud task's baked-Python path from the retired image's
   `/opt/npa/sim/venv/bin/python` to the active OCI config's image-owned
   `NPA_IMAGE_PYTHON=/opt/npa/venv/bin/python`; the materializer now rejects drift.
+- [x] Audited the active image's real filesystem ownership contract (`Config.User=root`)
+  and made G1 repair portable to a non-root rebuild with narrowly scoped non-interactive
+  elevation. Added a digest-pinned WSL/Docker fallback that requires the entrant-owned
+  licence markers, defaults to 4/8 environments and a 5/250 ladder, retains outputs
+  locally, and cannot weaken the managed workflow's mandatory S3 mode.
+- [x] Installed Docker Engine 29.1.3, Git LFS 3.4.1, NVIDIA Container Toolkit 1.19.1,
+  and verified public CUDA 12.8.1 GPU passthrough in WSL. The laptop remains below the
+  documented Isaac 5.1 RAM, VRAM, and driver floors. The exact CUDA 13 image correctly
+  refuses driver 577.13 before process startup, so local compute is blocked pending a
+  user-owned driver update/reboot and is not a claimed supported runtime.
+- [x] Pulled the exact 9,335,925,665-byte active image identity and completed every
+  legal open-only probe available inside it: non-Isaac imports, zero baked Isaac
+  packages, EULA-unaccepted cache status, 30-sequence dataset verification, anonymous
+  base-model hash verification, and real G1 asset repair. The container exposed a
+  Windows-CRLF attestation bug; forcing LF now passes identically on Windows and Linux
+  at 69 files, 68,376,574 bytes, and manifest `4c7faab7...62399e3`.
 
 ## Ready after entrant handoff
 
@@ -114,6 +130,9 @@ status here must remain truthful.
 - [ ] Named acceptance of the three NVIDIA/Isaac licence agreements and authorization
   for the documented run-scoped `ACCEPT_EULA=Y` value plus the project-owned
   `ENTRANT_NVIDIA_EULA_ACCEPTED=YES` marker.
+- [ ] For the unsupported laptop fallback only, install NVIDIA Windows driver 580.88
+  or newer and reboot; the current 577.13 driver is rejected by the pinned CUDA 13
+  image before container startup. This is not required for the managed cloud route.
 - [ ] Interactive Nebius profile/login plus visible challenge credit, a `us-central1`
   project, object-storage credentials, and RTX PRO 6000 Managed Kubernetes quota. The
   current pinned CLI itself is installed.

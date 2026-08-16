@@ -135,6 +135,7 @@ def main() -> int:
         "SUBMISSION_COMMIT": args.submission_commit.lower(),
         "RUN_ID": args.run_id,
         "EVIDENCE_S3_URI": args.evidence_s3_uri.rstrip("/"),
+        "LOCAL_ONLY": "0",
         "LADDER": "5,250,500,4000",
         "STAGE_WALLTIME_BUDGET_SECONDS": "5:900,250:1800,500:3600,4000:21600",
         "TRAINING_TIMEOUT_SECONDS": "5:600,250:1500,500:3000,4000:19800",
@@ -181,12 +182,14 @@ def main() -> int:
         'test "$(git rev-parse HEAD)" = "${SUBMISSION_COMMIT}"',
         'test "${SONIC_REPO_REF:-}" = 0a87181c9106d0e49293400714b157676e0ec664',
         'test "${NPA_IMAGE_PYTHON:-}" = /opt/npa/venv/bin/python',
+        'test "${LOCAL_ONLY:-}" = 0',
         "scripts/verify_dataset_bundle.py",
     )
     required_run_fragments = (
         "timeout --signal=TERM --kill-after=15m",
         '"${MAX_WALLTIME}"',
         'export RUN_STARTED_UTC="$(date -u +%Y-%m-%dT%H:%M:%SZ)"',
+        'test "${LOCAL_ONLY:-}" = 0',
         '"${deadline_remaining_seconds}s"',
         "bash scripts/cloud_pipeline.sh",
     )

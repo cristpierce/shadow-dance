@@ -1122,8 +1122,12 @@ outcome is no policy claim—not synthetic or estimated evidence.
   checkout, the image cannot restore those objects itself.
 - **Fact (non-GPU reproduction):** a clean anonymous sparse checkout of only the G1
   mesh and URDF directories at `0a87181c...ec664` completed with 69 files totaling
-  68,378,071 bytes, zero pointer files, and canonical path/size/content manifest SHA-256
-  `79fa6310cefeaf819c103e5c83c9c40c55ef71b28aace7bf9f8c116d4966d0c7`.
+  68,376,574 bytes, zero pointer files, and canonical path/size/content manifest SHA-256
+  `4c7faab77116580265453eb4d15559e8e7e2ae43dfac3150a94150c6562399e3`.
+  This is the Linux LF identity proven inside the exact runtime image. The initially
+  measured Windows checkout was 1,497 bytes larger because global `core.autocrlf`
+  inserted one carriage return per URDF line; that superseded identity would have
+  rejected the valid Linux assets before compute.
 - **Decision:** run `hydrate_sonic_assets.py` before base-model download and Isaac cold
   start. The script removes inherited LFS-skip settings, uses a noninteractive sparse
   checkout pinned to the embedded commit, validates the staged tree before any copy,
@@ -1141,6 +1145,69 @@ outcome is no policy claim—not synthetic or estimated evidence.
   read-only plan materialization tests. Keep `/isaac-sim/python.sh` separate: it is the
   present, executable bootstrap shim that performs the entrant-authorized runtime Isaac
   install on first use.
+
+### Late deadline field and local-runtime audit (August 16, 15:24 PT)
+
+- **Fact (direct Performance Arts comparator):**
+  [`iamazim/sonic-g1-uzbek-greeting`](https://huggingface.co/iamazim/sonic-g1-uzbek-greeting)
+  publishes complete five-graph ONNX bundles at 4,000 and 12,000 iterations and reports
+  local MPJPE improving from 31.96 to 19.51 mm with 0.9833 to 0.9945 success. Its
+  [dataset](https://huggingface.co/datasets/iamazim/uzbek-greeting-g1) describes 12
+  self-recorded Studio clips duplicated 15 times into 180 entries and mixed with base
+  locomotion. Its public card does not visibly expose an untouched parametric test or
+  repeated-seed aggregate. This is the closest visible track competitor and raises the
+  minimum acceptable artifact bar: one checkpoint file is not enough; publish the full
+  SONIC graph bundle and real metrics.
+- **Fact (second Performance Arts comparator):**
+  [`oniichan521/g1-taiji-form-sonic-onnx`](https://huggingface.co/oniichan521/g1-taiji-form-sonic-onnx)
+  publishes the five SONIC graphs at step 2,000 and reports local MPJPE improving from
+  55.8 to 34.3 mm over a 25-second Kimodo-derived form. This reinforces the importance
+  of an immediately playable policy demo. Its public model metadata labels the model
+  Apache-2.0 even though NVIDIA's upstream repository separately licenses model
+  derivatives; Shadow Dance should keep the full GEAR-SONIC dual licence instead of
+  copying that metadata choice.
+- **Fact (engineering-quality comparator):**
+  [GhostTrial Scorpion](https://github.com/SpiRaiL/GhostTrial-public) publishes the
+  `g1`, encoder, and decoder ONNX graphs, a polished build video, and unusually candid
+  limitations. Its Nebius helper independently documents the same G1 Git LFS asset
+  failure found in the active SONIC image. Its environment note reports roughly
+  155--185 steps/s at 16 environments on a local RTX 5080, suggesting a tiny local run
+  can be useful, but not proving compatibility or quality on this laptop.
+- **Fact (local system):** WSL Ubuntu 24.04 sees the RTX 5070 Ti Laptop GPU and passed a
+  public CUDA 12.8.1 container smoke. Docker Engine 29.1.3, Git LFS 3.4.1, and NVIDIA
+  Container Toolkit 1.19.1 are installed. The machine still has only 12,227 MiB GPU
+  memory, a 15 GiB WSL RAM cap, and driver 577.13, below Isaac Sim 5.1's documented
+  16 GB VRAM, 32 GB RAM, and Windows driver 580.88 minimums. The exact CUDA 13 SONIC
+  image was pulled by digest, but NVIDIA Container Toolkit refuses it before process
+  startup with `unsatisfied condition: cuda>=13.0`. No Isaac bytes were downloaded.
+  The local route is blocked until a driver update/reboot and remains unsupported even
+  after that; it is not a replacement for the RTX PRO cloud route.
+- **Fact (exact open image):** the pulled digest is a 9,335,925,665-byte image identity
+  (29.49 GB local unpacked Docker usage), declares `Config.User=root`, exports
+  `/opt/npa/venv/bin/python`, and contains Python 3.11.15 plus PyTorch 2.9.0+cu130. It
+  imports the required non-Isaac modules, contains zero `isaacsim`/`isaaclab` packages,
+  reports the Isaac cache unready with EULA unaccepted, and verifies all 30 submitted
+  dataset sequences without invoking the licensed bootstrap. An anonymous in-container
+  download of the pinned public GEAR-SONIC checkpoint and config also matched the frozen
+  469,418,283-byte checkpoint and both expected SHA-256 values.
+- **Fact (image permissions):** the source Dockerfile supports a non-root runtime, but
+  the exact published digest declares `root`; its root-owned G1 asset parent is therefore
+  writable in the current route. The pipeline still detects a non-writable rebuild and
+  limits `sudo --non-interactive` to the pinned public-asset repair. This portability
+  guard is useful, but root ownership is not a blocker for the exact digest.
+- **Decision:** retain cloud/S3 as the primary evidence route. The local wrapper uses
+  the exact public image digest, requires the entrant-supplied licence markers before
+  any Isaac action, preserves a versioned Docker cache volume, defaults to a 5/250
+  ladder at 4/8 environments, and writes to the repository-mounted output tree with an
+  explicit `LOCAL_ONLY=1` record. Cloud materialization hard-pins and verifies
+  `LOCAL_ONLY=0`, preventing an accidental no-upload managed job. It also performs an
+  open PyTorch CUDA allocation before creating the proprietary Isaac cache and exits 69
+  with the required driver action if the host cannot run the pinned image.
+- **Strategic conclusion:** Shadow Dance's clean regeneration, validation-only
+  selection, untouched 12-trial test, bidirectional walking/turning rehearsal, and
+  complete hash chain remain visible differentiators. They do not compensate for the
+  current absence of a trained policy, real stock/selected renders, and measured test
+  results. Unlocking one legal and one compute path remains the highest-value action.
 
 ## Primary sources
 

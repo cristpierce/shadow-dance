@@ -44,8 +44,8 @@
 ## Licensing and safety
 
 - [ ] Named NVIDIA/Isaac EULA acceptance recorded before Isaac provisioning.
-- [ ] `sonic-assets.json` reports the pinned SONIC revision, 69 files, 68,378,071 bytes,
-  zero Git LFS pointers, and manifest SHA-256 `79fa6310...d4966d0c7` before Isaac starts.
+- [ ] `sonic-assets.json` reports the pinned SONIC revision, 69 files, 68,376,574 bytes,
+  zero Git LFS pointers, and manifest SHA-256 `4c7faab7...62399e3` before Isaac starts.
 - [ ] NVIDIA Open Model License accompanies derivative weights.
 - [ ] Apache-2.0 and third-party notices included.
 - [x] Dataset card says no BONES-SEED and accurately describes synthetic generation.

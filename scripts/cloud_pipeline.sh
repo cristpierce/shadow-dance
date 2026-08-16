@@ -10,6 +10,7 @@ BASE_PYTHON="${BASE_PYTHON:-${NPA_IMAGE_PYTHON:-/opt/npa/venv/bin/python}}"
 SONIC_PYTHON="${SONIC_PYTHON:-/isaac-sim/python.sh}"
 RUN_ID="${RUN_ID:-shadow-dance-$(date -u +%Y%m%dT%H%M%SZ)}"
 EVIDENCE_S3_URI="${EVIDENCE_S3_URI:-}"
+LOCAL_ONLY="${LOCAL_ONLY:-0}"
 LADDER="${LADDER:-5,250,500,4000}"
 STAGE_WALLTIME_BUDGET_SECONDS="${STAGE_WALLTIME_BUDGET_SECONDS:-5:900,250:1800,500:3600,4000:21600}"
 TRAINING_TIMEOUT_SECONDS="${TRAINING_TIMEOUT_SECONDS:-5:600,250:1500,500:3000,4000:19800}"
@@ -36,10 +37,21 @@ if [[ "${ENTRANT_NVIDIA_EULA_ACCEPTED:-}" != "YES" || "${ACCEPT_EULA:-}" != "Y" 
   echo "Named entrant acceptance and ACCEPT_EULA=Y are required; refusing before any Isaac download." >&2
   exit 78
 fi
-if [[ -z "${EVIDENCE_S3_URI}" || "${EVIDENCE_S3_URI}" != s3://* ]]; then
-  echo "EVIDENCE_S3_URI must be a run-scoped s3:// URI." >&2
-  exit 2
-fi
+case "${LOCAL_ONLY}" in
+  0)
+    if [[ -z "${EVIDENCE_S3_URI}" || "${EVIDENCE_S3_URI}" != s3://* ]]; then
+      echo "EVIDENCE_S3_URI must be a run-scoped s3:// URI for a managed run." >&2
+      exit 2
+    fi
+    ;;
+  1)
+    echo "LOCAL_ONLY=1: retaining evidence under ${RUN_ROOT}; remote uploads are disabled."
+    ;;
+  *)
+    echo "LOCAL_ONLY must be exactly 0 or 1." >&2
+    exit 2
+    ;;
+esac
 if [[ ! -x "${BASE_PYTHON}" || ! -x "${SONIC_PYTHON}" ]]; then
   echo "Expected npa-sonic interpreters are missing." >&2
   exit 2
@@ -51,6 +63,9 @@ cd "${PROJECT_ROOT}"
 upload_path() {
   local source="$1"
   local suffix="$2"
+  if [[ "${LOCAL_ONLY}" == "1" ]]; then
+    return 0
+  fi
   "${BASE_PYTHON}" scripts/upload_tree.py \
     "${source}" "${EVIDENCE_S3_URI%/}/${suffix#/}"
 }
@@ -103,6 +118,7 @@ fi
 {
   echo "run_id=${RUN_ID}"
   echo "started_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+  echo "local_only=${LOCAL_ONLY}"
   echo "submission_commit=${SUBMISSION_COMMIT:-unknown}"
   echo "runtime_sonic_commit=${SONIC_REPO_REF:-unknown}"
   echo "policy_image=${POLICY_IMAGE:-unknown}"
@@ -137,9 +153,22 @@ if [[ -n "${SUBMISSION_COMMIT:-}" ]] && \
 fi
 
 export HF_HUB_DISABLE_XET=1
-"${BASE_PYTHON}" scripts/hydrate_sonic_assets.py \
-  --sonic-root "${SONIC_ROOT}" \
+asset_parent="${SONIC_ROOT}/gear_sonic/data/assets/robot_description"
+hydrate_args=(
+  "${BASE_PYTHON}" scripts/hydrate_sonic_assets.py
+  --sonic-root "${SONIC_ROOT}"
   --report "${RUN_ROOT}/sonic-assets.json"
+)
+if [[ -w "${asset_parent}" ]]; then
+  "${hydrate_args[@]}"
+else
+  command -v sudo >/dev/null || {
+    echo "SONIC assets need hydration but ${asset_parent} is not writable and sudo is absent." >&2
+    exit 2
+  }
+  echo "Hydrating the root-owned, pinned SONIC asset subtree with non-interactive sudo."
+  sudo --non-interactive "${hydrate_args[@]}"
+fi
 upload_path "${RUN_ROOT}/sonic-assets.json" evidence
 "${BASE_PYTHON}" scripts/download_base_model.py --output-dir "${SONIC_ROOT}"
 actual_checkpoint_hash="$(sha256sum "${BASE_CHECKPOINT}" | cut -d' ' -f1)"

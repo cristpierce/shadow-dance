@@ -33,7 +33,11 @@ cannot drift across machines.
    unlike NPA's product default, it cannot be synthesized by the workflow materializer.
 
 2. **Complete interactive Nebius login and confirm usable credit/quota.** The portal's
-   "applied" state is not proof that the $50 credit has posted. In WSL, run
+   "applied" state is not proof that the $50 credit has posted. The August 16 portal
+   client sends the **Claim $50 Nebius compute** button to
+   <https://dev.nebius.com/builders>; open that while signed in and verify the credit
+   in the resulting Nebius account rather than treating the outbound link as a claim
+   receipt. In WSL, run
    `cd /home/crist/npa-shadow-operator && .venv/bin/npa configure`, select a
    `us-central1` project, and confirm RTX PRO 6000 Managed Kubernetes quota. The
    supported cluster provisioning command is in section 1; dry-run it before creating
@@ -72,7 +76,12 @@ cannot drift across machines.
 6. **Publish the real policy comparison and submit the portal entry.** A signed-in team
    member must upload the final hash-verified simulator video to YouTube if the portal
    requires that host, check every public link while logged out, and change the Ultimate
-   Bots entry from `DRAFT` to submitted. The kinematic reference video is not a substitute.
+   Bots entry from `DRAFT` to submitted. The portal client counts exactly seven required
+   values: track, project name, writeup, GitHub URL, Hugging Face policy URL, Hugging Face
+   dataset URL, and simulation-video URL. It permits an incomplete **Save draft**, but
+   disables **Submit entry** until all seven are non-empty. After submitting, verify the
+   status indicator and the **Resubmit entry** action; a saved 7/7 draft is still not a
+   submission. The kinematic reference video is not a substitute.
 
 Everything else in this runbook is automated or already prepared.
 

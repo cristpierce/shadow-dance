@@ -13,7 +13,11 @@
 - [ ] Public Hugging Face ONNX/model link saved.
 - [ ] Public Hugging Face dataset link saved.
 - [ ] Stock/fine-tuned simulation video link saved.
-- [ ] Entry status changed from DRAFT to submitted before 2026-08-16 23:59 PT.
+- [ ] Portal readiness meter says `7 of 7 complete`; all four URLs were opened and
+  checked rather than counted merely because they contain text.
+- [ ] Click **Submit entry**, confirm the status is submitted and the action changes to
+  **Resubmit entry**, and capture the confirmation before 2026-08-16 23:59 PT. A saved
+  7/7 draft is not submitted.
 - [x] Immutable public reference-dataset fallback release works anonymously: both
   assets return HTTP 200 with matching SHA-256, and the archive inventory was inspected.
 

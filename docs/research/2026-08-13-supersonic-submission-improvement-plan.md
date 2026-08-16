@@ -1048,6 +1048,24 @@ August 16 at 11:59 PM PT. Exact public-source and GitHub searches still found no
 organizer WBT-Bench package; the Discord request remains mandatory, and the owned
 walking/turning suite must continue to be labelled a proxy.
 
+### Portal submission contract verified from the current client
+
+The August 16 screenshots and the public JavaScript served for the authenticated
+`/ghost-trial` route agree on the exact entry contract. The client counts seven values:
+track, project name, writeup, GitHub repository URL, Hugging Face ONNX-policy URL,
+Hugging Face dataset URL, and simulation-video URL. It allows an incomplete **Save
+draft**, but **Submit entry** stays disabled until all seven contain non-whitespace text.
+After submission, the action changes to **Resubmit entry** and the UI says updates can
+continue until close. No client-side maximum length or URL-domain validation is visible;
+server validation remains unknown, so placeholders must not be treated as acceptable.
+The operational finish line is therefore a confirmed submitted status, not merely a
+`7 of 7 complete` meter or a saved draft.
+
+The same current client sends **Claim $50 Nebius compute** to
+<https://dev.nebius.com/builders>. That outbound link is a route into Nebius, not proof
+that challenge credit, project access, or GPU quota has posted. Those must be verified
+inside the entrant's authenticated Nebius account before launch.
+
 ### Visible competitive evidence
 
 - [SONIC Capoeira V8](https://github.com/danniely/ultimate-bots-G1) published a real

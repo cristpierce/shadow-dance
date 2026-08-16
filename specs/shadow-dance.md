@@ -64,10 +64,12 @@ that the target is coherent; it is never presented as policy execution.
 - Runtime: public NPA `sonic-k8s-host-mounted` image at digest
   `sha256:c9ba0996b28f54b013e36da689638b386a7ef9c0c8c4413fc4b3c72ff1a808bb`.
 - Runtime SONIC commit: `0a87181c9106d0e49293400714b157676e0ec664`.
-- Candidate budgets: independent 5, 250, 500, and 4,000 iteration fine-tunes from the
-  same base. The deadline scheduler always keeps the five-step smoke, prioritizes the
-  largest candidate that fits, and uses remaining time for the strongest smaller
-  fallback; it never silently substitutes a partial checkpoint.
+- Candidate budgets: independent 5, 250, 500, 2,000, and 4,000 iteration fine-tunes
+  from the same base. The deadline scheduler always keeps the five-step smoke,
+  prioritizes the largest candidate that fits, and uses remaining time for the
+  strongest smaller fallback; it never silently substitutes a partial checkpoint. The
+  2,000-stage deadline fallback was added before any run after public same-challenge
+  evidence showed 2,000 iterations at 512 environments in 9,544.61 seconds.
 - Seed for selection evaluation: 42.
 - No W&B dependency, no hidden data, and no training/test overlap.
 - One on-demand Nebius RTX PRO 6000 Blackwell Kubernetes worker with a 10-hour hard

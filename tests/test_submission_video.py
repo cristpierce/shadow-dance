@@ -146,7 +146,7 @@ def test_submission_video_rejects_nonfrozen_checkpoint_label(tmp_path: Path) -> 
         "format": "shadow_dance_final_comparison_v1",
         "split": "test",
         "used_for_checkpoint_selection": False,
-        "selected_label": "stage-2000",
+        "selected_label": "stage-1000",
         "stock": summary,
         "selected": summary,
     }

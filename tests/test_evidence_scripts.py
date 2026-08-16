@@ -604,19 +604,21 @@ def test_model_publisher_dry_run_requires_valid_release(tmp_path: Path) -> None:
     ladder_plan = {
         "format": "shadow_dance_ladder_plan_v2",
         "schedule_policy": "smoke_then_largest_feasible_v1",
-        "planned_candidate_iterations": [5, 250, 500, 4000],
+        "planned_candidate_iterations": [5, 250, 500, 2000, 4000],
         "scheduled_candidate_iterations": [5, 250, 500, 4000],
-        "omitted_candidate_iterations": [],
+        "omitted_candidate_iterations": [2000],
         "stage_walltime_budget_seconds": {
             "5": 900,
             "250": 1800,
             "500": 3600,
+            "2000": 12600,
             "4000": 21600,
         },
         "training_timeout_seconds": {
             "5": 600,
             "250": 1500,
             "500": 3000,
+            "2000": 10800,
             "4000": 19800,
         },
         "computed_utc": "2026-08-16T20:20:00Z",
@@ -632,7 +634,7 @@ def test_model_publisher_dry_run_requires_valid_release(tmp_path: Path) -> None:
         "runtime_candidate_budget_available_seconds": 28800,
         "candidate_budget_available_seconds": 28440,
         "scheduled_candidate_budget_seconds": 27900,
-        "deadline_truncated": False,
+        "deadline_truncated": True,
         "launchable": True,
     }
     ladder_plan_path = tmp_path / "ladder-plan.json"
@@ -650,7 +652,7 @@ def test_model_publisher_dry_run_requires_valid_release(tmp_path: Path) -> None:
                 "completed_candidate_iterations": [5, 250, 500, 4000],
                 "runtime_omitted_candidate_iterations": [],
                 "timed_out_candidate_iteration": None,
-                "deadline_truncated_before_run": False,
+                "deadline_truncated_before_run": True,
                 "completed_utc": "2026-08-16T22:00:00Z",
             }
         ),

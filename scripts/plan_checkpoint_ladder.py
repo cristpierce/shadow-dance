@@ -138,12 +138,12 @@ def build_plan(
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--ladder", default="5,250,500,4000")
+    parser.add_argument("--ladder", default="5,250,500,2000,4000")
     parser.add_argument(
-        "--stage-budgets", default="5:900,250:1800,500:3600,4000:21600"
+        "--stage-budgets", default="5:900,250:1800,500:3600,2000:12600,4000:21600"
     )
     parser.add_argument(
-        "--training-timeouts", default="5:600,250:1500,500:3000,4000:19800"
+        "--training-timeouts", default="5:600,250:1500,500:3000,2000:10800,4000:19800"
     )
     parser.add_argument("--run-started-utc", required=True)
     parser.add_argument("--max-walltime-seconds", type=int, default=36000)

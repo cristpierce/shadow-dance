@@ -58,7 +58,7 @@ status here must remain truthful.
   and configuration used by the dataset are compatible with the SONIC commit embedded
   in the pinned cloud image; the only motion-loader delta is post-load memory cleanup.
 - [x] Expanded the frozen ladder from debug-only budgets to independent
-  5/250/500/4,000 iteration candidates. Its quality-first scheduler keeps the smoke,
+  5/250/500/2,000/4,000 iteration candidates. Its quality-first scheduler keeps the smoke,
   targets the largest candidate that fits, and fills spare time with the strongest
   smaller fallback while preserving the 10-hour worker cap.
 - [x] Passed 23 local tests with 3 licensed-runtime skips, plus Ruff, Bash, YAML,
@@ -86,7 +86,7 @@ status here must remain truthful.
 - [x] Finished the diff/security review, pushed the frozen implementation, and updated
   [upstream PR #1](https://github.com/Durp06/shadow-dance/pull/1).
 - [x] Added and locally verified a deadline-aware ladder plan. It preserves the full
-  5/250/500/4,000 protocol when time permits, switches to a quality-first subset when
+  5/250/500/2,000/4,000 declared ladder, switches to a quality-first subset when
   necessary, reserves two hours for final evidence plus 45 minutes for portal
   submission, and records every deadline or runtime omission in hash-bound evidence.
 - [x] Rechecked the official rules and public competitive field on deadline day. The
@@ -97,8 +97,9 @@ status here must remain truthful.
 - [x] Audited the active image's OCI build history and found its G1 visual meshes were
   Git LFS pointer stubs. Added a pre-Isaac, model-weight-excluding sparse hydration gate
   pinned to the embedded SONIC commit, with exact 69-file/68,376,574-byte/manifest-hash
-  attestation. Proved the finalized empty-root hydration (17.3 seconds, anonymous) and
-  cached revalidation; the full local suite now passes 30 tests with 3 licensed-runtime
+  attestation. Proved the Linux-canonical empty-root hydration in the exact image
+  (12.4 seconds) and from Windows (15.5 seconds), plus cached revalidation; the full
+  local suite now passes 34 tests with 3 licensed-runtime
   skips. A failed checkout also leaves a structured recovery report for evidence upload.
 - [x] Corrected the cloud task's baked-Python path from the retired image's
   `/opt/npa/sim/venv/bin/python` to the active OCI config's image-owned
@@ -119,6 +120,12 @@ status here must remain truthful.
   base-model hash verification, and real G1 asset repair. The container exposed a
   Windows-CRLF attestation bug; forcing LF now passes identically on Windows and Linux
   at 69 files, 68,376,574 bytes, and manifest `4c7faab7...62399e3`.
+- [x] Closed the deadline ladder's 500-to-4,000 quality gap before any training run by
+  preregistering a 2,000-iteration candidate. Its 3.5-hour stage budget and 3-hour
+  training timeout are grounded in public same-challenge evidence of 2,000 iterations
+  at 512 environments in 9,544.61 seconds. The quality-first scheduler still prefers
+  4,000 whenever it fits and otherwise exposes four new 2,000-stage routes through
+  17:29 PT without changing selection or retention thresholds.
 
 ## Ready after entrant handoff
 
@@ -161,10 +168,10 @@ status here must remain truthful.
 3. Go/no-go novelty decision; adjust the target if stock already succeeds.
 4. Run the deadline-planned checkpoint ladder with validation and retention at each
    gate. The post-baseline scheduler can still target 4,000 steps through 14:59 PT by
-   omitting lower-value intermediate candidates as time shrinks; later routes are
-   5/250/500 through 19:29, 5/500 through 19:59, 5/250 through 20:29, and smoke-only
-   through 20:59. The planner refuses any route that cannot preserve finalization and
-   portal reserves.
+   omitting lower-value intermediate candidates as time shrinks; 2,000-step routes
+   remain through 17:29, followed by 5/250/500 through 19:29, 5/500 through 19:59,
+   5/250 through 20:29, and smoke-only through 20:59. The planner refuses any route
+   that cannot preserve finalization and portal reserves.
 5. Freeze the winner, open the untouched test split, export, validate, render, hash,
    and publish the selected checkpoint.
 6. Replace every bracketed submission value from raw evidence, verify public links,

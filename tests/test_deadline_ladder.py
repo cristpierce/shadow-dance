@@ -18,9 +18,9 @@ finally:
     sys.path.pop(0)
 
 
-LADDER = (5, 250, 500, 4000)
-BUDGETS = {5: 900, 250: 1800, 500: 3600, 4000: 21600}
-TRAINING_TIMEOUTS = {5: 600, 250: 1500, 500: 3000, 4000: 19800}
+LADDER = (5, 250, 500, 2000, 4000)
+BUDGETS = {5: 900, 250: 1800, 500: 3600, 2000: 12600, 4000: 21600}
+TRAINING_TIMEOUTS = {5: 600, 250: 1500, 500: 3000, 2000: 10800, 4000: 19800}
 DEADLINE = datetime(2026, 8, 17, 6, 59, tzinfo=UTC)
 
 
@@ -31,6 +31,10 @@ DEADLINE = datetime(2026, 8, 17, 6, 59, tzinfo=UTC)
         (datetime(2026, 8, 16, 20, 50, tzinfo=UTC), [5, 500, 4000]),
         (datetime(2026, 8, 16, 21, 0, tzinfo=UTC), [5, 250, 4000]),
         (datetime(2026, 8, 16, 21, 30, tzinfo=UTC), [5, 4000]),
+        (datetime(2026, 8, 16, 22, 30, tzinfo=UTC), [5, 250, 500, 2000]),
+        (datetime(2026, 8, 16, 23, 0, tzinfo=UTC), [5, 500, 2000]),
+        (datetime(2026, 8, 16, 23, 30, tzinfo=UTC), [5, 250, 2000]),
+        (datetime(2026, 8, 17, 0, 0, tzinfo=UTC), [5, 2000]),
         (datetime(2026, 8, 17, 2, 0, tzinfo=UTC), [5, 250, 500]),
         (datetime(2026, 8, 17, 3, 20, tzinfo=UTC), [5, 250]),
         (datetime(2026, 8, 17, 3, 50, tzinfo=UTC), [5]),
@@ -59,8 +63,11 @@ def test_ladder_plan_preserves_evidence_and_portal_reserves(
 
 
 def test_ladder_parser_rejects_ambiguous_contracts() -> None:
-    assert parse_ladder("5,250,500,4000") == LADDER
-    assert parse_budgets("5:900,250:1800,500:3600,4000:21600", LADDER) == BUDGETS
+    assert parse_ladder("5,250,500,2000,4000") == LADDER
+    assert (
+        parse_budgets("5:900,250:1800,500:3600,2000:12600,4000:21600", LADDER)
+        == BUDGETS
+    )
     with pytest.raises(ValueError, match="strictly increasing"):
         parse_ladder("500,5")
     with pytest.raises(ValueError, match="exactly match"):
@@ -69,7 +76,13 @@ def test_ladder_parser_rejects_ambiguous_contracts() -> None:
         build_plan(
             ladder=LADDER,
             budgets=BUDGETS,
-            training_timeouts={5: 600, 250: 1500, 500: 3000, 4000: 22000},
+            training_timeouts={
+                5: 600,
+                250: 1500,
+                500: 3000,
+                2000: 10800,
+                4000: 22000,
+            },
             run_started=datetime(2026, 8, 16, 20, 0, tzinfo=UTC),
             now=datetime(2026, 8, 16, 20, 0, tzinfo=UTC),
             max_walltime_seconds=36000,
@@ -118,20 +131,20 @@ def test_publisher_accepts_a_quality_first_deadline_route(tmp_path: Path) -> Non
         ladder=LADDER,
         budgets=BUDGETS,
         training_timeouts=TRAINING_TIMEOUTS,
-        now=datetime(2026, 8, 16, 21, 0, tzinfo=UTC),
-        run_started=datetime(2026, 8, 16, 21, 0, tzinfo=UTC),
+        now=datetime(2026, 8, 16, 22, 30, tzinfo=UTC),
+        run_started=datetime(2026, 8, 16, 22, 30, tzinfo=UTC),
         max_walltime_seconds=36000,
         deadline=DEADLINE,
         finalization_reserve_seconds=7200,
         portal_reserve_seconds=2700,
     )
-    assert plan["scheduled_candidate_iterations"] == [5, 250, 4000]
+    assert plan["scheduled_candidate_iterations"] == [5, 250, 500, 2000]
     plan_path = tmp_path / "ladder-plan.json"
     plan_path.write_text(json.dumps(plan), encoding="utf-8")
     outcome = build_outcome(
         plan,
         plan_path=plan_path,
-        completed=[5, 250, 4000],
+        completed=[5, 250, 500, 2000],
         timed_out=None,
         completed_utc=datetime(2026, 8, 17, 3, 30, tzinfo=UTC),
     )
@@ -140,13 +153,15 @@ def test_publisher_accepts_a_quality_first_deadline_route(tmp_path: Path) -> Non
         "candidates": [
             {"label": "stage-5"},
             {"label": "stage-250"},
-            {"label": "stage-4000"},
+            {"label": "stage-500"},
+            {"label": "stage-2000"},
         ]
     }
     assert validate_ladder_evidence(tmp_path, selection) == {
         "stage-5",
         "stage-250",
-        "stage-4000",
+        "stage-500",
+        "stage-2000",
     }
 
 

@@ -21,9 +21,9 @@ reference_mode: g1
 smpl_motion_file: dummy
 training_seed: 42
 actor_learning_rate: 2.0e-5
-checkpoint_ladder_iterations: [5, 250, 500, 4000]
-stage_walltime_budget_seconds: {5: 900, 250: 1800, 500: 3600, 4000: 21600}
-training_timeout_seconds: {5: 600, 250: 1500, 500: 3000, 4000: 19800}
+checkpoint_ladder_iterations: [5, 250, 500, 2000, 4000]
+stage_walltime_budget_seconds: {5: 900, 250: 1800, 500: 3600, 2000: 12600, 4000: 21600}
+training_timeout_seconds: {5: 600, 250: 1500, 500: 3000, 2000: 10800, 4000: 19800}
 submission_deadline_utc: "2026-08-17T06:59:00Z"
 finalization_reserve_seconds: 7200
 portal_reserve_seconds: 2700

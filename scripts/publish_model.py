@@ -18,10 +18,28 @@ from summarize_eval import summarize as summarize_raw_metrics
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 EXPECTED_SELECTION_SEED = 42
 EXPECTED_TEST_SEEDS = (101, 202, 303)
-EXPECTED_CANDIDATE_LABELS = {"stage-5", "stage-250", "stage-500", "stage-4000"}
-EXPECTED_CANDIDATE_ITERATIONS = (5, 250, 500, 4000)
-EXPECTED_STAGE_BUDGETS = {"5": 900, "250": 1800, "500": 3600, "4000": 21600}
-EXPECTED_TRAINING_TIMEOUTS = {"5": 600, "250": 1500, "500": 3000, "4000": 19800}
+EXPECTED_CANDIDATE_LABELS = {
+    "stage-5",
+    "stage-250",
+    "stage-500",
+    "stage-2000",
+    "stage-4000",
+}
+EXPECTED_CANDIDATE_ITERATIONS = (5, 250, 500, 2000, 4000)
+EXPECTED_STAGE_BUDGETS = {
+    "5": 900,
+    "250": 1800,
+    "500": 3600,
+    "2000": 12600,
+    "4000": 21600,
+}
+EXPECTED_TRAINING_TIMEOUTS = {
+    "5": 600,
+    "250": 1500,
+    "500": 3000,
+    "2000": 10800,
+    "4000": 19800,
+}
 EXPECTED_SCHEDULE_POLICY = "smoke_then_largest_feasible_v1"
 EXPECTED_SUBMISSION_DEADLINE_UTC = "2026-08-17T06:59:00Z"
 EXPECTED_FINALIZATION_RESERVE_SECONDS = 7200

@@ -9,7 +9,7 @@ ROOT = Path(__file__).parents[1]
 
 
 def test_frozen_training_contract_is_consistent() -> None:
-    expected_iterations = [5, 250, 500, 4000]
+    expected_iterations = [5, 250, 500, 2000, 4000]
     expected_ladder = ",".join(map(str, expected_iterations))
     expected_labels = {f"stage-{iteration}" for iteration in expected_iterations}
     expected_walltime = "10h"
@@ -26,12 +26,14 @@ def test_frozen_training_contract_is_consistent() -> None:
         5: 900,
         250: 1800,
         500: 3600,
+        2000: 12600,
         4000: 21600,
     }
     assert config["training_timeout_seconds"] == {
         5: 600,
         250: 1500,
         500: 3000,
+        2000: 10800,
         4000: 19800,
     }
     assert config["submission_deadline_utc"] == "2026-08-17T06:59:00Z"
@@ -41,10 +43,10 @@ def test_frozen_training_contract_is_consistent() -> None:
     assert str(workflow["envs"]["LADDER"]) == expected_ladder
     assert str(workflow["envs"]["MAX_WALLTIME"]) == expected_walltime
     assert workflow["envs"]["STAGE_WALLTIME_BUDGET_SECONDS"] == (
-        "5:900,250:1800,500:3600,4000:21600"
+        "5:900,250:1800,500:3600,2000:12600,4000:21600"
     )
     assert workflow["envs"]["TRAINING_TIMEOUT_SECONDS"] == (
-        "5:600,250:1500,500:3000,4000:19800"
+        "5:600,250:1500,500:3000,2000:10800,4000:19800"
     )
     assert workflow["envs"]["SUBMISSION_DEADLINE_UTC"] == "2026-08-17T06:59:00Z"
     assert str(workflow["envs"]["FINALIZATION_RESERVE_SECONDS"]) == "7200"

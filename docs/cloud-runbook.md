@@ -6,7 +6,7 @@ image, frozen Shadow Dance commit
 **Rule:** do not start paid compute until the immutable inputs, storage, and licences
 below all pass.
 
-This is the operator handoff for the stock baseline, novelty gate, 5/250/500/4,000 checkpoint
+This is the operator handoff for the stock baseline, novelty gate, 5/250/500/2,000/4,000 checkpoint
 ladder, selection-validation and retention evaluation, untouched final testing, policy
 renders, ONNX validation, S3 evidence, and optional Hugging Face model publication. The
 final test repeats all four motions under three independent simulator seeds for each
@@ -90,7 +90,7 @@ currently blocked by the container runtime with `unsatisfied condition: cuda>=13
 No image process or Isaac download begins. The workstation route therefore remains
 blocked until the entrant updates Windows to NVIDIA driver 580.88 or newer and reboots.
 Even then it is only a best-effort 4/8-environment headless fallback; do not plan the
-500/4,000-iteration evidence run around it.
+500/2,000/4,000-iteration evidence run around it.
 
 The guarded wrapper uses the same digest-pinned image and evidence pipeline as cloud,
 keeps results under `outputs/cloud/<run-id>`, and makes S3 a no-op only when
@@ -364,11 +364,12 @@ npa workbench workflow submit \
 
 On-demand RTX PRO 6000 Kubernetes is the only active first-party NPA SONIC route and
 has the RT capability needed for rendering. The frozen run uses 64 environments for
-the 5-iteration smoke and 512 for the 250/500/4,000 candidates. This is calibrated
+the 5-iteration smoke and 512 for the 250/500/2,000/4,000 candidates. This is calibrated
 against a public challenge-targeted run that reported 2,000 iterations in 9,544.61
 seconds at 512 environments, then needed further curriculum work before claiming full
-completion. A longer ladder requires a separately versioned protocol decision; the
-current job never enables it implicitly. A rolling `last.pt` is atomically refreshed
+completion. Any further ladder change requires a separately versioned protocol
+decision; the current job never enables one implicitly. A rolling `last.pt` is
+atomically refreshed
 every five iterations, while regular numbered checkpoints are suppressed to avoid
 uploading tens of gigabytes of redundant optimizer state. The Kubernetes controller
 shares the provisioned cluster; the public GHCR image does not need a registry secret.
@@ -386,6 +387,7 @@ stages in increasing order:
 | 5 | 15 min | 10 min |
 | 250 | 30 min | 25 min |
 | 500 | 60 min | 50 min |
+| 2,000 | 3 h 30 min | 3 h |
 | 4,000 | 6 h | 5 h 30 min |
 
 It separately preserves two hours for repeated final-test evaluation, rendering, ONNX
@@ -398,10 +400,20 @@ The resulting quality-first routes and latest **post-baseline** decision times a
 | 13:59 | 5 / 500 / 4,000 |
 | 14:29 | 5 / 250 / 4,000 |
 | 14:59 | 5 / 4,000 |
+| 15:59 | 5 / 250 / 500 / 2,000 |
+| 16:29 | 5 / 500 / 2,000 |
+| 16:59 | 5 / 250 / 2,000 |
+| 17:29 | 5 / 2,000 |
 | 19:29 | 5 / 250 / 500 |
 | 19:59 | 5 / 500 |
 | 20:29 | 5 / 250 |
 | 20:59 | 5 only |
+
+The 2,000 and 4,000 stages are alternative quality tiers, not cumulative requirements.
+The ten-hour cap cannot fit both with the evidence reserve, so the scheduler always
+prefers 4,000 when available and records 2,000 as omitted; it selects 2,000 only after
+4,000 no longer fits. This closes the previous 500-to-4,000 deadline gap without making
+the primary route longer or changing the quality gates.
 
 Each row applies after the preceding route no longer fits. Launch earlier than those
 times because G1 asset hydration, base-model download, Isaac cold start, and the stock
@@ -488,7 +500,7 @@ After a successful run, the S3 prefix contains:
 ```text
 baseline/                       stock raw metrics and summaries
 baseline/novelty.json           preregistered stock novelty decision
-train/stage-{5,250,500,4000}/   training logs and rolling checkpoints as produced
+train/stage-{5,250,500,2000,4000}/ training logs and rolling checkpoints as produced
 checkpoints/stage-*/            packaged checkpoint + config + hash
 eval/                           validation, retention, and final-test raw metrics
 summaries/                      per-seed scorecards plus repeated-test aggregates

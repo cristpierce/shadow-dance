@@ -670,7 +670,7 @@ Avoid claiming real-robot validation unless Ultimate Bots actually runs it. Say
 - Capture/generate the small amplitude/tempo/direction set and owned fundamentals.
 - Validate every motion and freeze train/validation/test manifests.
 - Save stock baseline metrics and renders before training.
-- Run the 5/250/500/4,000 checkpoint ladder.
+- Run the 5/250/500/2,000/4,000 checkpoint ladder.
 - Evaluate held-out hero plus stand/walk/turn; choose whether to continue or fix data.
 
 ### August 15 — complete and submit early
@@ -946,17 +946,18 @@ The following updates supersede earlier references to a single “held-out” he
   gate fails, do not repurpose the test data; stop and preregister a separate harder
   target before generating or training anything new.
 - Prefer the active public runtime-fetch image on an on-demand RTX PRO 6000 Managed
-  Kubernetes node for deadline reliability and rendering support. The frozen run is
-  exactly 5/250/500/4,000 iterations with 64 environments for
-  the smoke and 512 for the two main candidates. This supersedes the initial
+  Kubernetes node for deadline reliability and rendering support. The frozen run
+  declares exactly 5/250/500/2,000/4,000 iterations with 64 environments for
+  the smoke and 512 for the main candidates. This supersedes the initial
   5/25/100 debug-scale ladder: NVIDIA documents 100 iterations as a local debug run,
   while the public challenge-targeted `ultimate-bots-G1` evidence reports that its
   2,000-iteration, 512-environment first run still had a mean episode length of only
   44.17 frames and an 85.98% end-effector termination rate. The later public Tai Chi
   entry reports 7,500 total refinement iterations on two L40S GPUs. Independent
   candidates retain a clean same-base comparison, and the 10-hour worker guard gives
-  the 4,000-step candidate room to finish on one GPU. Any longer ladder requires a new versioned
-  protocol decision before the untouched test is opened; it is not silently enabled.
+  the 4,000-step candidate room to finish on one GPU. The explicit 2,000-stage deadline
+  amendment is documented below; any other ladder change requires another versioned
+  protocol decision before the untouched test is opened.
 - Enforce a ten-hour worker timeout with a 15-minute recovery window and tear down
   the small jobs controller after terminal status. This bounds a stuck attempt while
   retaining enough of the $50 credit for one evidence-driven retry.
@@ -1080,7 +1081,8 @@ policy, explicit walking/turning retention, raw source hashes, and full regenera
 The previous relative ten-hour timeout could expire during the 4,000-step candidate
 before selection/export, stranding usable earlier checkpoints. The run now freezes a
 deadline plan after the stock gate. Candidate budgets are 15 minutes for stage 5,
-30 minutes for stage 250, 60 minutes for stage 500, and 6 hours for stage 4,000,
+30 minutes for stage 250, 60 minutes for stage 500, 3.5 hours for stage 2,000, and
+6 hours for stage 4,000,
 followed by a two-hour evidence reserve and 45-minute portal reserve. The 4,000-stage
 training subprocess itself may run for at most 5.5 hours, matching the public 5.3-hour
 linear runtime evidence while leaving evaluation/upload margin.
@@ -1091,8 +1093,9 @@ the auditable `smoke_then_largest_feasible_v1` policy: keep stage 5, greedily pr
 the largest remaining candidate, fill spare time with the strongest smaller fallback,
 then execute the chosen stages in increasing order. The full ladder remains available
 through 13:29 PT post-baseline; quality-first 4,000-step routes remain available through
-14:59 PT, followed by 5/250/500 through 19:29, 5/500 through 19:59, 5/250 through 20:29,
-and stage 5 through 20:59. Cold start and baseline work occur first, so actual launch
+14:59 PT. Quality-first 2,000-step routes then remain through 17:29, followed by
+5/250/500 through 19:29, 5/500 through 19:59, 5/250 through 20:29, and stage 5 through
+20:59. Cold start and baseline work occur first, so actual launch
 must precede those times. The planner also enforces the remaining portion of the
 ten-hour worker cap after that pre-gate work. A later timeout is recorded and only
 fully completed candidates may be selected; partial weights are never renamed as a
@@ -1208,6 +1211,29 @@ outcome is no policy claim—not synthetic or estimated evidence.
   complete hash chain remain visible differentiators. They do not compensate for the
   current absence of a trained policy, real stock/selected renders, and measured test
   results. Unlocking one legal and one compute path remains the highest-value action.
+
+### Preregistered 2,000-stage deadline amendment (August 16, 15:56 PT)
+
+- **Problem found before compute:** the declared ladder jumped directly from 500 to
+  4,000 iterations. Once the six-hour 4,000-stage budget stopped fitting, the scheduler
+  could leave several candidate-training hours unused and fall back to only 500
+  iterations. This was a protocol gap, not a runtime result; no stock or candidate run
+  had started when it was found.
+- **Evidence for the budget:** the public same-challenge `ultimate-bots-G1` record
+  reports 2,000 iterations at 512 environments in 9,544.61 seconds. Shadow Dance now
+  assigns 10,800 seconds to training and 12,600 seconds to the complete stage, leaving
+  roughly 21 minutes of training margin plus 30 minutes for packaging and two
+  evaluations. It retains the same base checkpoint, 512 environments, seed 42,
+  learning rate, data, and selection thresholds.
+- **Scheduler effect:** the 10-hour runtime cap still chooses 4,000 first whenever it
+  fits, so the primary route remains 5/250/500/4,000 and 2,000 is explicitly omitted.
+  After the 4,000 cutoff, the new post-baseline routes are 5/250/500/2,000 through
+  15:59 PT, 5/500/2,000 through 16:29, 5/250/2,000 through 16:59, and 5/2,000 through
+  17:29. Existing 500/250/smoke routes then continue unchanged.
+- **Decision:** add 2,000 to the immutable config, managed YAML, shell defaults,
+  materializer, evidence publisher, video label allowlist, deadline tests, and portal
+  disclosure together. Do not call a timed-out partial checkpoint `stage-2000`; the
+  existing ordered-prefix outcome rule still excludes it from selection.
 
 ## Primary sources
 

@@ -18,6 +18,12 @@ smpl_motion_file: dummy
 training_seed: 42
 actor_learning_rate: 2.0e-5
 checkpoint_ladder_iterations: [5, 500, 4000]
+stage_walltime_budget_seconds: {5: 900, 500: 3600, 4000: 21600}
+training_timeout_seconds: {5: 600, 500: 3000, 4000: 19800}
+submission_deadline_utc: "2026-08-17T06:59:00Z"
+finalization_reserve_seconds: 7200
+portal_reserve_seconds: 2700
+max_walltime_seconds: 36000
 smoke_num_envs: 64
 main_num_envs: 512
 regular_checkpoint_frequency: 1000000

@@ -114,6 +114,12 @@ def main() -> int:
         "RUN_ID": args.run_id,
         "EVIDENCE_S3_URI": args.evidence_s3_uri.rstrip("/"),
         "LADDER": "5,500,4000",
+        "STAGE_WALLTIME_BUDGET_SECONDS": "5:900,500:3600,4000:21600",
+        "TRAINING_TIMEOUT_SECONDS": "5:600,500:3000,4000:19800",
+        "SUBMISSION_DEADLINE_UTC": "2026-08-17T06:59:00Z",
+        "FINALIZATION_RESERVE_SECONDS": "7200",
+        "PORTAL_RESERVE_SECONDS": "2700",
+        "MAX_WALLTIME_SECONDS": "36000",
         "FINAL_TEST_SEEDS": "101,202,303",
         "MAX_WALLTIME": "10h",
         "SMOKE_NUM_ENVS": "64",
@@ -160,6 +166,8 @@ def main() -> int:
     required_run_fragments = (
         "timeout --signal=TERM --kill-after=15m",
         '"${MAX_WALLTIME}"',
+        'export RUN_STARTED_UTC="$(date -u +%Y-%m-%dT%H:%M:%SZ)"',
+        '"${deadline_remaining_seconds}s"',
         "bash scripts/cloud_pipeline.sh",
     )
     if not all(fragment in setup for fragment in required_setup_fragments):

@@ -154,10 +154,10 @@ case "$POLICY_IMAGE" in
 esac
 ```
 
-The official default registry currently resolves to
-`cr.eu-north1.nebius.cloud/e00cm0vc6t09m0z5gw`. It is a public locator but still
-requires a Nebius IAM pull token. NPA mints and injects a short-lived token because the
-SONIC image is the task's direct `resources.image_id`; no registry password is committed.
+The account-specific registry locator resolves from the entrant's protected NPA
+configuration and must not be copied into public documentation. It still requires a
+Nebius IAM pull token. NPA mints and injects a short-lived token because the SONIC image
+is the task's direct `resources.image_id`; no registry password is committed.
 The image reference is pinned to the L40S digest recorded by NPA, not only the mutable
 `0.1.2` tag. There is no confirmed public GHCR copy of that image.
 
@@ -280,6 +280,36 @@ uploading tens of gigabytes of redundant optimizer state.
 `--controller-backend nebius` uses NPA's small `cpu-e2_2vcpu-8gb` fallback controller;
 without this explicit selection, the CLI assumes an existing Kubernetes controller.
 
+### Deadline guard (August 16)
+
+The immutable challenge deadline is `2026-08-17T06:59:00Z` (August 16, 11:59 PM PT).
+The job now freezes `ladder-plan.json` after the stock novelty gate and schedules the
+largest ordered prefix of 5/500/4,000 that fits these conservative budgets:
+
+| Candidate | Stage budget | Training timeout |
+|---:|---:|---:|
+| 5 | 15 min | 10 min |
+| 500 | 60 min | 50 min |
+| 4,000 | 6 h | 5 h 30 min |
+
+It separately preserves two hours for repeated final-test evaluation, rendering, ONNX
+export, validation, and upload, plus 45 minutes for logged-out URL checks and the portal.
+The resulting latest **post-baseline** decision times are 13:59 PT for the complete
+ladder, 19:59 PT for 5/500, and 20:59 PT for the smoke candidate only. Launch earlier
+than those times because base-model download, Isaac cold start, and the stock gate occur
+before the decision. The planner also subtracts time already spent before the stock
+gate from the ten-hour worker cap, so a slow cold start can shorten the ladder even when
+the absolute deadline alone would allow it. The outer wrapper refuses to run after the
+45-minute portal reserve begins.
+
+If a scheduled later training stage hits its explicit timeout, the pipeline does not
+mislabel its partial checkpoint. It records the timeout in `ladder-outcome.json`,
+selects only among fully trained and evaluated earlier candidates, and publishes the
+shortened inventory only if one still clears the frozen improvement and retention
+gates. The model publisher recomputes the deadline decision and verifies both ladder
+files and their hashes. A shortened ladder is disclosed evidence, not a claim that all
+4,000 iterations ran.
+
 ### Cost guard
 
 Recheck the live SkyPilot catalog before launch:
@@ -291,7 +321,8 @@ Recheck the live SkyPilot catalog before launch:
 On August 14, the pinned catalog priced the requested
 `gpu-l40s-a_1gpu-16vcpu-64gb` at **$1.747/hour on demand** (matching Nebius's
 [component pricing](https://docs.nebius.com/compute/resources/pricing)). At that price,
-$50 is about 28.6 instance-hours. The task has an immutable ten-hour wall-time guard,
+$50 is about 28.6 instance-hours. The task has a ten-hour maximum wall-time guard plus
+the absolute deadline guard above,
 so one attempt is capped near **$17.47** of VM compute before minor disk/object-storage
 costs; a ten-hour 2-vCPU/8-GB controller is roughly another $0.50. This leaves room
 for diagnosis and a deliberate retry. The timeout sends `TERM`, allows 15 minutes for
@@ -311,7 +342,7 @@ best-effort `failure-recovery/` upload on nonzero exit.
 |---:|---|---|
 | `0` | Selected checkpoint, renders, ONNX, S3 evidence, and requested HF publish passed | Verify public files and prepare the portal |
 | `3` | Stock SONIC cleared both preregistered novelty thresholds | Do not call it a new skill; revise/freeze a harder hero target |
-| `4` | No 5/500/4,000 candidate improved hero while retaining fundamentals | Inspect stage summaries; justify a longer ladder or revise data |
+| `4` | No scheduled candidate fit the deadline or improved hero while retaining fundamentals | Inspect the ladder/eval evidence; do not overrun the portal reserve |
 | `78` | EULA variables absent or not exactly `YES` | Obtain named entrant acceptance; do not bypass |
 | other | Platform, download, simulator, training, evaluation, export, or publication failure | Classify from the last log and persisted stage before retrying |
 
@@ -350,6 +381,8 @@ eval/                           validation, retention, and final-test raw metric
 summaries/                      per-seed scorecards plus repeated-test aggregates
 final/release/model/            selected PT, ONNX, configs, licences, hashes
 final/media/                    target, all uncut renders, edited comparison, hash manifest
+final/ladder-plan.json          deadline-budgeted candidate schedule
+final/ladder-outcome.json       completed candidates and any honest timeout/truncation
 final/selection.json            preregistered selection decision
 final/final-comparison.json     untouched test result bound to selection hash
 final/onnx-report.json          ONNX checker/Runtime I/O evidence
@@ -367,7 +400,8 @@ python "$SHADOW_REPO/scripts/publish_model.py" \
 # Remove --dry-run only after the validation summary is correct.
 ```
 
-The publisher refuses a missing eligible selection, a selected checkpoint whose hash
+The publisher refuses an inconsistent deadline ladder, a missing eligible selection,
+a selected checkpoint whose hash
 does not match the release, selection summaries not bound to raw metrics, a final
 comparison not bound to that selection, divergent release copies, a broken release
 checksum inventory, a failed ONNX report, or mismatched video sources. It includes raw

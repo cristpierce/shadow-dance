@@ -20,6 +20,12 @@ envs:
   RUN_ID: ${RUN_ID}
   EVIDENCE_S3_URI: ${EVIDENCE_S3_URI}
   LADDER: 5,500,4000
+  STAGE_WALLTIME_BUDGET_SECONDS: 5:900,500:3600,4000:21600
+  TRAINING_TIMEOUT_SECONDS: 5:600,500:3000,4000:19800
+  SUBMISSION_DEADLINE_UTC: "2026-08-17T06:59:00Z"
+  FINALIZATION_RESERVE_SECONDS: "7200"
+  PORTAL_RESERVE_SECONDS: "2700"
+  MAX_WALLTIME_SECONDS: "36000"
   FINAL_TEST_SEEDS: 101,202,303
   MAX_WALLTIME: 10h
   SMOKE_NUM_ENVS: "64"
@@ -54,5 +60,13 @@ run: |
   command -v timeout >/dev/null
   test -x /isaac-sim/python.sh
   test -x /opt/npa/sim/venv/bin/python
+  export RUN_STARTED_UTC="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+  deadline_epoch="$(date -u -d "${SUBMISSION_DEADLINE_UTC}" +%s)"
+  deadline_remaining_seconds="$((deadline_epoch - $(date -u +%s) - PORTAL_RESERVE_SECONDS))"
+  if [ "${deadline_remaining_seconds}" -le 0 ]; then
+    echo "The portal reserve has begun; refusing a run that cannot be submitted." >&2
+    exit 4
+  fi
   timeout --signal=TERM --kill-after=15m "${MAX_WALLTIME}" \
-    bash scripts/cloud_pipeline.sh
+    timeout --signal=TERM --kill-after=15m "${deadline_remaining_seconds}s" \
+      bash scripts/cloud_pipeline.sh

@@ -558,6 +558,50 @@ def test_model_publisher_dry_run_requires_valid_release(tmp_path: Path) -> None:
         ),
         encoding="utf-8",
     )
+    ladder_plan = {
+        "format": "shadow_dance_ladder_plan_v1",
+        "planned_candidate_iterations": [5, 500, 4000],
+        "scheduled_candidate_iterations": [5, 500, 4000],
+        "omitted_candidate_iterations": [],
+        "stage_walltime_budget_seconds": {"5": 900, "500": 3600, "4000": 21600},
+        "training_timeout_seconds": {"5": 600, "500": 3000, "4000": 19800},
+        "computed_utc": "2026-08-16T20:59:00Z",
+        "run_started_utc": "2026-08-16T20:59:00Z",
+        "max_walltime_seconds": 36000,
+        "runtime_deadline_utc": "2026-08-17T06:59:00Z",
+        "submission_deadline_utc": "2026-08-17T06:59:00Z",
+        "seconds_until_deadline": 36000,
+        "runtime_seconds_remaining": 36000,
+        "finalization_reserve_seconds": 7200,
+        "portal_reserve_seconds": 2700,
+        "submission_candidate_budget_available_seconds": 26100,
+        "runtime_candidate_budget_available_seconds": 28800,
+        "candidate_budget_available_seconds": 26100,
+        "scheduled_candidate_budget_seconds": 26100,
+        "deadline_truncated": False,
+        "launchable": True,
+    }
+    ladder_plan_path = tmp_path / "ladder-plan.json"
+    ladder_plan_path.write_text(json.dumps(ladder_plan), encoding="utf-8")
+    ladder_outcome_path = tmp_path / "ladder-outcome.json"
+    ladder_outcome_path.write_text(
+        json.dumps(
+            {
+                "format": "shadow_dance_ladder_outcome_v1",
+                "plan": {
+                    "path": "ladder-plan.json",
+                    "sha256": hashlib.sha256(ladder_plan_path.read_bytes()).hexdigest(),
+                },
+                "scheduled_candidate_iterations": [5, 500, 4000],
+                "completed_candidate_iterations": [5, 500, 4000],
+                "runtime_omitted_candidate_iterations": [],
+                "timed_out_candidate_iteration": None,
+                "deadline_truncated_before_run": False,
+                "completed_utc": "2026-08-16T22:00:00Z",
+            }
+        ),
+        encoding="utf-8",
+    )
     test_seeds = [101, 202, 303]
     stock_sources = [
         bound_summary(
@@ -715,7 +759,14 @@ def test_model_publisher_dry_run_requires_valid_release(tmp_path: Path) -> None:
         ),
         encoding="utf-8",
     )
-    for path in (novelty_path, selection_path, comparison_path, onnx_path):
+    for path in (
+        novelty_path,
+        ladder_plan_path,
+        ladder_outcome_path,
+        selection_path,
+        comparison_path,
+        onnx_path,
+    ):
         (release / path.name).write_bytes(path.read_bytes())
     checksum_lines = [
         f"{hashlib.sha256(path.read_bytes()).hexdigest()}  ./{path.name}"

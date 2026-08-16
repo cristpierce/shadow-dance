@@ -1,6 +1,6 @@
 # SuperSONIC submission progress
 
-**Last updated:** 2026-08-14 17:22 PT
+**Last updated:** 2026-08-16 13:26 PT
 **Branch:** `feature/supersonic-submission`
 **Deadline:** 2026-08-16 23:59 PT
 
@@ -81,6 +81,14 @@ status here must remain truthful.
   reference MP4 decodes as H.264/YUV420p at 640×480, 50 fps, and 5.26 seconds.
 - [x] Finished the diff/security review, pushed the frozen implementation, and updated
   [upstream PR #1](https://github.com/Durp06/shadow-dance/pull/1).
+- [x] Added and locally verified a deadline-aware ladder plan. It preserves the full
+  5/500/4,000 protocol when time permits, freezes the largest honest prefix otherwise,
+  reserves two hours for final evidence plus 45 minutes for portal submission, and
+  records any deadline or runtime truncation in hash-bound release evidence.
+- [x] Rechecked the official rules and public competitive field on deadline day. The
+  strongest visible entries now have real ONNX/video evidence; Shadow Dance's remaining
+  differentiator is its independent validation/test design, fundamentals-retention
+  check, reproducibility, and raw-evidence publication—but only if the run is unlocked.
 
 ## Ready after entrant handoff
 
@@ -97,7 +105,7 @@ status here must remain truthful.
   creation of public dataset/model repositories.
 - [ ] Organizer WBT-Bench package or Discord release link. The official page still
   promises it, but no public package was discoverable in the challenge portal resources,
-  NVIDIA/Nebius repositories, or exact-name GitHub search as of August 14.
+  NVIDIA/Nebius repositories, or exact-name GitHub search as of August 16.
 - [ ] A working browser session for authenticated Ultimate Bots portal actions, or
   manual portal entry by a team member using the prepared copy and links.
 - [ ] Teammate's exact registered name plus merge of the PR or write access for
@@ -116,7 +124,10 @@ status here must remain truthful.
 2. Materialize the no-compute plan, then run the Isaac sample smoke and stock validation
    baseline once NVIDIA acceptance and Nebius authentication are present.
 3. Go/no-go novelty decision; adjust the target if stock already succeeds.
-4. Run the 5/500/4,000 checkpoint ladder with validation and retention at each gate.
+4. Run the deadline-planned checkpoint ladder with validation and retention at each
+   gate. The full ladder must begin immediately; after the planner's 13:59 PT
+   full-ladder cutoff it truthfully falls back to 5/500, and it refuses a run that
+   cannot preserve finalization and portal reserves.
 5. Freeze the winner, open the untouched test split, export, validate, render, hash,
    and publish the selected checkpoint.
 6. Replace every bracketed submission value from raw evidence, verify public links,

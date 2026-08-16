@@ -1003,6 +1003,69 @@ The following updates supersede earlier references to a single “held-out” he
   accessibility and packaging integrity without turning the preview into policy
   evidence.
 
+## August 16 deadline-day audit
+
+### Official requirements remain unchanged
+
+The [official challenge page](https://www.ultimatebots.com/hackathon) was rechecked on
+August 16. Performance Arts remains the right track; the complete entry still requires
+an ONNX policy, documented dataset and creation method, reproducible training config,
+a short simulation demo, and a stock-versus-fine-tuned comparison. Judging still
+combines the organizer's WBT tracking/fundamentals backbone with originality,
+execution/reliability, data craft, and pipeline cleanliness. The deadline remains
+August 16 at 11:59 PM PT. Exact public-source and GitHub searches still found no
+organizer WBT-Bench package; the Discord request remains mandatory, and the owned
+walking/turning suite must continue to be labelled a proxy.
+
+### Visible competitive evidence
+
+- [SONIC Capoeira V8](https://github.com/danniely/ultimate-bots-G1) published a real
+  stock/fine-tuned video, Hugging Face policy and dataset links, ONNX parity evidence,
+  112/112 completed Isaac screening rollouts, and a ten-run MuJoCo cross-check. Its
+  strongest disclosed result is 10/10 full-motion MuJoCo rollouts, while the stricter
+  final-stabilization gate passes 3/10. Its engineering journal is unusually strong:
+  eight iterations diagnose launch, contact, landing, policy handoff, actuator risk,
+  and cross-simulator recovery rather than presenting a single lucky render.
+- [GhostTrial Scorpion](https://github.com/SpiRaiL/GhostTrial-public) published a
+  polished five-minute build video, a commissioned-performer data story, a 3,750-step
+  G1 ONNX policy, and source/config artifacts. Its model card openly says walking and
+  turning were not separately evaluated and that the learned motion retains 97%
+  double support where the reference requests 58%. This is strong storytelling and
+  honest limitation disclosure, but it leaves a clear fundamentals-evidence opening.
+- [G1 Taiji Form](https://github.com/qjwdlwjdl/G1-Taiji-Form-final) presents separate
+  25-second before/after clips and reports large same-reference MPJPE/completion gains.
+  Its public GitHub tree exposes presentation/config files but not the policy or raw
+  evaluation inventory, making Shadow Dance's planned immutable evidence chain a
+  potential differentiator rather than a reason to imitate its packaging.
+
+These are public-repository observations, not claims about the private portal field or
+judge ranking. The lesson is concrete: dataset quality alone cannot win this field.
+Shadow Dance needs a real trained policy, a legible matched before/after, and numerical
+proof. Its best distinct angle is the combination competitors do not visibly provide:
+separate validation and untouched parametric test families, 12 matched final trials per
+policy, explicit walking/turning retention, raw source hashes, and full regeneration.
+
+### Deadline decision
+
+The previous relative ten-hour timeout could expire during the 4,000-step candidate
+before selection/export, stranding usable earlier checkpoints. The run now freezes a
+deadline plan after the stock gate. Candidate budgets are 15 minutes for stage 5,
+60 minutes for stage 500, and 6 hours for stage 4,000, followed by a two-hour evidence
+reserve and 45-minute portal reserve. The 4,000-stage training subprocess itself may
+run for at most 5.5 hours, matching the public 5.3-hour linear runtime evidence while
+leaving evaluation/upload margin. That makes 13:59 PT the mathematical latest
+post-baseline time for the full ladder, 19:59 PT for 5/500, and 20:59 PT for stage 5
+alone. Cold start and baseline work occur first, so actual launch must precede those
+times. The planner also enforces the remaining portion of the ten-hour worker cap after
+that pre-gate work. A later timeout is recorded and only fully completed candidates may
+be selected; partial weights are never renamed as a completed stage.
+
+This fallback changes compute breadth, not the frozen novelty/improvement/retention
+thresholds or the untouched final-test rule. `ladder-plan.json` and
+`ladder-outcome.json` make the reduction auditable, and the publisher recomputes their
+decision before releasing weights. If no completed candidate is eligible, the correct
+outcome is no policy claim—not synthetic or estimated evidence.
+
 ## Primary sources
 
 - [Ultimate Bots Trial 03 challenge page](https://www.ultimatebots.com/hackathon)

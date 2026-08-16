@@ -8,6 +8,7 @@ import hashlib
 import json
 import math
 import tempfile
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
@@ -18,6 +19,13 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 EXPECTED_SELECTION_SEED = 42
 EXPECTED_TEST_SEEDS = (101, 202, 303)
 EXPECTED_CANDIDATE_LABELS = {"stage-5", "stage-500", "stage-4000"}
+EXPECTED_CANDIDATE_ITERATIONS = (5, 500, 4000)
+EXPECTED_STAGE_BUDGETS = {"5": 900, "500": 3600, "4000": 21600}
+EXPECTED_TRAINING_TIMEOUTS = {"5": 600, "500": 3000, "4000": 19800}
+EXPECTED_SUBMISSION_DEADLINE_UTC = "2026-08-17T06:59:00Z"
+EXPECTED_FINALIZATION_RESERVE_SECONDS = 7200
+EXPECTED_PORTAL_RESERVE_SECONDS = 2700
+EXPECTED_MAX_WALLTIME_SECONDS = 36000
 
 
 def read_json(path: Path) -> dict[str, Any]:
@@ -151,7 +159,132 @@ def compact_single_summary(
     return result, identifiers
 
 
-def validate_selection_evidence(run_root: Path, selection: dict[str, Any]) -> None:
+def parse_utc(value: Any, *, label: str) -> datetime:
+    if not isinstance(value, str):
+        raise ValueError(f"{label} is not a timestamp")
+    parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    if parsed.tzinfo is None or parsed.utcoffset() != UTC.utcoffset(parsed):
+        raise ValueError(f"{label} is not explicit UTC")
+    return parsed.astimezone(UTC)
+
+
+def validate_ladder_evidence(run_root: Path, selection: dict[str, Any]) -> set[str]:
+    plan_path = run_root / "ladder-plan.json"
+    outcome_path = run_root / "ladder-outcome.json"
+    plan = read_json(plan_path)
+    outcome = read_json(outcome_path)
+    if plan.get("format") != "shadow_dance_ladder_plan_v1":
+        raise ValueError("unsupported or missing ladder plan")
+    if outcome.get("format") != "shadow_dance_ladder_outcome_v1":
+        raise ValueError("unsupported or missing ladder outcome")
+    planned = tuple(int(value) for value in plan.get("planned_candidate_iterations", []))
+    if planned != EXPECTED_CANDIDATE_ITERATIONS:
+        raise ValueError("ladder plan differs from the frozen checkpoint inventory")
+    budgets = plan.get("stage_walltime_budget_seconds")
+    if budgets != EXPECTED_STAGE_BUDGETS:
+        raise ValueError("ladder plan differs from the frozen stage budgets")
+    if plan.get("training_timeout_seconds") != EXPECTED_TRAINING_TIMEOUTS:
+        raise ValueError("ladder plan differs from the frozen training timeouts")
+    if (
+        plan.get("submission_deadline_utc") != EXPECTED_SUBMISSION_DEADLINE_UTC
+        or plan.get("finalization_reserve_seconds")
+        != EXPECTED_FINALIZATION_RESERVE_SECONDS
+        or plan.get("portal_reserve_seconds") != EXPECTED_PORTAL_RESERVE_SECONDS
+        or plan.get("max_walltime_seconds") != EXPECTED_MAX_WALLTIME_SECONDS
+    ):
+        raise ValueError("ladder plan differs from the frozen deadline reserves")
+
+    computed = parse_utc(plan.get("computed_utc"), label="ladder computation")
+    run_started = parse_utc(plan.get("run_started_utc"), label="run start")
+    deadline = parse_utc(plan.get("submission_deadline_utc"), label="submission deadline")
+    runtime_deadline = run_started + timedelta(seconds=EXPECTED_MAX_WALLTIME_SECONDS)
+    if plan.get("runtime_deadline_utc") != runtime_deadline.isoformat().replace(
+        "+00:00", "Z"
+    ):
+        raise ValueError("ladder plan has an invalid runtime deadline")
+    if computed < run_started:
+        raise ValueError("ladder computation predates the run")
+    seconds_until_deadline = max(0, int((deadline - computed).total_seconds()))
+    submission_available = max(
+        0,
+        seconds_until_deadline
+        - EXPECTED_FINALIZATION_RESERVE_SECONDS
+        - EXPECTED_PORTAL_RESERVE_SECONDS,
+    )
+    runtime_seconds_remaining = max(0, int((runtime_deadline - computed).total_seconds()))
+    runtime_available = max(
+        0, runtime_seconds_remaining - EXPECTED_FINALIZATION_RESERVE_SECONDS
+    )
+    available = min(submission_available, runtime_available)
+    expected_scheduled: list[int] = []
+    scheduled_budget = 0
+    for iteration in planned:
+        next_budget = EXPECTED_STAGE_BUDGETS[str(iteration)]
+        if scheduled_budget + next_budget > available:
+            break
+        expected_scheduled.append(iteration)
+        scheduled_budget += next_budget
+    scheduled = [int(value) for value in plan.get("scheduled_candidate_iterations", [])]
+    omitted = [int(value) for value in plan.get("omitted_candidate_iterations", [])]
+    if (
+        scheduled != expected_scheduled
+        or omitted != list(planned[len(scheduled) :])
+        or plan.get("seconds_until_deadline") != seconds_until_deadline
+        or plan.get("runtime_seconds_remaining") != runtime_seconds_remaining
+        or plan.get("submission_candidate_budget_available_seconds")
+        != submission_available
+        or plan.get("runtime_candidate_budget_available_seconds") != runtime_available
+        or plan.get("candidate_budget_available_seconds") != available
+        or plan.get("scheduled_candidate_budget_seconds") != scheduled_budget
+        or plan.get("deadline_truncated") is not bool(omitted)
+        or plan.get("launchable") is not bool(scheduled)
+    ):
+        raise ValueError("ladder schedule is inconsistent with its deadline budget")
+    if not scheduled:
+        raise ValueError("ladder evidence scheduled no candidate")
+
+    outcome_plan = outcome.get("plan")
+    if (
+        not isinstance(outcome_plan, dict)
+        or outcome_plan.get("path") != plan_path.name
+        or outcome_plan.get("sha256") != sha256(plan_path)
+    ):
+        raise ValueError("ladder outcome is not bound to its plan")
+    outcome_scheduled = [
+        int(value) for value in outcome.get("scheduled_candidate_iterations", [])
+    ]
+    completed = [int(value) for value in outcome.get("completed_candidate_iterations", [])]
+    runtime_omitted = [
+        int(value) for value in outcome.get("runtime_omitted_candidate_iterations", [])
+    ]
+    timed_out = outcome.get("timed_out_candidate_iteration")
+    if (
+        outcome_scheduled != scheduled
+        or not completed
+        or completed != scheduled[: len(completed)]
+        or runtime_omitted != scheduled[len(completed) :]
+        or outcome.get("deadline_truncated_before_run") is not bool(omitted)
+    ):
+        raise ValueError("ladder outcome is inconsistent with its schedule")
+    expected_timeout = runtime_omitted[0] if runtime_omitted else None
+    if timed_out != expected_timeout:
+        raise ValueError("ladder outcome has an invalid timeout decision")
+    completed_utc = parse_utc(outcome.get("completed_utc"), label="ladder completion")
+    if completed_utc < computed or completed_utc > deadline:
+        raise ValueError("ladder completion timestamp is outside the submission window")
+
+    completed_labels = [f"stage-{iteration}" for iteration in completed]
+    selection_labels = [
+        str(candidate.get("label")) for candidate in selection.get("candidates", [])
+    ]
+    if selection_labels != completed_labels:
+        raise ValueError("checkpoint selection differs from the completed ladder")
+    return set(completed_labels)
+
+
+def validate_selection_evidence(
+    run_root: Path, selection: dict[str, Any], expected_candidate_labels: set[str]
+) -> None:
     seed = selection.get("selection_seed")
     sources = selection.get("sources")
     candidates = selection.get("candidates")
@@ -204,7 +337,7 @@ def validate_selection_evidence(run_root: Path, selection: dict[str, Any]) -> No
         raise ValueError("selection novelty decision differs from stock metrics")
 
     labels = {str(candidate.get("label")) for candidate in candidates}
-    if labels != EXPECTED_CANDIDATE_LABELS:
+    if labels != expected_candidate_labels:
         raise ValueError("selection report has the wrong checkpoint-ladder inventory")
     if set(candidate_sources) != labels:
         raise ValueError("selection candidate/source labels differ")
@@ -534,6 +667,7 @@ def render_model_card(
     adapted = comparison["selected"]
     stock_retention = selection["stock_retention"]
     adapted_retention = selected["retention"]
+    candidate_labels = ", ".join(str(candidate["label"]) for candidate in selection["candidates"])
     stock_row = (
         f"| Stock SONIC | {stock['success_count']}/{stock['trial_count']} | "
         f"{stock['success_rate']:.1%} | {stock['mpjpe_l']:.3f} |"
@@ -577,14 +711,17 @@ The {stock["motion_count"]} final-test motions were first evaluated across
 Selection itself used separate held-out validation plus the preregistered novelty,
 improvement, and retention gates in `selection.json`; `final-comparison.json` binds the
 test summaries to that already-selected checkpoint.
+The completed deadline-bounded candidate inventory was {candidate_labels};
+`ladder-plan.json` and `ladder-outcome.json` disclose any stage omitted to preserve the
+final evidence and portal-submission reserve.
 
 ## Files and use
 
 - `last.pt` and exported `.onnx` graphs are model weights; the graph ending in
   `_g1.onnx` is the deployable G1 portal nominee.
-- `config.yaml`, `novelty.json`, `selection.json`, `final-comparison.json`,
-  `onnx-report.json`, and `SHA256SUMS` preserve the training/evaluation contract and
-  artifact identities.
+- `config.yaml`, `novelty.json`, `ladder-plan.json`, `ladder-outcome.json`,
+  `selection.json`, `final-comparison.json`, `onnx-report.json`, and `SHA256SUMS`
+  preserve the training/evaluation contract and artifact identities.
 - `training/` contains the stage logs and resolved text configs (intermediate weights
   are intentionally omitted). `evaluation/` contains compact frozen-split summaries.
   `media/` contains every matched uncut simulator source run,
@@ -666,7 +803,8 @@ def validate_run(run_root: Path) -> tuple[dict[str, Any], dict[str, Any]]:
         raise ValueError("unsupported or missing checkpoint selection report")
     if not selection.get("selected", {}).get("eligible"):
         raise ValueError("refusing to publish without an eligible selected checkpoint")
-    validate_selection_evidence(run_root, selection)
+    expected_candidate_labels = validate_ladder_evidence(run_root, selection)
+    validate_selection_evidence(run_root, selection, expected_candidate_labels)
     validate_novelty_evidence(run_root, selection)
     comparison = read_json(run_root / "final-comparison.json")
     if comparison.get("format") != "shadow_dance_final_comparison_v1":
@@ -747,6 +885,8 @@ def validate_run(run_root: Path) -> tuple[dict[str, Any], dict[str, Any]]:
         release / "last.pt",
         release / "config.yaml",
         release / "novelty.json",
+        release / "ladder-plan.json",
+        release / "ladder-outcome.json",
         release / "selection.json",
         release / "final-comparison.json",
         release / "onnx-report.json",
@@ -780,7 +920,14 @@ def validate_run(run_root: Path) -> tuple[dict[str, Any], dict[str, Any]]:
         release / "last.pt"
     ).stat().st_size or selected.get("checkpoint_sha256") != sha256(release / "last.pt"):
         raise ValueError("released checkpoint does not match the selected checkpoint identity")
-    for name in ("novelty.json", "selection.json", "final-comparison.json", "onnx-report.json"):
+    for name in (
+        "novelty.json",
+        "ladder-plan.json",
+        "ladder-outcome.json",
+        "selection.json",
+        "final-comparison.json",
+        "onnx-report.json",
+    ):
         if sha256(release / name) != sha256(run_root / name):
             raise ValueError(f"release copy differs from run evidence: {name}")
     verify_release_hashes(release)

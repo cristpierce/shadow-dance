@@ -11,6 +11,13 @@ SONIC_PYTHON="${SONIC_PYTHON:-/isaac-sim/python.sh}"
 RUN_ID="${RUN_ID:-shadow-dance-$(date -u +%Y%m%dT%H%M%SZ)}"
 EVIDENCE_S3_URI="${EVIDENCE_S3_URI:-}"
 LADDER="${LADDER:-5,500,4000}"
+STAGE_WALLTIME_BUDGET_SECONDS="${STAGE_WALLTIME_BUDGET_SECONDS:-5:900,500:3600,4000:21600}"
+TRAINING_TIMEOUT_SECONDS="${TRAINING_TIMEOUT_SECONDS:-5:600,500:3000,4000:19800}"
+SUBMISSION_DEADLINE_UTC="${SUBMISSION_DEADLINE_UTC:-2026-08-17T06:59:00Z}"
+FINALIZATION_RESERVE_SECONDS="${FINALIZATION_RESERVE_SECONDS:-7200}"
+PORTAL_RESERVE_SECONDS="${PORTAL_RESERVE_SECONDS:-2700}"
+RUN_STARTED_UTC="${RUN_STARTED_UTC:-$(date -u +%Y-%m-%dT%H:%M:%SZ)}"
+MAX_WALLTIME_SECONDS="${MAX_WALLTIME_SECONDS:-36000}"
 FINAL_TEST_SEEDS="${FINAL_TEST_SEEDS:-101,202,303}"
 SMOKE_NUM_ENVS="${SMOKE_NUM_ENVS:-64}"
 MAIN_NUM_ENVS="${MAIN_NUM_ENVS:-512}"
@@ -69,7 +76,8 @@ persist_failure() {
   if [[ -d "${RUN_ROOT}/media" ]]; then
     upload_path "${RUN_ROOT}/media" final/media || true
   fi
-  for evidence_file in novelty.json selection.json final-comparison.json onnx-report.json; do
+  for evidence_file in novelty.json ladder-plan.json ladder-outcome.json selection.json \
+    final-comparison.json onnx-report.json; do
     if [[ -f "${RUN_ROOT}/${evidence_file}" ]]; then
       upload_path "${RUN_ROOT}/${evidence_file}" final || true
     fi
@@ -99,6 +107,13 @@ fi
   echo "runtime_sonic_commit=${SONIC_REPO_REF:-unknown}"
   echo "policy_image=${POLICY_IMAGE:-unknown}"
   echo "ladder=${LADDER}"
+  echo "stage_walltime_budget_seconds=${STAGE_WALLTIME_BUDGET_SECONDS}"
+  echo "training_timeout_seconds=${TRAINING_TIMEOUT_SECONDS}"
+  echo "submission_deadline_utc=${SUBMISSION_DEADLINE_UTC}"
+  echo "finalization_reserve_seconds=${FINALIZATION_RESERVE_SECONDS}"
+  echo "portal_reserve_seconds=${PORTAL_RESERVE_SECONDS}"
+  echo "run_started_utc=${RUN_STARTED_UTC}"
+  echo "max_walltime_seconds=${MAX_WALLTIME_SECONDS}"
   echo "final_test_seeds=${FINAL_TEST_SEEDS}"
   echo "max_walltime=${MAX_WALLTIME:-not_wrapped}"
   echo "smoke_num_envs=${SMOKE_NUM_ENVS}"
@@ -179,6 +194,39 @@ if [[ "${novelty_status}" -ne 0 ]]; then
   exit "${novelty_status}"
 fi
 
+ladder_plan_status=0
+effective_ladder="$("${BASE_PYTHON}" scripts/plan_checkpoint_ladder.py \
+  --ladder "${LADDER}" \
+  --stage-budgets "${STAGE_WALLTIME_BUDGET_SECONDS}" \
+  --training-timeouts "${TRAINING_TIMEOUT_SECONDS}" \
+  --run-started-utc "${RUN_STARTED_UTC}" \
+  --max-walltime-seconds "${MAX_WALLTIME_SECONDS}" \
+  --deadline-utc "${SUBMISSION_DEADLINE_UTC}" \
+  --finalization-reserve-seconds "${FINALIZATION_RESERVE_SECONDS}" \
+  --portal-reserve-seconds "${PORTAL_RESERVE_SECONDS}" \
+  --output "${RUN_ROOT}/ladder-plan.json" \
+  --print-scheduled-csv)" || ladder_plan_status="$?"
+upload_path "${RUN_ROOT}/ladder-plan.json" final
+if [[ "${ladder_plan_status}" -ne 0 || -z "${effective_ladder}" ]]; then
+  echo "No checkpoint candidate fits before the evidence and portal reserves." >&2
+  exit 4
+fi
+
+declare -A training_timeout_by_iteration=()
+IFS=',' read -r -a training_timeout_specs <<< "${TRAINING_TIMEOUT_SECONDS}"
+for timeout_spec in "${training_timeout_specs[@]}"; do
+  timeout_iteration="${timeout_spec%%:*}"
+  timeout_seconds="${timeout_spec#*:}"
+  if [[ "${timeout_iteration}" == "${timeout_spec}" ]] || \
+     ! [[ "${timeout_iteration}" =~ ^[1-9][0-9]*$ ]] || \
+     ! [[ "${timeout_seconds}" =~ ^[1-9][0-9]*$ ]] || \
+     [[ -n "${training_timeout_by_iteration[${timeout_iteration}]+present}" ]]; then
+    echo "Invalid TRAINING_TIMEOUT_SECONDS entry: ${timeout_spec}" >&2
+    exit 2
+  fi
+  training_timeout_by_iteration["${timeout_iteration}"]="${timeout_seconds}"
+done
+
 package_checkpoint() {
   local train_root="$1"
   local label="$2"
@@ -208,7 +256,9 @@ package_checkpoint() {
 }
 
 candidate_args=()
-IFS=',' read -r -a ladder_values <<< "${LADDER}"
+completed_iterations=()
+timed_out_iteration=""
+IFS=',' read -r -a ladder_values <<< "${effective_ladder}"
 for iterations in "${ladder_values[@]}"; do
   if ! [[ "${iterations}" =~ ^[1-9][0-9]*$ ]]; then
     echo "Invalid LADDER value: ${iterations}" >&2
@@ -220,13 +270,32 @@ for iterations in "${ladder_values[@]}"; do
   if [[ "${iterations}" == "5" ]]; then
     env_count="${SMOKE_NUM_ENVS}"
   fi
-  SONIC_ROOT="${SONIC_ROOT}" SONIC_PYTHON="${SONIC_PYTHON}" \
+  training_timeout="${training_timeout_by_iteration[${iterations}]:-}"
+  if [[ -z "${training_timeout}" ]]; then
+    echo "No training timeout was configured for ${iterations} iterations." >&2
+    exit 2
+  fi
+  train_status=0
+  timeout --signal=TERM --kill-after=15m "${training_timeout}s" env \
+    SONIC_ROOT="${SONIC_ROOT}" SONIC_PYTHON="${SONIC_PYTHON}" \
     MOTION_DIR="${PROJECT_ROOT}/data/generated/train" CHECKPOINT="${BASE_CHECKPOINT}" \
     NUM_ENVS="${env_count}" ITERATIONS="${iterations}" RUN_NAME="${label}" \
     SEED="${TRAIN_SEED}" LEARNING_RATE="${LEARNING_RATE}" \
     REGULAR_SAVE_FREQUENCY="${REGULAR_SAVE_FREQUENCY}" \
     SAVE_LAST_FREQUENCY="${SAVE_LAST_FREQUENCY}" \
-    OUTPUT_ROOT="${train_root}" bash scripts/train.sh
+    OUTPUT_ROOT="${train_root}" bash scripts/train.sh || train_status="$?"
+  if [[ "${train_status}" -ne 0 ]]; then
+    if [[ -d "${train_root}" ]]; then
+      upload_path "${train_root}" "train/${label}-incomplete" || true
+    fi
+    if [[ "${train_status}" -eq 124 ]] && \
+       [[ "${#completed_iterations[@]}" -gt 0 ]]; then
+      timed_out_iteration="${iterations}"
+      echo "Training ${label} exceeded its deadline budget; selecting from completed candidates." >&2
+      break
+    fi
+    exit "${train_status}"
+  fi
   candidate_checkpoint="$(package_checkpoint "${train_root}" "${label}")"
   upload_path "${RUN_ROOT}/train/${label}" "train/${label}"
   upload_path "${RUN_ROOT}/checkpoints/${label}" "checkpoints/${label}"
@@ -245,7 +314,24 @@ for iterations in "${ladder_values[@]}"; do
     "${RUN_ROOT}/summaries/${label}-heldout-seed-42.json"
     "${RUN_ROOT}/summaries/${label}-retention-seed-42.json"
   )
+  completed_iterations+=("${iterations}")
 done
+
+if [[ "${#completed_iterations[@]}" -eq 0 ]]; then
+  echo "No checkpoint candidate completed." >&2
+  exit 4
+fi
+completed_csv="$(IFS=,; echo "${completed_iterations[*]}")"
+outcome_args=(
+  --plan "${RUN_ROOT}/ladder-plan.json"
+  --completed "${completed_csv}"
+  --output "${RUN_ROOT}/ladder-outcome.json"
+)
+if [[ -n "${timed_out_iteration}" ]]; then
+  outcome_args+=(--timed-out "${timed_out_iteration}")
+fi
+"${BASE_PYTHON}" scripts/record_ladder_outcome.py "${outcome_args[@]}"
+upload_path "${RUN_ROOT}/ladder-outcome.json" final
 
 "${BASE_PYTHON}" scripts/select_checkpoint.py \
   --stock-heldout "${RUN_ROOT}/summaries/stock-heldout-seed-42.json" \
@@ -358,7 +444,8 @@ if [[ -f "$(dirname "${selected_checkpoint}")/model_config.yaml" ]]; then
 fi
 cp "${exported_dir}"/*.onnx "${release_dir}/model/"
 cp "${RUN_ROOT}/onnx-report.json" "${RUN_ROOT}/novelty.json" "${RUN_ROOT}/selection.json" \
-  "${RUN_ROOT}/final-comparison.json" "${release_dir}/model/"
+  "${RUN_ROOT}/final-comparison.json" "${RUN_ROOT}/ladder-plan.json" \
+  "${RUN_ROOT}/ladder-outcome.json" "${release_dir}/model/"
 cp "${SONIC_ROOT}/LICENSE" "${release_dir}/model/GEAR-SONIC-DUAL-LICENSE"
 # A recovery run may reuse a partially populated run directory. Remove the old
 # inventory before expanding the glob so SHA256SUMS can never hash itself.

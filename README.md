@@ -14,7 +14,7 @@ fills result tables with estimates.
 
 *Kinematic target only—not stock or fine-tuned policy output.*
 
-> Current state (2026-08-14): the original synthetic references and fail-closed
+> Current state (2026-08-16): the original synthetic references and fail-closed
 > reproducible pipeline pass local validation and public Linux regeneration. The
 > immutable [Shadow Dip v1.0.0 reference release](https://github.com/cristpierce/shadow-dance/releases/tag/shadow-dip-v1.0.0)
 > is public. Stock/fine-tuned metrics, final ONNX links, and the policy before/after
@@ -40,7 +40,7 @@ before either policy is measured on the independent final-test family.
 | Original data + provenance | [`shadow-dip-v1.0.0`](https://github.com/cristpierce/shadow-dance/releases/tag/shadow-dip-v1.0.0) manifest, PKLs, and source CSVs | 30 sequences generated, hashed, and public |
 | G1 limits / foot IK / support QA | `results/reference-validation.json` | 30/30 pass; 0 warnings |
 | Stock SONIC on validation moves | raw eval log + novelty report | Pending Isaac run |
-| Fine-tuned SONIC | independent 5/500/4,000 checkpoint ladder from pinned base | Pending Isaac run |
+| Fine-tuned SONIC | deadline-planned 5/500/4,000 checkpoint ladder from pinned base | Pending Isaac run |
 | Fundamentals retention | identical stock/fine-tuned suite | Pending Isaac run |
 | Untouched final test | 4 motions × 3 seeds per policy, bound to frozen selection | Pending checkpoint selection |
 | Deployable policy | checked ONNX graphs + hashes | Pending selected checkpoint |
@@ -154,10 +154,13 @@ bash scripts/export_onnx.sh /workspace/outputs/.../last.pt data/generated/test
 python scripts/verify_artifacts.py /workspace/outputs/.../exported
 ```
 
-The checkpoint ladder is bounded by the 10-hour cloud wall-time guard and stops if no
-candidate clears the preregistered novelty, improvement, and retention gates. It is not
-an instruction to burn the full credit allocation. Exact parameters and the selection
-rule are in [configs/shadow_dip_finetune.yaml](configs/shadow_dip_finetune.yaml).
+The checkpoint ladder is bounded by the 10-hour cloud wall-time guard and the absolute
+submission deadline. It freezes the largest ordered prefix that still leaves two hours
+for final evidence and 45 minutes for portal submission, records any omitted/timed-out
+stage, and stops if no completed candidate clears the preregistered novelty,
+improvement, and retention gates. It is not an instruction to burn the full credit
+allocation. Exact parameters and the selection rule are in
+[configs/shadow_dip_finetune.yaml](configs/shadow_dip_finetune.yaml).
 
 ## Result contract
 

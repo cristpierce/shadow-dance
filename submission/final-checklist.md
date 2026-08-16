@@ -21,6 +21,8 @@
 
 - [x] Reference validator overall pass and visual inspection.
 - [ ] Stock baseline establishes a real novelty gap; otherwise revise hero before train.
+- [ ] `ladder-plan.json` preserves the evidence/portal reserves and
+  `ladder-outcome.json` exactly discloses every completed or omitted candidate.
 - [ ] Selected checkpoint wins on validation—not only train—references.
 - [ ] Final headline comes from test motions first opened after the winner was frozen.
 - [ ] Stock and selected policy each have all 12 final trials (4 motions × 3 seeds).
@@ -36,6 +38,8 @@
 - [ ] Exact five-graph SONIC ONNX bundle passes checker/Runtime inference; `_g1.onnx`
   nominee, I/O contract, and hashes are published.
 - [ ] Public URLs work when logged out and point to immutable revisions/tags.
+- [ ] Stop artifact work by 23:14 PT and leave the final 45 minutes for logged-out link
+  verification, teammate review, saving every field, and changing DRAFT to submitted.
 
 ## Licensing and safety
 

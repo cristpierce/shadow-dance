@@ -142,7 +142,10 @@ status here must remain truthful.
   image before container startup. This is not required for the managed cloud route.
 - [ ] Interactive Nebius profile/login plus visible challenge credit, a `us-central1`
   project, object-storage credentials, and RTX PRO 6000 Managed Kubernetes quota. The
-  current pinned CLI itself is installed.
+  current pinned CLI itself is installed. The portal's claim button opens the Builder
+  Program; its terms grant an initial $25 AI Cloud code after email verification and a
+  second $25 only about 30 days later. The initial code/balance has not been confirmed,
+  so the advertised `$50` cannot yet be budgeted for the deadline run.
 - [ ] Hugging Face account/handle confirmation, write-capable authentication, and
   creation of public dataset/model repositories.
 - [ ] Organizer WBT-Bench package or Discord release link. The official page still

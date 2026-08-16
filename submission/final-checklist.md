@@ -5,7 +5,9 @@
 - [x] Team exists: `SELTZER`, 2 members.
 - [x] Track: Performance Arts.
 - [x] GitHub and Discord connected; country set.
-- [ ] Compute credit actually available (claim/application alone is not availability).
+- [ ] Initial $25 **AI Cloud** promotional code is email-verified, redeemed, and visible
+  in the Nebius console (claim/application alone is not availability; Builder Program
+  terms schedule the second $25 about 30 days later, outside the usable deadline window).
 - [ ] Project name saved.
 - [ ] Final writeup saved with no brackets.
 - [ ] Canonical GitHub link points to merged current commit.

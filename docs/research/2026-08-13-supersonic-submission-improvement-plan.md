@@ -1062,9 +1062,17 @@ The operational finish line is therefore a confirmed submitted status, not merel
 `7 of 7 complete` meter or a saved draft.
 
 The same current client sends **Claim $50 Nebius compute** to
-<https://dev.nebius.com/builders>. That outbound link is a route into Nebius, not proof
-that challenge credit, project access, or GPU quota has posted. Those must be verified
-inside the entrant's authenticated Nebius account before launch.
+<https://dev.nebius.com/builders>. On August 16, that public destination advertised a
+$25 Nebius Token Factory credit, a $25 Tavily credit, and a $1 Academy offer. It did not
+surface AI Cloud credit in that marketing summary. However, the linked June 2026
+Builder Program terms resolve the apparent mismatch: section C.1 grants $25 in AI
+Cloud credit after successful registration and double-opt-in verification, and section
+C.2 grants a second $25 approximately 30 days later. The page title's `$50` therefore
+does not mean $50 is immediately available. For this deadline, plan against only the
+first $25, verify the email-delivered code and console balance, and escalate to the
+Discord help desk if it is missing after verification. This is likely sufficient for
+the approximately $18 GPU component, but CPU/storage/networking must stay within the
+remaining margin and the ten-hour auto-stop remains mandatory.
 
 ### Visible competitive evidence
 

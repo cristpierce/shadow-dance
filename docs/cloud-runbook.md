@@ -35,9 +35,27 @@ cannot drift across machines.
 2. **Complete interactive Nebius login and confirm usable credit/quota.** The portal's
    "applied" state is not proof that the $50 credit has posted. The August 16 portal
    client sends the **Claim $50 Nebius compute** button to
-   <https://dev.nebius.com/builders>; open that while signed in and verify the credit
-   in the resulting Nebius account rather than treating the outbound link as a claim
-   receipt. In WSL, run
+   <https://dev.nebius.com/builders>. Its short landing-page summary mentions a $25
+   Token Factory credit and $25 Tavily credit, but the linked June 2026 Builder Program
+   terms are more specific: section C.1 grants $25 of **Nebius AI Cloud** credit after
+   successful registration and email verification; section C.2 schedules another $25
+   of AI Cloud credit approximately 30 days later. Only the first $25 can be assumed to
+   arrive inside this challenge window. Check the entrant's inbox/spam for the required
+   double-opt-in and promotional-code email, redeem it, then verify the AI Cloud balance
+   in the console. If the initial code is absent after verification, send this in the
+   challenge Discord help desk:
+
+   > Team SELTZER's **Claim $50 Nebius compute** button currently opens
+   > `dev.nebius.com/builders`. We completed registration and email verification, but
+   > the initial $25 AI Cloud promotional code described in Builder Program terms C.1
+   > has not arrived or appeared in our console. We need it for the supported RTX PRO
+   > 6000 Managed Kubernetes SONIC workload. Could you confirm or resend the code and
+   > the Trial 03 redemption path?
+
+   Do not treat the outbound link or submitted form as a credit receipt. The first $25
+   should cover the approximately $18 ten-hour GPU component only if CPU, storage, and
+   networking stay inside the remaining margin, so watch the balance and preserve the
+   existing ten-hour auto-stop. Once AI Cloud access is visible, in WSL run
    `cd /home/crist/npa-shadow-operator && .venv/bin/npa configure`, select a
    `us-central1` project, and confirm RTX PRO 6000 Managed Kubernetes quota. The
    supported cluster provisioning command is in section 1; dry-run it before creating

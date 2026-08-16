@@ -171,6 +171,22 @@ marks the former baked L40S digest as quarantined and rejects it; do not restore
 route. The active image contains no Isaac bytes and depends on GPU Operator driver
 mounts, so it must run on the supported RTX PRO 6000 Kubernetes target.
 
+An independent OCI-history audit found an additional preflight requirement in this
+exact digest: its upstream checkout exports `GIT_LFS_SKIP_SMUDGE=1` and then removes
+`.git`. That correctly keeps model weights out of the image, but it also leaves the G1
+URDF's visual meshes as pointer stubs. `cloud_pipeline.sh` therefore runs
+`hydrate_sonic_assets.py` before base-model download and Isaac startup. It performs an
+anonymous sparse checkout at SONIC commit `0a87181...`, copies only the G1 URDF/mesh
+subtree, and fails closed unless all 69 files total 68,378,071 bytes, contain no LFS
+pointers, satisfy every URDF mesh reference, and match manifest SHA-256
+`79fa6310cefeaf819c103e5c83c9c40c55ef71b28aace7bf9f8c116d4966d0c7`. Do not bypass
+this gate. Its `sonic-assets.json` report is uploaded under the run's `evidence/` prefix;
+the fetch includes no checkpoint/model-weight path and requires no Hugging Face token.
+The active image's ordinary interpreter is `/opt/npa/venv/bin/python` (exported as
+`NPA_IMAGE_PYTHON`), while `/isaac-sim/python.sh` is the Isaac bootstrap shim. The task
+asserts both identities; `/opt/npa/sim/venv/bin/python` belongs to the retired baked
+variant and must not be reintroduced.
+
 After visible credit and quota are confirmed, provision only the minimal supported
 cluster. The dry run is mandatory; the second command creates billable nodes:
 
@@ -354,8 +370,8 @@ The resulting quality-first routes and latest **post-baseline** decision times a
 | 20:59 | 5 only |
 
 Each row applies after the preceding route no longer fits. Launch earlier than those
-times because base-model download, Isaac cold start, and the stock gate occur before
-the decision.
+times because G1 asset hydration, base-model download, Isaac cold start, and the stock
+gate occur before the decision.
 The planner also subtracts time already spent before the stock gate from the ten-hour
 worker cap, so a slow cold start can shorten the ladder even when the absolute deadline
 alone would allow it. The outer wrapper refuses to run after the 45-minute portal

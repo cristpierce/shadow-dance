@@ -18,8 +18,9 @@ The shorter panel freezes and says `RUN ENDED`; no fall or reset is edited away.
 
 Across 12 untouched final-test trials per policy (4 motions × 3 seeds), stock SONIC
 completed **[x/12]** and the selected **[stage]** checkpoint completed **[y/12]**.
-Local MPJPE changed from **[a] mm** to **[b] mm**. The winner was frozen on separate
-validation and retention data before this final test was opened.
+Local MPJPE changed from **[a] mm** to **[b] mm**. The winner was frozen using held-out
+validation plus a preregistered training-rehearsal retention check before this final
+test was opened.
 
 - Code/config: [IMMUTABLE_GITHUB_URL]
 - Dataset: [IMMUTABLE_DATASET_URL]

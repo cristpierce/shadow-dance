@@ -6,7 +6,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="${PROJECT_ROOT:-$(cd -- "${SCRIPT_DIR}/.." && pwd)}"
 SONIC_ROOT="${SONIC_ROOT:-/opt/sonic}"
-BASE_PYTHON="${BASE_PYTHON:-/opt/npa/sim/venv/bin/python}"
+BASE_PYTHON="${BASE_PYTHON:-${NPA_IMAGE_PYTHON:-/opt/npa/venv/bin/python}}"
 SONIC_PYTHON="${SONIC_PYTHON:-/isaac-sim/python.sh}"
 RUN_ID="${RUN_ID:-shadow-dance-$(date -u +%Y%m%dT%H%M%SZ)}"
 EVIDENCE_S3_URI="${EVIDENCE_S3_URI:-}"
@@ -82,7 +82,7 @@ persist_failure() {
       upload_path "${RUN_ROOT}/${evidence_file}" final || true
     fi
   done
-  for identity_file in environment.txt base-model.sha256; do
+  for identity_file in environment.txt base-model.sha256 sonic-assets.json; do
     if [[ -f "${RUN_ROOT}/${identity_file}" ]]; then
       upload_path "${RUN_ROOT}/${identity_file}" evidence || true
     fi
@@ -106,6 +106,9 @@ fi
   echo "submission_commit=${SUBMISSION_COMMIT:-unknown}"
   echo "runtime_sonic_commit=${SONIC_REPO_REF:-unknown}"
   echo "policy_image=${POLICY_IMAGE:-unknown}"
+  echo "base_python=${BASE_PYTHON}"
+  echo "base_python_version=$("${BASE_PYTHON}" --version 2>&1)"
+  echo "sonic_python=${SONIC_PYTHON}"
   echo "ladder=${LADDER}"
   echo "stage_walltime_budget_seconds=${STAGE_WALLTIME_BUDGET_SECONDS}"
   echo "training_timeout_seconds=${TRAINING_TIMEOUT_SECONDS}"
@@ -134,6 +137,10 @@ if [[ -n "${SUBMISSION_COMMIT:-}" ]] && \
 fi
 
 export HF_HUB_DISABLE_XET=1
+"${BASE_PYTHON}" scripts/hydrate_sonic_assets.py \
+  --sonic-root "${SONIC_ROOT}" \
+  --report "${RUN_ROOT}/sonic-assets.json"
+upload_path "${RUN_ROOT}/sonic-assets.json" evidence
 "${BASE_PYTHON}" scripts/download_base_model.py --output-dir "${SONIC_ROOT}"
 actual_checkpoint_hash="$(sha256sum "${BASE_CHECKPOINT}" | cut -d' ' -f1)"
 if [[ "${actual_checkpoint_hash}" != "${BASE_CHECKPOINT_SHA256}" ]]; then

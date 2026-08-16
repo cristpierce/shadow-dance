@@ -1104,6 +1104,44 @@ thresholds or the untouched final-test rule. `ladder-plan.json` and
 decision before releasing weights. If no completed candidate is eligible, the correct
 outcome is no policy claim—not synthetic or estimated evidence.
 
+### Active-image G1 asset correction (August 16, 14:43 PT)
+
+- **Fact (immutable-image evidence):** an anonymous OCI config/history read of active
+  digest `sha256:c9ba0996...1a808bb` shows that it checks out SONIC commit
+  `0a87181c...ec664` with `GIT_LFS_SKIP_SMUDGE=1`, includes `/gear_sonic/**`, and then
+  removes `/opt/sonic/.git`. This matches the current NPA
+  [SONIC Dockerfile](https://github.com/nebius/nebius-physical-ai/blob/43ffee689b02a117ff4eb2c32f7057b39bcef030/npa/docker/workbench/sonic/Dockerfile),
+  whose purpose is to avoid redistributing gated model weights.
+- **Fact (runtime dependency):** at that same SONIC revision, the released config selects
+  `g1_model_12_dex`; its
+  [robot configuration](https://github.com/NVlabs/GR00T-WholeBodyControl/blob/0a87181c9106d0e49293400714b157676e0ec664/gear_sonic/envs/manager_env/robots/g1.py)
+  loads `gear_sonic/data/assets/robot_description/urdf/g1/main.urdf`. That URDF contains
+  67 `meshes/g1` references. The pinned tree has 68 G1 mesh files, and
+  [`.gitattributes`](https://github.com/NVlabs/GR00T-WholeBodyControl/blob/0a87181c9106d0e49293400714b157676e0ec664/.gitattributes)
+  routes every `*.STL` through Git LFS. Because `.git` is removed after a no-smudge
+  checkout, the image cannot restore those objects itself.
+- **Fact (non-GPU reproduction):** a clean anonymous sparse checkout of only the G1
+  mesh and URDF directories at `0a87181c...ec664` completed with 69 files totaling
+  68,378,071 bytes, zero pointer files, and canonical path/size/content manifest SHA-256
+  `79fa6310cefeaf819c103e5c83c9c40c55ef71b28aace7bf9f8c116d4966d0c7`.
+- **Decision:** run `hydrate_sonic_assets.py` before base-model download and Isaac cold
+  start. The script removes inherited LFS-skip settings, uses a noninteractive sparse
+  checkout pinned to the embedded commit, validates the staged tree before any copy,
+  atomically replaces only those 69 files, validates again, and emits
+  `sonic-assets.json`. It fetches no model checkpoint or weight path and does not touch
+  the NVIDIA Isaac acceptance gate. Treat the upstream repository as dual-licensed and
+  preserve its `LICENSE`; do not overstate a separate asset licence.
+- **Fact (interpreter contract):** the same immutable OCI config sets both
+  `NPA_IMAGE_PYTHON` and `NPA_ISAAC_BASE_PYTHON` to `/opt/npa/venv/bin/python`; its
+  `PATH` also begins with `/opt/npa/venv/bin`. The retired baked variant used
+  `/opt/npa/sim/venv/bin/python`. The initial Shadow Dance task retained that retired
+  path and therefore would have failed in SkyPilot setup before evaluation.
+- **Decision:** use the image-owned `NPA_IMAGE_PYTHON` variable everywhere, assert that
+  it equals the active digest's `/opt/npa/venv/bin/python`, and bind that assertion into
+  read-only plan materialization tests. Keep `/isaac-sim/python.sh` separate: it is the
+  present, executable bootstrap shim that performs the entrant-authorized runtime Isaac
+  install on first use.
+
 ## Primary sources
 
 - [Ultimate Bots Trial 03 challenge page](https://www.ultimatebots.com/hackathon)

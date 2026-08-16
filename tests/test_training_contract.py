@@ -66,10 +66,20 @@ def test_frozen_training_contract_is_consistent() -> None:
     assert config["runtime_image_digest"] == (
         "sha256:c9ba0996b28f54b013e36da689638b386a7ef9c0c8c4413fc4b3c72ff1a808bb"
     )
+    assert config["runtime_base_python"] == "/opt/npa/venv/bin/python"
     assert config["cloud"]["gpu_target"] == "gpu-rtx6000"
     assert config["cloud"]["backend"] == "kubernetes"
 
     pipeline = (ROOT / "scripts" / "cloud_pipeline.sh").read_text(encoding="utf-8")
+    assert (
+        'BASE_PYTHON="${BASE_PYTHON:-${NPA_IMAGE_PYTHON:-/opt/npa/venv/bin/python}}"'
+        in pipeline
+    )
+    assert "/opt/npa/sim/venv" not in pipeline
+    workflow_text = (ROOT / "cloud" / "sky-shadow-dance.yaml").read_text(encoding="utf-8")
+    assert "/opt/npa/venv/bin/python" in workflow_text
+    assert 'test "${NPA_IMAGE_PYTHON:-}" = /opt/npa/venv/bin/python' in workflow_text
+    assert "/opt/npa/sim/venv" not in workflow_text
     materializer = (ROOT / "scripts" / "materialize_cloud_plan.py").read_text(
         encoding="utf-8"
     )

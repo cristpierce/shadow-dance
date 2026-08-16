@@ -52,14 +52,16 @@ setup: |
   git checkout --detach "${SUBMISSION_COMMIT}"
   test "$(git rev-parse HEAD)" = "${SUBMISSION_COMMIT}"
   test "${SONIC_REPO_REF:-}" = 0a87181c9106d0e49293400714b157676e0ec664
-  /opt/npa/sim/venv/bin/python -c 'import boto3, huggingface_hub, imageio, numpy, onnx, PIL'
-  /opt/npa/sim/venv/bin/python scripts/verify_dataset_bundle.py
+  test "${NPA_IMAGE_PYTHON:-}" = /opt/npa/venv/bin/python
+  "${NPA_IMAGE_PYTHON}" -c 'import boto3, huggingface_hub, imageio, numpy, onnx, PIL'
+  "${NPA_IMAGE_PYTHON}" scripts/verify_dataset_bundle.py
 run: |
   set -euo pipefail
   cd "${HOME}/shadow-dance"
   command -v timeout >/dev/null
   test -x /isaac-sim/python.sh
-  test -x /opt/npa/sim/venv/bin/python
+  test "${NPA_IMAGE_PYTHON:-}" = /opt/npa/venv/bin/python
+  test -x "${NPA_IMAGE_PYTHON}"
   export RUN_STARTED_UTC="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
   deadline_epoch="$(date -u -d "${SUBMISSION_DEADLINE_UTC}" +%s)"
   deadline_remaining_seconds="$((deadline_epoch - $(date -u +%s) - PORTAL_RESERVE_SECONDS))"

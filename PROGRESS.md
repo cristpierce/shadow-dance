@@ -1,6 +1,6 @@
 # SuperSONIC submission progress
 
-**Last updated:** 2026-08-16 13:55 PT
+**Last updated:** 2026-08-16 14:56 PT
 **Branch:** `feature/supersonic-submission`
 **Deadline:** 2026-08-16 23:59 PT
 
@@ -93,6 +93,16 @@ status here must remain truthful.
   strongest visible entries now have real ONNX/video evidence; Shadow Dance's remaining
   differentiator is its independent validation/test design, fundamentals-retention
   check, reproducibility, and raw-evidence publication—but only if the run is unlocked.
+
+- [x] Audited the active image's OCI build history and found its G1 visual meshes were
+  Git LFS pointer stubs. Added a pre-Isaac, model-weight-excluding sparse hydration gate
+  pinned to the embedded SONIC commit, with exact 69-file/68,378,071-byte/manifest-hash
+  attestation. Proved the finalized empty-root hydration (17.3 seconds, anonymous) and
+  cached revalidation; the full local suite now passes 28 tests with 3 licensed-runtime
+  skips. A failed checkout also leaves a structured recovery report for evidence upload.
+- [x] Corrected the cloud task's baked-Python path from the retired image's
+  `/opt/npa/sim/venv/bin/python` to the active OCI config's image-owned
+  `NPA_IMAGE_PYTHON=/opt/npa/venv/bin/python`; the materializer now rejects drift.
 
 ## Ready after entrant handoff
 

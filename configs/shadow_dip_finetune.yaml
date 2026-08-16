@@ -9,6 +9,7 @@ runtime_image_digest: sha256:c9ba0996b28f54b013e36da689638b386a7ef9c0c8c4413fc4b
 runtime_image_variant: sonic-k8s-host-mounted
 npa_operator_commit: 43ffee689b02a117ff4eb2c32f7057b39bcef030
 runtime_sonic_commit: 0a87181c9106d0e49293400714b157676e0ec664
+runtime_base_python: /opt/npa/venv/bin/python
 base_checkpoint: nvidia/GEAR-SONIC/sonic_release/last.pt
 base_model_revision: 9c0ff22b4ffec27c5392e8e284eb2f2df7a5b4e2
 base_checkpoint_size_bytes: 469418283

@@ -133,6 +133,14 @@ motions exercise the G1 and derived teleoperation references; `smpl_motion_file=
 is supported by upstream and prevents fake SMPL data from entering the provenance
 chain.
 
+The pinned NPA image deliberately leaves Git LFS payloads out of its upstream checkout,
+which also leaves the G1 visual meshes as pointer stubs. Before downloading Isaac or
+starting evaluation, the cloud pipeline sparsely fetches only the G1 URDF/mesh subtree
+from the image's exact SONIC commit and verifies 69 files, 68,378,071 bytes, zero
+pointers, and canonical manifest SHA-256
+`79fa6310cefeaf819c103e5c83c9c40c55ef71b28aace7bf9f8c116d4966d0c7`. Model weights
+are excluded from that fetch; `sonic-assets.json` records the result.
+
 ```bash
 # 5-iteration data/environment smoke
 SONIC_ROOT=/workspace/GR00T-WholeBodyControl \

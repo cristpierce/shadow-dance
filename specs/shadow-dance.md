@@ -145,6 +145,14 @@ The workflow uploads checkpoints, configs, logs, summaries, and evidence increme
 to a run-scoped S3 prefix. On failure it uploads the recoverable state before exit. A
 rerun syncs unchanged hash-matching objects rather than duplicating them.
 
+Before Isaac starts, the workflow repairs a known property of the immutable NPA image:
+its Git-LFS-suppressed checkout contains pointer stubs for the G1 visual meshes required
+by the released SONIC URDF. Only the pinned G1 URDF/mesh subtree is fetched from the
+exact embedded SONIC commit. A content-bound report must prove 69 files, 68,378,071
+bytes, zero remaining pointers, all 67 URDF mesh references present, and canonical
+manifest SHA-256 `79fa6310cefeaf819c103e5c83c9c40c55ef71b28aace7bf9f8c116d4966d0c7`.
+No model-weight path is included.
+
 The workflow is not launchable until the entrant explicitly accepts the applicable
 NVIDIA Omniverse, Isaac Sim materials, and software licences. It never interprets a
 generic project approval as licence acceptance.

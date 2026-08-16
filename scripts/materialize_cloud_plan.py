@@ -180,6 +180,7 @@ def main() -> int:
         'git checkout --detach "${SUBMISSION_COMMIT}"',
         'test "$(git rev-parse HEAD)" = "${SUBMISSION_COMMIT}"',
         'test "${SONIC_REPO_REF:-}" = 0a87181c9106d0e49293400714b157676e0ec664',
+        'test "${NPA_IMAGE_PYTHON:-}" = /opt/npa/venv/bin/python',
         "scripts/verify_dataset_bundle.py",
     )
     required_run_fragments = (

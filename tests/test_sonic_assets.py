@@ -117,6 +117,13 @@ def test_pinned_asset_contract_matches_runtime_and_precedes_isaac() -> None:
     assert 'asset_parent="${SONIC_ROOT}/gear_sonic/data/assets/robot_description"' in pipeline
     assert 'sudo --non-interactive "${hydrate_args[@]}"' in pipeline
 
+    workflow = (ROOT / ".github" / "workflows" / "reference-qa.yml").read_text(
+        encoding="utf-8"
+    )
+    assert "scripts/hydrate_sonic_assets.py" in workflow
+    assert 'runtime-sonic"' in workflow
+    assert 'sonic-assets.json"' in workflow
+
 
 def test_asset_report_records_pinned_identity(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch

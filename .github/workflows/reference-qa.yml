@@ -40,6 +40,14 @@ jobs:
           ruff check src scripts tests
           pytest -q
 
+      - name: Verify active-runtime G1 asset hydration
+        env:
+          QA_ROOT: ${{ runner.temp }}/shadow-qa
+        run: |
+          python scripts/hydrate_sonic_assets.py \
+            --sonic-root "$QA_ROOT/runtime-sonic" \
+            --report "$QA_ROOT/sonic-assets.json"
+
       - name: Regenerate and validate the complete frozen set
         env:
           QA_ROOT: ${{ runner.temp }}/shadow-qa
@@ -76,6 +84,7 @@ jobs:
           name: reference-validation
           path: |
             ${{ runner.temp }}/shadow-qa/reference-validation.json
+            ${{ runner.temp }}/shadow-qa/sonic-assets.json
             ${{ runner.temp }}/shadow-qa/manifests
             ${{ runner.temp }}/shadow-qa/splits
             ${{ runner.temp }}/shadow-qa/generated

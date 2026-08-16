@@ -1285,6 +1285,35 @@ outcome is no policy claim—not synthetic or estimated evidence.
   disclosure together. Do not call a timed-out partial checkpoint `stage-2000`; the
   existing ordered-prefix outcome rule still excludes it from selection.
 
+### Final static-runtime and cloud-readiness audit (August 16, 16:35 PT)
+
+- **Fact (pinned-runtime review):** the repository's training invocation matches the
+  official `sonic_release` Hydra configuration at SONIC commit `0a87181c...ec664`.
+  The model-save callback writes `last.pt` atomically whenever the global step is a
+  multiple of `save_last_frequency`; Shadow Dance overrides that value to five and all
+  declared ladder stages end on a five-step boundary. The evaluation callback writes
+  `metrics_eval.json` into the supplied `eval_output_dir`, and the universal-token ONNX
+  branch emits the `smpl`, `g1`, `teleop`, `encoder`, and `decoder` graphs plus
+  `model_config.yaml`, matching the downstream inventory gate.
+- **Fact (open verification):** Bash parsed all five runtime wrappers and the cloud
+  pipeline. The focused deadline, evidence, submission-video, and training-contract
+  suite passed 24/24 locally with Ruff clean. Both public CI copies passed all 37 tests
+  at immutable head `938f0b968d284288b6e1ab6cf9da00f82a81c877`; the downloaded Linux evidence artifact
+  again reports 69 G1 assets, 68,376,574 bytes, zero LFS pointers, and manifest
+  `4c7faab77116580265453eb4d15559e8e7e2ae43dfac3150a94150c6562399e3`.
+- **Fact (entrant environment):** a value-suppressing WSL probe found NPA 0.1.0 and its
+  dedicated SkyPilot environment installed. However, `npa cluster list --format json`
+  reports `NOT_CONFIGURED`, with no project ID, cluster, kubeconfig, or Kubernetes
+  context. `npa skypilot verify` reports Nebius compute disabled for missing Nebius
+  credentials and Nebius storage disabled for a missing S3 profile. NPA health preflight
+  separately reports missing S3 and Hugging Face credentials. Its top-level
+  `status: ok` means the local verifier completed; it does not mean a cloud is enabled.
+- **Decision:** no further static code change is justified before runtime evidence.
+  The critical path is entrant-owned NVIDIA acceptance, Nebius account/credit/quota and
+  interactive `npa configure`, local Hugging Face authentication, then the already
+  bounded stock gate and best deadline-feasible candidate. Do not spend the remaining
+  window polishing synthetic evidence while those gates are unresolved.
+
 ## Primary sources
 
 - [Ultimate Bots Trial 03 challenge page](https://www.ultimatebots.com/hackathon)

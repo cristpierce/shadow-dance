@@ -1,6 +1,6 @@
 # SuperSONIC submission progress
 
-**Last updated:** 2026-08-16 14:56 PT
+**Last updated:** 2026-08-16 16:35 PT
 **Branch:** `feature/supersonic-submission`
 **Deadline:** 2026-08-16 23:59 PT
 
@@ -126,6 +126,26 @@ status here must remain truthful.
   at 512 environments in 9,544.61 seconds. The quality-first scheduler still prefers
   4,000 whenever it fits and otherwise exposes four new 2,000-stage routes through
   17:29 PT without changing selection or retention thresholds.
+- [x] Completed a focused review of the pinned SONIC runtime at `0a87181c`: the training
+  command matches the official `sonic_release` contract, the five-iteration smoke is
+  guaranteed to emit an atomic `last.pt` because the callback is overridden to save
+  every five global steps, evaluation writes `metrics_eval.json` to the supplied output
+  directory, and the universal-token export produces the expected five ONNX graphs plus
+  `model_config.yaml`. Bash syntax passed and 24 deadline/evidence/video/contract tests
+  plus Ruff passed locally; no licensed runtime was invoked.
+- [x] Passed both public CI copies at the final implementation head
+  `938f0b968d284288b6e1ab6cf9da00f82a81c877`: [main run
+  31979083056](https://github.com/cristpierce/shadow-dance/actions/runs/31979083056)
+  and [feature run
+  31979081796](https://github.com/cristpierce/shadow-dance/actions/runs/31979081796).
+  The main artifact was downloaded and independently checked: 69 G1 assets,
+  68,376,574 bytes, zero LFS pointers, and canonical manifest `4c7faab7...62399e3`.
+- [x] Ran a secret-suppressing WSL cloud-readiness probe at 23:33 UTC. NPA/SkyPilot is
+  installed, but `npa cluster list --format json` reports `NOT_CONFIGURED`; no Nebius
+  project, cluster, kubeconfig, or Kubernetes context exists. SkyPilot's detailed check
+  reports Nebius compute/storage disabled, and NPA preflight reports no S3 or Hugging
+  Face credentials. The top-level SkyPilot `status: ok` only verifies the local
+  installation and must not be treated as cloud readiness.
 
 ## Ready after entrant handoff
 
@@ -141,10 +161,11 @@ status here must remain truthful.
   or newer and reboot; the current 577.13 driver is rejected by the pinned CUDA 13
   image before container startup. This is not required for the managed cloud route.
 - [ ] Interactive Nebius profile/login plus visible challenge credit, a `us-central1`
-  project, object-storage credentials, and RTX PRO 6000 Managed Kubernetes quota. The
-  current pinned CLI itself is installed. The portal's claim button opens the Builder
-  Program; its terms grant an initial $25 AI Cloud code after email verification and a
-  second $25 only about 30 days later. The initial code/balance has not been confirmed,
+  project, object-storage credentials, and RTX PRO 6000 Managed Kubernetes quota. A
+  23:33 UTC read-only probe positively confirmed that these are not configured; only the
+  pinned local CLI/SkyPilot environment is ready. The portal's claim button opens the
+  Builder Program; its terms grant an initial $25 AI Cloud code after email verification
+  and a second $25 only about 30 days later. The initial code/balance has not been confirmed,
   so the advertised `$50` cannot yet be budgeted for the deadline run. Standard promo
   redemption also requires a user-owned $25 card activation; no payment is authorized
   by the general project approval. Nebius publishes a default `us-central1` regular

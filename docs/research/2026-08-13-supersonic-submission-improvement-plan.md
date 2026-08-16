@@ -1080,17 +1080,23 @@ policy, explicit walking/turning retention, raw source hashes, and full regenera
 The previous relative ten-hour timeout could expire during the 4,000-step candidate
 before selection/export, stranding usable earlier checkpoints. The run now freezes a
 deadline plan after the stock gate. Candidate budgets are 15 minutes for stage 5,
-60 minutes for stage 500, and 6 hours for stage 4,000, followed by a two-hour evidence
-reserve and 45-minute portal reserve. The 4,000-stage training subprocess itself may
-run for at most 5.5 hours, matching the public 5.3-hour linear runtime evidence while
-leaving evaluation/upload margin. A preregistered 250-iteration candidate adds a
-meaningful late fallback with a 30-minute stage budget and 25-minute training timeout.
-That makes 13:29 PT the mathematical latest post-baseline time for the full ladder,
-19:29 PT through 500, 20:29 PT through 250, and 20:59 PT for stage 5 alone. Cold start
-and baseline work occur first, so actual launch must precede those times. The planner
-also enforces the remaining portion of the ten-hour worker cap after that pre-gate
-work. A later timeout is recorded and only fully completed candidates may
-be selected; partial weights are never renamed as a completed stage.
+30 minutes for stage 250, 60 minutes for stage 500, and 6 hours for stage 4,000,
+followed by a two-hour evidence reserve and 45-minute portal reserve. The 4,000-stage
+training subprocess itself may run for at most 5.5 hours, matching the public 5.3-hour
+linear runtime evidence while leaving evaluation/upload margin.
+
+The initial ordered-prefix planner could leave enough time for stage 4,000 unused when
+the sum of every intermediate candidate no longer fit. On August 16 it was replaced by
+the auditable `smoke_then_largest_feasible_v1` policy: keep stage 5, greedily prioritize
+the largest remaining candidate, fill spare time with the strongest smaller fallback,
+then execute the chosen stages in increasing order. The full ladder remains available
+through 13:29 PT post-baseline; quality-first 4,000-step routes remain available through
+14:59 PT, followed by 5/250/500 through 19:29, 5/500 through 19:59, 5/250 through 20:29,
+and stage 5 through 20:59. Cold start and baseline work occur first, so actual launch
+must precede those times. The planner also enforces the remaining portion of the
+ten-hour worker cap after that pre-gate work. A later timeout is recorded and only
+fully completed candidates may be selected; partial weights are never renamed as a
+completed stage.
 
 This fallback changes compute breadth, not the frozen novelty/improvement/retention
 thresholds or the untouched final-test rule. `ladder-plan.json` and

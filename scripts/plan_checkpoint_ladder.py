@@ -8,6 +8,8 @@ import json
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
+SCHEDULE_POLICY = "smoke_then_largest_feasible_v1"
+
 
 def parse_utc(value: str) -> datetime:
     normalized = value.strip().replace("Z", "+00:00")
@@ -46,6 +48,23 @@ def parse_budgets(value: str, ladder: tuple[int, ...]) -> dict[int, int]:
     return budgets
 
 
+def choose_schedule(
+    ladder: tuple[int, ...], budgets: dict[int, int], available_seconds: int
+) -> list[int]:
+    """Keep the smoke stage, then spend the remaining budget on strongest candidates."""
+    smoke_iteration = ladder[0]
+    if budgets[smoke_iteration] > available_seconds:
+        return []
+
+    selected = {smoke_iteration}
+    remaining = available_seconds - budgets[smoke_iteration]
+    for iteration in reversed(ladder[1:]):
+        if budgets[iteration] <= remaining:
+            selected.add(iteration)
+            remaining -= budgets[iteration]
+    return [iteration for iteration in ladder if iteration in selected]
+
+
 def build_plan(
     *,
     ladder: tuple[int, ...],
@@ -82,17 +101,12 @@ def build_plan(
     candidate_budget_available = min(
         submission_candidate_budget_available, runtime_candidate_budget_available
     )
-    scheduled: list[int] = []
-    scheduled_budget = 0
-    for iteration in ladder:
-        next_budget = budgets[iteration]
-        if scheduled_budget + next_budget > candidate_budget_available:
-            break
-        scheduled.append(iteration)
-        scheduled_budget += next_budget
-    omitted = list(ladder[len(scheduled) :])
+    scheduled = choose_schedule(ladder, budgets, candidate_budget_available)
+    scheduled_budget = sum(budgets[iteration] for iteration in scheduled)
+    omitted = [iteration for iteration in ladder if iteration not in scheduled]
     return {
-        "format": "shadow_dance_ladder_plan_v1",
+        "format": "shadow_dance_ladder_plan_v2",
+        "schedule_policy": SCHEDULE_POLICY,
         "planned_candidate_iterations": list(ladder),
         "scheduled_candidate_iterations": scheduled,
         "omitted_candidate_iterations": omitted,

@@ -58,10 +58,12 @@ status here must remain truthful.
   and configuration used by the dataset are compatible with the SONIC commit embedded
   in the pinned cloud image; the only motion-loader delta is post-load memory cleanup.
 - [x] Expanded the frozen ladder from debug-only budgets to independent
-  5/250/500/4,000 iteration candidates. The 250-stage fallback preserves a meaningful
-  late-deadline option while the 10-hour worker cap remains intact.
-- [x] Passed 14/14 local tests against the pinned NVIDIA converter/MJCF plus Ruff, Bash,
-  YAML, dataset-inventory, publication dry-run, and read-only cloud-plan checks.
+  5/250/500/4,000 iteration candidates. Its quality-first scheduler keeps the smoke,
+  targets the largest candidate that fits, and fills spare time with the strongest
+  smaller fallback while preserving the 10-hour worker cap.
+- [x] Passed 23 local tests with 3 licensed-runtime skips, plus Ruff, Bash, YAML,
+  dataset-inventory, publication dry-run, and read-only cloud-plan checks. The skipped
+  probes require the still-gated Isaac runtime and are not represented as passes.
 - [x] Added a deterministic target/before/after video builder and a publication gate
   that hashes every uncut source clip, the frozen comparison, and edited output.
 - [x] Installed and verified official Nebius CLI `0.12.254` for Linux/amd64; no profile,
@@ -84,9 +86,9 @@ status here must remain truthful.
 - [x] Finished the diff/security review, pushed the frozen implementation, and updated
   [upstream PR #1](https://github.com/Durp06/shadow-dance/pull/1).
 - [x] Added and locally verified a deadline-aware ladder plan. It preserves the full
-  5/250/500/4,000 protocol when time permits, freezes the largest honest prefix otherwise,
-  reserves two hours for final evidence plus 45 minutes for portal submission, and
-  records any deadline or runtime truncation in hash-bound release evidence.
+  5/250/500/4,000 protocol when time permits, switches to a quality-first subset when
+  necessary, reserves two hours for final evidence plus 45 minutes for portal
+  submission, and records every deadline or runtime omission in hash-bound evidence.
 - [x] Rechecked the official rules and public competitive field on deadline day. The
   strongest visible entries now have real ONNX/video evidence; Shadow Dance's remaining
   differentiator is its independent validation/test design, fundamentals-retention
@@ -129,9 +131,11 @@ status here must remain truthful.
    baseline once NVIDIA acceptance and Nebius authentication are present.
 3. Go/no-go novelty decision; adjust the target if stock already succeeds.
 4. Run the deadline-planned checkpoint ladder with validation and retention at each
-   gate. The full-ladder post-baseline cutoff is 13:29 PT; the truthful prefixes then
-   fall to 5/250/500 until 19:29, 5/250 until 20:29, and smoke-only until 20:59. The
-   planner refuses any run that cannot preserve finalization and portal reserves.
+   gate. The post-baseline scheduler can still target 4,000 steps through 14:59 PT by
+   omitting lower-value intermediate candidates as time shrinks; later routes are
+   5/250/500 through 19:29, 5/500 through 19:59, 5/250 through 20:29, and smoke-only
+   through 20:59. The planner refuses any route that cannot preserve finalization and
+   portal reserves.
 5. Freeze the winner, open the untouched test split, export, validate, render, hash,
    and publish the selected checkpoint.
 6. Replace every bracketed submission value from raw evidence, verify public links,

@@ -314,11 +314,11 @@ npa workbench workflow submit \
 
 On-demand RTX PRO 6000 Kubernetes is the only active first-party NPA SONIC route and
 has the RT capability needed for rendering. The frozen run uses 64 environments for
-the 5-iteration smoke and 512 for the 500/4,000 candidates. This is calibrated against a public
-challenge-targeted run that reported 2,000 iterations in 9,544.61 seconds at 512
-environments, then needed further curriculum work before claiming full completion. A
-longer ladder requires a separately versioned protocol decision; the current job never
-enables it implicitly. A rolling `last.pt` is atomically refreshed
+the 5-iteration smoke and 512 for the 250/500/4,000 candidates. This is calibrated
+against a public challenge-targeted run that reported 2,000 iterations in 9,544.61
+seconds at 512 environments, then needed further curriculum work before claiming full
+completion. A longer ladder requires a separately versioned protocol decision; the
+current job never enables it implicitly. A rolling `last.pt` is atomically refreshed
 every five iterations, while regular numbered checkpoints are suppressed to avoid
 uploading tens of gigabytes of redundant optimizer state. The Kubernetes controller
 shares the provisioned cluster; the public GHCR image does not need a registry secret.
@@ -327,7 +327,9 @@ shares the provisioned cluster; the public GHCR image does not need a registry s
 
 The immutable challenge deadline is `2026-08-17T06:59:00Z` (August 16, 11:59 PM PT).
 The job now freezes `ladder-plan.json` after the stock novelty gate and schedules the
-largest ordered prefix of 5/250/500/4,000 that fits these conservative budgets:
+five-step smoke plus the largest remaining candidates that fit these conservative
+budgets. It fills spare time with the strongest smaller fallback and emits the selected
+stages in increasing order:
 
 | Candidate | Stage budget | Training timeout |
 |---:|---:|---:|
@@ -338,10 +340,22 @@ largest ordered prefix of 5/250/500/4,000 that fits these conservative budgets:
 
 It separately preserves two hours for repeated final-test evaluation, rendering, ONNX
 export, validation, and upload, plus 45 minutes for logged-out URL checks and the portal.
-The resulting latest **post-baseline** decision times are 13:29 PT for the complete
-ladder, 19:29 PT through 500, 20:29 PT through the meaningful 250-step fallback, and
-20:59 PT for the smoke candidate only. Launch earlier than those times because
-base-model download, Isaac cold start, and the stock gate occur before the decision.
+The resulting quality-first routes and latest **post-baseline** decision times are:
+
+| Latest decision (PT) | Scheduled route |
+|---:|:---|
+| 13:29 | 5 / 250 / 500 / 4,000 |
+| 13:59 | 5 / 500 / 4,000 |
+| 14:29 | 5 / 250 / 4,000 |
+| 14:59 | 5 / 4,000 |
+| 19:29 | 5 / 250 / 500 |
+| 19:59 | 5 / 500 |
+| 20:29 | 5 / 250 |
+| 20:59 | 5 only |
+
+Each row applies after the preceding route no longer fits. Launch earlier than those
+times because base-model download, Isaac cold start, and the stock gate occur before
+the decision.
 The planner also subtracts time already spent before the stock gate from the ten-hour
 worker cap, so a slow cold start can shorten the ladder even when the absolute deadline
 alone would allow it. The outer wrapper refuses to run after the 45-minute portal

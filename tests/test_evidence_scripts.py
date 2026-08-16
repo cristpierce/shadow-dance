@@ -602,7 +602,8 @@ def test_model_publisher_dry_run_requires_valid_release(tmp_path: Path) -> None:
         encoding="utf-8",
     )
     ladder_plan = {
-        "format": "shadow_dance_ladder_plan_v1",
+        "format": "shadow_dance_ladder_plan_v2",
+        "schedule_policy": "smoke_then_largest_feasible_v1",
         "planned_candidate_iterations": [5, 250, 500, 4000],
         "scheduled_candidate_iterations": [5, 250, 500, 4000],
         "omitted_candidate_iterations": [],
@@ -640,7 +641,7 @@ def test_model_publisher_dry_run_requires_valid_release(tmp_path: Path) -> None:
     ladder_outcome_path.write_text(
         json.dumps(
             {
-                "format": "shadow_dance_ladder_outcome_v1",
+                "format": "shadow_dance_ladder_outcome_v2",
                 "plan": {
                     "path": "ladder-plan.json",
                     "sha256": hashlib.sha256(ladder_plan_path.read_bytes()).hexdigest(),

@@ -28,6 +28,9 @@ DEADLINE = datetime(2026, 8, 17, 6, 59, tzinfo=UTC)
     ("now", "expected"),
     [
         (datetime(2026, 8, 16, 20, 20, tzinfo=UTC), [5, 250, 500, 4000]),
+        (datetime(2026, 8, 16, 20, 50, tzinfo=UTC), [5, 500, 4000]),
+        (datetime(2026, 8, 16, 21, 0, tzinfo=UTC), [5, 250, 4000]),
+        (datetime(2026, 8, 16, 21, 30, tzinfo=UTC), [5, 4000]),
         (datetime(2026, 8, 17, 2, 0, tzinfo=UTC), [5, 250, 500]),
         (datetime(2026, 8, 17, 3, 20, tzinfo=UTC), [5, 250]),
         (datetime(2026, 8, 17, 3, 50, tzinfo=UTC), [5]),
@@ -49,7 +52,9 @@ def test_ladder_plan_preserves_evidence_and_portal_reserves(
         portal_reserve_seconds=2700,
     )
     assert plan["scheduled_candidate_iterations"] == expected
-    assert plan["omitted_candidate_iterations"] == list(LADDER[len(expected) :])
+    assert plan["omitted_candidate_iterations"] == [
+        iteration for iteration in LADDER if iteration not in expected
+    ]
     assert plan["launchable"] is bool(expected)
 
 
@@ -108,25 +113,25 @@ def test_ladder_outcome_binds_a_completed_prefix(tmp_path: Path) -> None:
         )
 
 
-def test_publisher_accepts_a_truthfully_deadline_truncated_ladder(tmp_path: Path) -> None:
+def test_publisher_accepts_a_quality_first_deadline_route(tmp_path: Path) -> None:
     plan = build_plan(
         ladder=LADDER,
         budgets=BUDGETS,
         training_timeouts=TRAINING_TIMEOUTS,
-        now=datetime(2026, 8, 17, 2, 0, tzinfo=UTC),
-        run_started=datetime(2026, 8, 17, 2, 0, tzinfo=UTC),
+        now=datetime(2026, 8, 16, 21, 0, tzinfo=UTC),
+        run_started=datetime(2026, 8, 16, 21, 0, tzinfo=UTC),
         max_walltime_seconds=36000,
         deadline=DEADLINE,
         finalization_reserve_seconds=7200,
         portal_reserve_seconds=2700,
     )
-    assert plan["scheduled_candidate_iterations"] == [5, 250, 500]
+    assert plan["scheduled_candidate_iterations"] == [5, 250, 4000]
     plan_path = tmp_path / "ladder-plan.json"
     plan_path.write_text(json.dumps(plan), encoding="utf-8")
     outcome = build_outcome(
         plan,
         plan_path=plan_path,
-        completed=[5, 250, 500],
+        completed=[5, 250, 4000],
         timed_out=None,
         completed_utc=datetime(2026, 8, 17, 3, 30, tzinfo=UTC),
     )
@@ -135,13 +140,13 @@ def test_publisher_accepts_a_truthfully_deadline_truncated_ladder(tmp_path: Path
         "candidates": [
             {"label": "stage-5"},
             {"label": "stage-250"},
-            {"label": "stage-500"},
+            {"label": "stage-4000"},
         ]
     }
     assert validate_ladder_evidence(tmp_path, selection) == {
         "stage-5",
         "stage-250",
-        "stage-500",
+        "stage-4000",
     }
 
 
@@ -159,4 +164,4 @@ def test_ladder_plan_accounts_for_time_spent_before_the_stock_gate() -> None:
     )
     assert plan["submission_candidate_budget_available_seconds"] > 27900
     assert plan["runtime_candidate_budget_available_seconds"] == 25200
-    assert plan["scheduled_candidate_iterations"] == [5, 250, 500]
+    assert plan["scheduled_candidate_iterations"] == [5, 250, 4000]

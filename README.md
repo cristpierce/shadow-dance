@@ -155,11 +155,13 @@ python scripts/verify_artifacts.py /workspace/outputs/.../exported
 ```
 
 The checkpoint ladder is bounded by the 10-hour cloud wall-time guard and the absolute
-submission deadline. It freezes the largest ordered prefix that still leaves two hours
-for final evidence and 45 minutes for portal submission, records any omitted/timed-out
-stage, and stops if no completed candidate clears the preregistered novelty,
-improvement, and retention gates. It is not an instruction to burn the full credit
-allocation. Exact parameters and the selection rule are in
+submission deadline. When any candidate fits, the scheduler keeps the five-step smoke,
+then prioritizes the largest remaining candidate that fits and uses spare time for the
+strongest smaller fallback. This preserves two hours for final evidence and 45 minutes
+for portal submission without wasting a late 4,000-step window on only short stages.
+It records every omitted/timed-out stage and stops if no completed candidate clears the
+preregistered novelty, improvement, and retention gates. It is not an instruction to
+burn the full credit allocation. Exact parameters and the selection rule are in
 [configs/shadow_dip_finetune.yaml](configs/shadow_dip_finetune.yaml).
 
 ## Result contract

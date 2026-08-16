@@ -22,6 +22,7 @@ EXPECTED_CANDIDATE_LABELS = {"stage-5", "stage-250", "stage-500", "stage-4000"}
 EXPECTED_CANDIDATE_ITERATIONS = (5, 250, 500, 4000)
 EXPECTED_STAGE_BUDGETS = {"5": 900, "250": 1800, "500": 3600, "4000": 21600}
 EXPECTED_TRAINING_TIMEOUTS = {"5": 600, "250": 1500, "500": 3000, "4000": 19800}
+EXPECTED_SCHEDULE_POLICY = "smoke_then_largest_feasible_v1"
 EXPECTED_SUBMISSION_DEADLINE_UTC = "2026-08-17T06:59:00Z"
 EXPECTED_FINALIZATION_RESERVE_SECONDS = 7200
 EXPECTED_PORTAL_RESERVE_SECONDS = 2700
@@ -173,9 +174,9 @@ def validate_ladder_evidence(run_root: Path, selection: dict[str, Any]) -> set[s
     outcome_path = run_root / "ladder-outcome.json"
     plan = read_json(plan_path)
     outcome = read_json(outcome_path)
-    if plan.get("format") != "shadow_dance_ladder_plan_v1":
+    if plan.get("format") != "shadow_dance_ladder_plan_v2":
         raise ValueError("unsupported or missing ladder plan")
-    if outcome.get("format") != "shadow_dance_ladder_outcome_v1":
+    if outcome.get("format") != "shadow_dance_ladder_outcome_v2":
         raise ValueError("unsupported or missing ladder outcome")
     planned = tuple(int(value) for value in plan.get("planned_candidate_iterations", []))
     if planned != EXPECTED_CANDIDATE_ITERATIONS:
@@ -217,18 +218,29 @@ def validate_ladder_evidence(run_root: Path, selection: dict[str, Any]) -> set[s
     )
     available = min(submission_available, runtime_available)
     expected_scheduled: list[int] = []
-    scheduled_budget = 0
-    for iteration in planned:
-        next_budget = EXPECTED_STAGE_BUDGETS[str(iteration)]
-        if scheduled_budget + next_budget > available:
-            break
-        expected_scheduled.append(iteration)
-        scheduled_budget += next_budget
+    if EXPECTED_STAGE_BUDGETS[str(planned[0])] <= available:
+        selected = {planned[0]}
+        remaining = available - EXPECTED_STAGE_BUDGETS[str(planned[0])]
+        for iteration in reversed(planned[1:]):
+            next_budget = EXPECTED_STAGE_BUDGETS[str(iteration)]
+            if next_budget <= remaining:
+                selected.add(iteration)
+                remaining -= next_budget
+        expected_scheduled = [
+            iteration for iteration in planned if iteration in selected
+        ]
+    scheduled_budget = sum(
+        EXPECTED_STAGE_BUDGETS[str(iteration)] for iteration in expected_scheduled
+    )
+    expected_omitted = [
+        iteration for iteration in planned if iteration not in expected_scheduled
+    ]
     scheduled = [int(value) for value in plan.get("scheduled_candidate_iterations", [])]
     omitted = [int(value) for value in plan.get("omitted_candidate_iterations", [])]
     if (
         scheduled != expected_scheduled
-        or omitted != list(planned[len(scheduled) :])
+        or omitted != expected_omitted
+        or plan.get("schedule_policy") != EXPECTED_SCHEDULE_POLICY
         or plan.get("seconds_until_deadline") != seconds_until_deadline
         or plan.get("runtime_seconds_remaining") != runtime_seconds_remaining
         or plan.get("submission_candidate_budget_available_seconds")

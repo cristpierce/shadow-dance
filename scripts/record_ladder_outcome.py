@@ -35,7 +35,7 @@ def build_outcome(
     timed_out: int | None,
     completed_utc: datetime,
 ) -> dict[str, object]:
-    if plan.get("format") != "shadow_dance_ladder_plan_v1":
+    if plan.get("format") != "shadow_dance_ladder_plan_v2":
         raise ValueError("unsupported ladder plan")
     scheduled = [int(value) for value in plan.get("scheduled_candidate_iterations", [])]
     if not scheduled:
@@ -51,7 +51,7 @@ def build_outcome(
         raise ValueError("an incomplete schedule must identify the timed-out candidate")
     runtime_omitted = scheduled[len(completed) :]
     return {
-        "format": "shadow_dance_ladder_outcome_v1",
+        "format": "shadow_dance_ladder_outcome_v2",
         "plan": {
             "path": plan_path.name,
             "sha256": sha256(plan_path),

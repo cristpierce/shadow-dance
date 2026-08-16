@@ -145,7 +145,11 @@ status here must remain truthful.
   current pinned CLI itself is installed. The portal's claim button opens the Builder
   Program; its terms grant an initial $25 AI Cloud code after email verification and a
   second $25 only about 30 days later. The initial code/balance has not been confirmed,
-  so the advertised `$50` cannot yet be budgeted for the deadline run.
+  so the advertised `$50` cannot yet be budgeted for the deadline run. Standard promo
+  redemption also requires a user-owned $25 card activation; no payment is authorized
+  by the general project approval. Nebius publishes a default `us-central1` regular
+  RTX PRO 6000 quota of zero, and Managed Kubernetes nodes use the same Compute quota;
+  the entrant must verify an actual quota of at least one or request/escalate it now.
 - [ ] Hugging Face account/handle confirmation, write-capable authentication, and
   creation of public dataset/model repositories.
 - [ ] Organizer WBT-Bench package or Discord release link. The official page still

@@ -8,6 +8,12 @@
 - [ ] Initial $25 **AI Cloud** promotional code is email-verified, redeemed, and visible
   in the Nebius console (claim/application alone is not availability; Builder Program
   terms schedule the second $25 about 30 days later, outside the usable deadline window).
+- [ ] Entrant explicitly chooses the standard $25 card activation, or the organizer
+  supplies a fee-free Trial 03 redemption. Do not infer payment authorization from
+  general project approval.
+- [ ] In **Administration -> Limits -> Quotas -> Compute**, actual `us-central1`
+  regular RTX PRO 6000 quota is at least **1**. The public default is zero and Managed
+  Kubernetes uses the same quota; request/escalate quota 1 immediately if unchanged.
 - [ ] Project name saved.
 - [ ] Final writeup saved with no brackets.
 - [ ] Canonical GitHub link points to merged current commit.

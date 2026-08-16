@@ -1070,9 +1070,33 @@ Cloud credit after successful registration and double-opt-in verification, and s
 C.2 grants a second $25 approximately 30 days later. The page title's `$50` therefore
 does not mean $50 is immediately available. For this deadline, plan against only the
 first $25, verify the email-delivered code and console balance, and escalate to the
-Discord help desk if it is missing after verification. This is likely sufficient for
-the approximately $18 GPU component, but CPU/storage/networking must stay within the
-remaining margin and the ten-hour auto-stop remains mandatory.
+Discord help desk if it is missing after verification. Nebius's current promo-code and
+signup documentation adds a second constraint: payment details must be configured to
+apply a code, and adding a card triggers a $25 initial charge that is added to the
+account balance. That payment cannot be inferred from general project approval. If the
+entrant explicitly chooses it, the paid $25 plus first $25 promo should cover the
+approximately $18 GPU component and ancillary costs; otherwise the organizer must
+confirm a fee-free challenge redemption. The ten-hour auto-stop remains mandatory.
+
+Credit is not the only deadline gate. Nebius's August 16
+[Compute quota table](https://docs.nebius.com/compute/resources/quotas-limits) sets the
+default `us-central1` quota for regular RTX PRO 6000 GPUs without reservations to zero.
+Its [Managed Kubernetes quota documentation](https://docs.nebius.com/kubernetes/resources/quotas-limits)
+states that Kubernetes nodes use the same Compute VM quotas. The entrant's actual
+challenge project might have an override, but it has not been authenticated or inspected.
+An admin must verify at least one RTX PRO GPU or request quota one immediately; a posted
+credit balance by itself cannot launch the supported cluster. Preemptible VMs have a
+published default count quota of eight and NPA supports that pool, making it the only
+documented deadline fallback if the regular quota request is not approved, at the cost
+of arbitrary reclamation during training. The count quota does not guarantee current
+RTX capacity, so even that route must pass a live capacity/preflight check.
+
+The current NPA cluster defaults add a 1x `cpu-d3` 8-vCPU/32-GiB node and 1,151 GiB of
+Network SSD boot disks to the single GPU node. Applying Nebius's published rates to ten
+hours gives about $21.10 in listed components: $18 GPU, $1.98 CPU node, and $1.12 disks,
+before object storage, egress, taxes, or setup time beyond the task guard. The first $25
+AI Cloud grant is therefore plausible but tight; the console estimate remains the final
+spend gate.
 
 ### Visible competitive evidence
 

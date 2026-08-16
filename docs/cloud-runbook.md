@@ -42,24 +42,50 @@ cannot drift across machines.
    of AI Cloud credit approximately 30 days later. Only the first $25 can be assumed to
    arrive inside this challenge window. Check the entrant's inbox/spam for the required
    double-opt-in and promotional-code email, redeem it, then verify the AI Cloud balance
-   in the console. If the initial code is absent after verification, send this in the
-   challenge Discord help desk:
+   in the console. Nebius's current promo-code instructions also say that billing details
+   must be configured first and that adding a card charges $25, which is then added to
+   the account balance. This is an entrant-owned financial and legal action; broad
+   project approval does not authorize the operator to enter payment details or trigger
+   the charge. If the entrant does not explicitly choose that $25 activation, ask the
+   organizer whether Trial 03 has a fee-free redemption path. If the initial code is
+   absent after verification, send this in the challenge Discord help desk:
 
    > Team SELTZER's **Claim $50 Nebius compute** button currently opens
    > `dev.nebius.com/builders`. We completed registration and email verification, but
    > the initial $25 AI Cloud promotional code described in Builder Program terms C.1
    > has not arrived or appeared in our console. We need it for the supported RTX PRO
    > 6000 Managed Kubernetes SONIC workload. Could you confirm or resend the code and
-   > the Trial 03 redemption path?
+   > the Trial 03 redemption path? The public promo-code instructions also require a $25
+   > card activation; please confirm whether challenge credit can be redeemed without
+   > that personal charge. The public Compute quota table also defaults `us-central1`
+   > regular RTX PRO 6000 quota to zero; please grant or expedite quota **1** for our
+   > project, or confirm that we should use the preemptible pool.
 
-   Do not treat the outbound link or submitted form as a credit receipt. The first $25
-   should cover the approximately $18 ten-hour GPU component only if CPU, storage, and
-   networking stay inside the remaining margin, so watch the balance and preserve the
-   existing ten-hour auto-stop. Once AI Cloud access is visible, in WSL run
+   Do not treat the outbound link or submitted form as a credit receipt. If the entrant
+   chooses the standard card activation, the paid $25 balance plus the first $25 promo
+   provides margin above the approximately $18 ten-hour GPU component; CPU, storage,
+   and networking still require monitoring and the existing ten-hour auto-stop. Once AI
+   Cloud access is visible, in WSL run
    `cd /home/crist/npa-shadow-operator && .venv/bin/npa configure`, select a
-   `us-central1` project, and confirm RTX PRO 6000 Managed Kubernetes quota. The
-   supported cluster provisioning command is in section 1; dry-run it before creating
-   the GPU node.
+   `us-central1` project, and open **Administration -> Limits -> Quotas -> Compute**.
+   Nebius's current
+   [Compute quota table](https://docs.nebius.com/compute/resources/quotas-limits)
+   gives new `us-central1` projects a default quota of **zero** RTX PRO 6000 GPUs for
+   regular VMs without reservations. Its
+   [Managed Kubernetes quota page](https://docs.nebius.com/kubernetes/resources/quotas-limits)
+   confirms that Kubernetes nodes consume those same Compute quotas. Verify the actual
+   project has at least one regular RTX PRO 6000 GPU, one GPU VM, one CPU VM, and 1,151
+   GiB of Network SSD capacity. If RTX quota is zero, an admin must immediately request
+   **1** through the row's **Change quota** action and copy the request into the challenge
+   support escalation. Credit does not bypass quota. The supported cluster provisioning
+   command is in section 1; dry-run it before creating the GPU node.
+
+   If the organizer cannot grant regular quota in time, the same NPA command supports
+   `--preemptible` and Nebius currently publishes a default preemptible-VM quota of eight.
+   That count does not guarantee RTX capacity. Treat it as an availability fallback
+   only: the platform may reclaim the GPU at any time, so keep every completed checkpoint
+   in S3 and never describe an interrupted candidate as complete. Prefer the documented
+   on-demand route whenever quota exists.
 
 3. **Complete Hugging Face login locally.** Never paste a token into chat, Git, YAML, or
    a shell command argument. Run `.venv\Scripts\hf.exe auth login` interactively in the
@@ -468,10 +494,14 @@ npa workbench workflow gpus --context "$KUBE_CONTEXT" --json
 
 On August 16, Nebius's current
 [component pricing](https://docs.nebius.com/compute/resources/pricing) lists the
-`us-central1` RTX PRO 6000 at **$1.80 per GPU-hour on demand**. The task's ten-hour GPU
-guard therefore caps that component near **$18**, before the small CPU node, disk, and
-object-storage charges. Confirm the actual billing estimate and posted credit before
-provisioning, and delete the cluster after all jobs are terminal. The timeout sends
+`us-central1` RTX PRO 6000 at **$1.80 per GPU-hour on demand**, CPU-d3 at $0.012 per
+vCPU-hour plus $0.0032 per GiB-hour, and Network SSD at $0.071 per GiB per 730 hours.
+For the NPA default one-GPU/one-CPU cluster and its 1,151 GiB of boot disks, ten hours of
+the published components are approximately **$21.10** ($18 GPU + $1.98 CPU node + $1.12
+disks), excluding object storage, egress, taxes, and setup time outside the workload
+guard. This leaves little margin inside the first $25 promotional grant. Confirm the
+console estimate and posted balance before provisioning, and delete the cluster after
+all jobs are terminal. The timeout sends
 `TERM`, allows 15 minutes for hash-skipping recovery sync, and exits `124` if still
 running.
 

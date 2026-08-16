@@ -138,10 +138,19 @@ source clip, the final comparison, and the edited output.
 ## 6. Compute and failure policy
 
 Nebius lists RTX PRO 6000 at $1.80 per GPU-hour on demand. The 10-hour GPU ceiling is
-therefore $18 before the cluster's small CPU-node, disk, and object-storage charges,
-leaving room inside a posted $50 challenge credit for the intended run. On-demand is
-preferred near the deadline because interruption would cost more evidence time than
-the preemptible discount saves.
+therefore $18. Including the NPA default CPU node and 1,151 GiB of boot disks brings the
+published-component estimate to approximately $21.10 before object storage, egress,
+taxes, or setup time outside the guard. Builder Program terms issue only the first $25
+AI Cloud code after verification and schedule the second $25 approximately 30 days
+later; standard promo redemption also requires the entrant to make a $25 card payment.
+No balance or payment authorization is assumed. The console estimate and visible
+balance remain mandatory spend gates.
+
+The public default `us-central1` regular RTX PRO 6000 quota is zero, and Managed
+Kubernetes nodes use that same Compute quota. The entrant must verify or request quota
+one before launch. On-demand is preferred near the deadline because interruption would
+cost more evidence time than the preemptible discount saves; NPA's preemptible pool is
+only a reclaim-prone fallback if regular quota cannot be granted in time.
 
 The workflow uploads checkpoints, configs, logs, summaries, and evidence incrementally
 to a run-scoped S3 prefix. On failure it uploads the recoverable state before exit. A

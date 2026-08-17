@@ -1,6 +1,6 @@
 # SuperSONIC submission progress
 
-**Last updated:** 2026-08-16 17:31 PT
+**Last updated:** 2026-08-16 17:49 PT
 **Branch:** `feature/supersonic-submission`
 **Deadline:** 2026-08-16 23:59 PT
 
@@ -176,6 +176,27 @@ status here must remain truthful.
   `f07c37e3...24be07f` (29 layers; 8,408,106,479 compressed bytes). A fail-closed ignored
   wrapper and derived Dockerfile are Bash-parse clean, do not bake acceptance, and reuse
   the already verified source/assets/checkpoint. No image layer was pulled or run.
+- [x] Hardened that contingency without invoking licensed code: pinned the undeclared
+  SMPLSim metric dependency to its exact public commit; changed the preflight from a
+  shallow Python import to a real headless Kit launch/close with Vulkan/GPU checks;
+  reused shader caches between probe and run; and added the file-limit and HDF5 settings
+  independently reported by successful entrants. The fail-closed wrapper still exits 78
+  before any pull when acceptance is absent.
+- [x] Added an opt-in `SAVE_LAST_FREQUENCY=stage` deadline mode. The local fallback now
+  writes one final atomic checkpoint per candidate instead of repeatedly serializing a
+  checkpoint-sized optimizer state every five iterations. Earlier completed candidates
+  remain the recovery boundary. The default managed-cloud contract remains unchanged.
+- [x] Completed a fresh late-entrant audit. Capoeira V8 sets the strongest public
+  execution threshold found (112/112 Isaac screening rollouts, 10/10 full MuJoCo
+  motions, 3/10 strict final stabilizations), while its public Hugging Face model shows
+  only two of the five upstream SONIC graphs. The Shadow Partner Dip advantage remains
+  held-out selection, untouched repeated final tests, fundamentals retention, exact
+  hashes, and the full five-graph contract—but only if a real policy run is unlocked.
+- [x] Repaired the interactive Nebius launcher and drove it through the local-profile,
+  endpoint, and federation prompts to the genuine browser OAuth redirect. No compatible
+  controllable browser backend was available, so the waiting CLI processes were
+  terminated rather than abandoned. No profile, resource, credential, or charge was
+  created. Hugging Face login is subject to the same browser-auth gate.
 
 ## Ready after entrant handoff
 

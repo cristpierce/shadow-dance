@@ -1384,6 +1384,58 @@ outcome is no policy claim—not synthetic or estimated evidence.
   fails before its post-acceptance import probe; do continue to label the entire laptop
   route unsupported because the hardware is below NVIDIA's published minimums.
 
+### Late competitive threshold (August 16, 17:36 PT)
+
+- **New evidence:** [SONIC Capoeira V8](https://github.com/danniely/ultimate-bots-G1)
+  is now the strongest public execution benchmark found. Its repository reports
+  112/112 completed Isaac screening rollouts, 10/10 full-motion MuJoCo rollouts, 3/10
+  passing a stricter final-stabilization gate, and encoder/decoder ONNX parity within
+  `1.67e-6`. It also links public model, dataset, and before/after assets. The public
+  Hugging Face model inventory currently contains only encoder and decoder graphs,
+  however, rather than the five-file upstream SONIC export contract.
+- **Other visible thresholds:** G1 Taiji reports a 25-second completion and an 85%
+  global-MPJPE reduction, but evaluates the same single target used for training and
+  still reports local MPJPE 34.3 mm. Uzbek Greeting reports local MPJPE 19.51 mm and
+  locomotion mixing, but truthfully concedes that stock already succeeds 98.3% of the
+  time and that its stock run was not preserved. GhostTrial Scorpion has the strongest
+  polished narrative and source provenance, but its public model inventory does not
+  show the complete five-graph contract either.
+- **Implication:** another reference-only animation will not be competitive. Shadow
+  Partner Dip's defensible advantage is the combination of a measured stock novelty
+  gate, separate train/validation/final-test families, matched repeated seeds,
+  fundamentals retention, evidence hashes, and an exact five-graph export. Those
+  advantages become judgeable only after a genuine policy run; licence acceptance and
+  usable compute therefore remain higher priority than any additional synthetic media.
+
+### Runtime preflight hardening (August 16, 17:49 PT)
+
+- **Dependency finding:** the pinned challenge/NPA runtime `0a87181c` imports
+  `smpl_sim.smpllib.smpl_eval` when `ImEvalCallback` emits metrics but does not declare
+  SMPLSim in its training extra. NVIDIA's later `c374bae5` merge adds that dependency,
+  along with allocator/garbage-collection optimizations. To retain the already reviewed
+  release-runtime/checkpoint contract, the contingency remains on `0a87181c` and pins
+  the missing public SMPLSim source to
+  `b5c08720503ad5fff64050c4d289c42d947fcf8d` in the derived image.
+- **Preflight improvement:** the local probe now launches and closes a real headless
+  Isaac Lab application, imports SONIC and the exact metrics function, verifies CUDA,
+  and passes all NVIDIA graphics capabilities. Named shader/compute caches are reused by
+  the subsequent pipeline, so the probe exercises the driver/Vulkan boundary without
+  paying the cold shader cost twice. The full run also uses `nofile=65536` and disables
+  HDF5 file locking on the Windows bind mount.
+- **Deadline I/O improvement:** an opt-in `SAVE_LAST_FREQUENCY=stage` policy saves once
+  at each candidate's final iteration. This preserves the five-step smoke artifact but
+  avoids tens of checkpoint rewrites during 250/500-stage local candidates. Managed
+  cloud inputs retain their existing five-iteration recovery policy.
+- **Authentication result:** after correcting both the Windows Terminal argument
+  handling and the actual NPA command (`configure`, not `setup`), the flow reached the
+  Nebius federation OAuth redirect. The available browser-control runtime exposed no
+  browser backend, so the CLI was terminated cleanly rather than left waiting. No
+  Nebius profile/resource was created. This is now a confirmed browser-account gate,
+  not an NPA installation or PATH defect.
+- **Verification:** 34 local tests pass, 3 licensed simulator tests skip as designed,
+  Ruff passes, both modified shell scripts parse, and the pre-acceptance wrapper still
+  returns exit 78 before an image pull.
+
 ## Primary sources
 
 - [Ultimate Bots Trial 03 challenge page](https://www.ultimatebots.com/hackathon)

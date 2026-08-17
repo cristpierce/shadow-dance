@@ -435,6 +435,10 @@ atomically refreshed
 every five iterations, while regular numbered checkpoints are suppressed to avoid
 uploading tens of gigabytes of redundant optimizer state. The Kubernetes controller
 shares the provisioned cluster; the public GHCR image does not need a registry secret.
+The unsupported local contingency may instead set `SAVE_LAST_FREQUENCY=stage`, which
+writes only at each candidate's terminal iteration and relies on the prior completed
+candidate for recovery. That deadline I/O mode is opt-in and does not alter this frozen
+managed-cloud protocol.
 
 ### Deadline guard (August 16)
 

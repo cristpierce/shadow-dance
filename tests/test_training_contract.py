@@ -83,6 +83,8 @@ def test_frozen_training_contract_is_consistent() -> None:
     assert 'if [[ "${LOCAL_ONLY}" == "1" ]]' in pipeline
     assert 'echo "local_only=${LOCAL_ONLY}"' in pipeline
     assert 'sudo --non-interactive "${hydrate_args[@]}"' in pipeline
+    assert 'if [[ "${stage_save_last_frequency}" == "stage" ]]' in pipeline
+    assert 'SAVE_LAST_FREQUENCY="${stage_save_last_frequency}"' in pipeline
     workflow_text = (ROOT / "cloud" / "sky-shadow-dance.yaml").read_text(encoding="utf-8")
     assert "/opt/npa/venv/bin/python" in workflow_text
     assert 'test "${NPA_IMAGE_PYTHON:-}" = /opt/npa/venv/bin/python' in workflow_text

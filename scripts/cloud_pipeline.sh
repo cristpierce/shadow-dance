@@ -311,6 +311,15 @@ for iterations in "${ladder_values[@]}"; do
     echo "No training timeout was configured for ${iterations} iterations." >&2
     exit 2
   fi
+  stage_save_last_frequency="${SAVE_LAST_FREQUENCY}"
+  if [[ "${stage_save_last_frequency}" == "stage" ]]; then
+    # A deadline run can preserve earlier completed candidates instead of rewriting a
+    # roughly checkpoint-sized last.pt every few iterations. The smoke still saves at 5.
+    stage_save_last_frequency="${iterations}"
+  elif ! [[ "${stage_save_last_frequency}" =~ ^[1-9][0-9]*$ ]]; then
+    echo "SAVE_LAST_FREQUENCY must be a positive integer or 'stage'." >&2
+    exit 2
+  fi
   train_status=0
   timeout --signal=TERM --kill-after=15m "${training_timeout}s" env \
     SONIC_ROOT="${SONIC_ROOT}" SONIC_PYTHON="${SONIC_PYTHON}" \
@@ -318,7 +327,7 @@ for iterations in "${ladder_values[@]}"; do
     NUM_ENVS="${env_count}" ITERATIONS="${iterations}" RUN_NAME="${label}" \
     SEED="${TRAIN_SEED}" LEARNING_RATE="${LEARNING_RATE}" \
     REGULAR_SAVE_FREQUENCY="${REGULAR_SAVE_FREQUENCY}" \
-    SAVE_LAST_FREQUENCY="${SAVE_LAST_FREQUENCY}" \
+    SAVE_LAST_FREQUENCY="${stage_save_last_frequency}" \
     OUTPUT_ROOT="${train_root}" bash scripts/train.sh || train_status="$?"
   if [[ "${train_status}" -ne 0 ]]; then
     if [[ -d "${train_root}" ]]; then

@@ -1,6 +1,6 @@
 # --- Capture + intermediate motion data -------------------------------------
 # Raw video and the SMPL/retarget intermediates are large and regenerable.
-# The small frozen train/validation/test bundle is explicitly committed below.
+# The small frozen train/validation/preflight/test bundle is explicitly committed below.
 data/raw/
 data/video/
 data/smpl/
@@ -14,6 +14,10 @@ data/retarget/
 !data/generated/train/*.pkl
 !data/generated/heldout/*.pkl
 !data/generated/test/*.pkl
+!data/generated-v2/train/*.pkl
+!data/generated-v2/heldout/*.pkl
+!data/generated-v2/preflight/*.pkl
+!data/generated-v2/test/*.pkl
 
 # --- Training outputs --------------------------------------------------------
 checkpoints/
@@ -40,3 +44,4 @@ venv/
 .idea/
 .DS_Store
 Thumbs.db
+MUJOCO_LOG.TXT

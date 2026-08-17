@@ -52,7 +52,7 @@ def read_json(path: Path) -> dict[str, Any]:
 
 
 def load_expected_motion_ids() -> dict[str, tuple[str, ...]]:
-    manifest = read_json(PROJECT_ROOT / "data" / "manifests" / "shadow-dip-v1.json")
+    manifest = read_json(PROJECT_ROOT / "data" / "manifests" / "shadow-dance-v2.json")
     splits = manifest.get("splits")
     if not isinstance(splits, dict):
         raise ValueError("dataset manifest has no split inventory")
@@ -206,8 +206,7 @@ def validate_ladder_evidence(run_root: Path, selection: dict[str, Any]) -> set[s
         raise ValueError("ladder plan differs from the frozen training timeouts")
     if (
         plan.get("submission_deadline_utc") != EXPECTED_SUBMISSION_DEADLINE_UTC
-        or plan.get("finalization_reserve_seconds")
-        != EXPECTED_FINALIZATION_RESERVE_SECONDS
+        or plan.get("finalization_reserve_seconds") != EXPECTED_FINALIZATION_RESERVE_SECONDS
         or plan.get("portal_reserve_seconds") != EXPECTED_PORTAL_RESERVE_SECONDS
         or plan.get("max_walltime_seconds") != EXPECTED_MAX_WALLTIME_SECONDS
     ):
@@ -217,9 +216,7 @@ def validate_ladder_evidence(run_root: Path, selection: dict[str, Any]) -> set[s
     run_started = parse_utc(plan.get("run_started_utc"), label="run start")
     deadline = parse_utc(plan.get("submission_deadline_utc"), label="submission deadline")
     runtime_deadline = run_started + timedelta(seconds=EXPECTED_MAX_WALLTIME_SECONDS)
-    if plan.get("runtime_deadline_utc") != runtime_deadline.isoformat().replace(
-        "+00:00", "Z"
-    ):
+    if plan.get("runtime_deadline_utc") != runtime_deadline.isoformat().replace("+00:00", "Z"):
         raise ValueError("ladder plan has an invalid runtime deadline")
     if computed < run_started:
         raise ValueError("ladder computation predates the run")
@@ -231,9 +228,7 @@ def validate_ladder_evidence(run_root: Path, selection: dict[str, Any]) -> set[s
         - EXPECTED_PORTAL_RESERVE_SECONDS,
     )
     runtime_seconds_remaining = max(0, int((runtime_deadline - computed).total_seconds()))
-    runtime_available = max(
-        0, runtime_seconds_remaining - EXPECTED_FINALIZATION_RESERVE_SECONDS
-    )
+    runtime_available = max(0, runtime_seconds_remaining - EXPECTED_FINALIZATION_RESERVE_SECONDS)
     available = min(submission_available, runtime_available)
     expected_scheduled: list[int] = []
     if EXPECTED_STAGE_BUDGETS[str(planned[0])] <= available:
@@ -244,15 +239,11 @@ def validate_ladder_evidence(run_root: Path, selection: dict[str, Any]) -> set[s
             if next_budget <= remaining:
                 selected.add(iteration)
                 remaining -= next_budget
-        expected_scheduled = [
-            iteration for iteration in planned if iteration in selected
-        ]
+        expected_scheduled = [iteration for iteration in planned if iteration in selected]
     scheduled_budget = sum(
         EXPECTED_STAGE_BUDGETS[str(iteration)] for iteration in expected_scheduled
     )
-    expected_omitted = [
-        iteration for iteration in planned if iteration not in expected_scheduled
-    ]
+    expected_omitted = [iteration for iteration in planned if iteration not in expected_scheduled]
     scheduled = [int(value) for value in plan.get("scheduled_candidate_iterations", [])]
     omitted = [int(value) for value in plan.get("omitted_candidate_iterations", [])]
     if (
@@ -261,8 +252,7 @@ def validate_ladder_evidence(run_root: Path, selection: dict[str, Any]) -> set[s
         or plan.get("schedule_policy") != EXPECTED_SCHEDULE_POLICY
         or plan.get("seconds_until_deadline") != seconds_until_deadline
         or plan.get("runtime_seconds_remaining") != runtime_seconds_remaining
-        or plan.get("submission_candidate_budget_available_seconds")
-        != submission_available
+        or plan.get("submission_candidate_budget_available_seconds") != submission_available
         or plan.get("runtime_candidate_budget_available_seconds") != runtime_available
         or plan.get("candidate_budget_available_seconds") != available
         or plan.get("scheduled_candidate_budget_seconds") != scheduled_budget
@@ -280,9 +270,7 @@ def validate_ladder_evidence(run_root: Path, selection: dict[str, Any]) -> set[s
         or outcome_plan.get("sha256") != sha256(plan_path)
     ):
         raise ValueError("ladder outcome is not bound to its plan")
-    outcome_scheduled = [
-        int(value) for value in outcome.get("scheduled_candidate_iterations", [])
-    ]
+    outcome_scheduled = [int(value) for value in outcome.get("scheduled_candidate_iterations", [])]
     completed = [int(value) for value in outcome.get("completed_candidate_iterations", [])]
     runtime_omitted = [
         int(value) for value in outcome.get("runtime_omitted_candidate_iterations", [])
@@ -968,7 +956,7 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--run-root", type=Path, required=True)
     parser.add_argument("--repo-id", required=True)
-    parser.add_argument("--dataset-repo", default="cristpierce/shadow-dip-v1")
+    parser.add_argument("--dataset-repo", default="cristpierce/shadow-dance-v2")
     parser.add_argument("--private", action="store_true")
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--report", type=Path)

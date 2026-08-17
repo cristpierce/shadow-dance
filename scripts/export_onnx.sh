@@ -9,7 +9,7 @@ fi
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 SONIC_ROOT="${SONIC_ROOT:-${PROJECT_ROOT}/../GR00T-WholeBodyControl}"
 CHECKPOINT="$1"
-MOTION_DIR="${2:-${PROJECT_ROOT}/data/generated/heldout}"
+MOTION_DIR="${2:-${PROJECT_ROOT}/data/generated-v2/heldout}"
 SONIC_PYTHON="${SONIC_PYTHON:-python}"
 OUTPUT_DIR="${OUTPUT_DIR:-$(dirname -- "${CHECKPOINT}")}"
 

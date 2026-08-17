@@ -1,0 +1,8 @@
+shadow_dip_left_heldout_19
+shadow_dip_right_heldout_20
+shadow_dip_left_heldout_21
+shadow_dip_right_heldout_22
+shadow_gancho_left_heldout_01
+shadow_gancho_left_heldout_02
+shadow_gancho_right_heldout_01
+shadow_gancho_right_heldout_02

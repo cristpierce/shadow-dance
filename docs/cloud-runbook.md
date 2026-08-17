@@ -94,7 +94,7 @@ cannot drift across machines.
    and update the two public repositories (a download-only token is insufficient).
    Confirm the intended Hugging Face handle; no public `cristpierce` profile or repos
    were visible through the public API on August 14. If that namespace is created, the
-   dataset and final model defaults are `cristpierce/shadow-dip-v1` and
+   dataset and final model defaults are `cristpierce/shadow-dance-v2` and
    `cristpierce/shadow-dance-sonic`.
 
 4. **Have the teammate merge the canonical GitHub PR and confirm their registered
@@ -327,15 +327,15 @@ Run the dataset checks and publication from PowerShell in the project venv:
 Set-Location C:\Users\crist\dev\projects\shadow-dance
 .venv\Scripts\python.exe scripts\verify_dataset_bundle.py
 .venv\Scripts\python.exe scripts\publish_dataset.py `
-  --repo-id cristpierce/shadow-dip-v1 --dry-run
+  --repo-id cristpierce/shadow-dance-v2 --dry-run
 .venv\Scripts\hf.exe auth login
 .venv\Scripts\python.exe scripts\publish_dataset.py `
-  --repo-id cristpierce/shadow-dip-v1 `
+  --repo-id cristpierce/shadow-dance-v2 `
   --report .runtime\huggingface-dataset-publication.json
 ```
 
 Verify
-`https://huggingface.co/datasets/cristpierce/shadow-dip-v1` in a logged-out browser and
+`https://huggingface.co/datasets/cristpierce/shadow-dance-v2` in a logged-out browser and
 record its immutable commit URL. The publisher refuses missing PKLs or a failed QA
 report.
 
@@ -590,7 +590,7 @@ writes `huggingface-model-publication.json`. Otherwise, sync the run locally and
 python "$SHADOW_REPO/scripts/publish_model.py" \
   --run-root /path/to/downloaded/run \
   --repo-id cristpierce/shadow-dance-sonic \
-  --dataset-repo cristpierce/shadow-dip-v1 \
+  --dataset-repo cristpierce/shadow-dance-v2 \
   --dry-run
 # Remove --dry-run only after the validation summary is correct.
 ```

@@ -1,6 +1,6 @@
 # SuperSONIC submission progress
 
-**Last updated:** 2026-08-16 17:49 PT
+**Last updated:** 2026-08-16 19:11 PT
 **Branch:** `feature/supersonic-submission`
 **Deadline:** 2026-08-16 23:59 PT
 
@@ -43,7 +43,7 @@ status here must remain truthful.
 - [x] Implemented a fail-closed cloud pipeline with incremental S3 recovery, novelty
   and retention gates, validation-only checkpoint selection, untouched final testing,
   ONNX Runtime verification, release hashes, and optional Hugging Face publication.
-- [x] Added three-seed final evaluation: 12 untouched trials per policy with exact
+- [x] Added three-seed final evaluation: 24 untouched trials per policy with exact
   motion/seed inventories and source-summary hashes bound into the final comparison.
 - [x] Freshly regenerated all 30 motions in an isolated directory: the manifest and all
   60 CSV/PKL payloads are byte-identical; the QA report is identical after normalizing
@@ -197,6 +197,27 @@ status here must remain truthful.
   controllable browser backend was available, so the waiting CLI processes were
   terminated rather than abandoned. No profile, resource, credential, or charge was
   created. Hugging Face login is subject to the same browser-auth gate.
+- [x] Downloaded NVIDIA's public default deployment encoder and decoder anonymously at
+  revision `9c0ff22`; both pass ONNX checker and CPU Runtime inference. Their SHA-256
+  values are `013ab028...5362d3` and `c7241a12...18ed`, respectively.
+- [x] Built and calibrated an account-free MuJoCo deployment proxy against NVIDIA's
+  public C++ observation/action contract. It is explicitly not Isaac or WBT-Bench. The
+  original four dip validation motions averaged 28.958 mm local MPJPE and 42.709 mm
+  root error; stock remained upright on all four, proving the dip alone was too weak a
+  novelty story.
+- [x] Designed the stronger Shadow Gancho family: an asymmetric partner frame, planted
+  pivot, off-axis one-foot hold, 29.4–31.4 cm free-leg hook, and recovery. On its four
+  committed validation motions, the same stock proxy averaged 28.881 mm local MPJPE
+  but 114.498 mm root error (2.68× the dip), with one motion above the guide's 30 mm
+  local target. Official Isaac novelty remains unclaimed.
+- [x] Generated `shadow-dance-v2`: 34 training/rehearsal, eight validation, four
+  disclosed preflight-only legacy v1 tests, and eight fresh untouched final-test
+  motions. The manifest-bound validator passes 54/54 with zero warnings, and all 60
+  original v1 PKL/CSV payload hashes remain byte-identical. Manifest SHA-256 is
+  `20803a03...d21bb1`; validation SHA-256 is `a9199a29...cec5b4`.
+- [x] Updated the train/eval/render/export, managed-cloud, model-publication, and dataset
+  publication defaults to v2. Both v1 and v2 bundle verifiers pass; the v2 Hugging Face
+  dry-run packages 117 files, 54 PKLs, and 7,211,442 bytes without authentication.
 
 ## Ready after entrant handoff
 

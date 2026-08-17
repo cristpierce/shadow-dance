@@ -38,6 +38,29 @@ def test_generated_hero_passes_hard_validation() -> None:
     assert generated.ik_max_orientation_error_deg < 3.0
 
 
+def test_generated_gancho_passes_hard_validation() -> None:
+    mjcf = _mjcf()
+    spec = SequenceSpec(
+        id="shadow_gancho_right_test",
+        split="test",
+        kind="shadow_gancho",
+        direction="right",
+        amplitude=0.98,
+        duration_s=5.1,
+        step_back_m=0.115,
+        step_width_m=0.11,
+        hold_s=0.64,
+    )
+    generated = generate_motion(spec, G1Kinematics(mjcf))
+    result = MotionValidator(mjcf).validate_entry(spec.id, generated.entry)
+    assert result["pass"], result["errors"]
+    assert result["warnings"] == []
+    assert generated.ik_max_position_error_m < 0.008
+    assert generated.ik_max_orientation_error_deg < 5.0
+    assert result["metrics"]["foot_height_max_m"] > 0.25
+    assert result["metrics"]["deepest_hold_support_margin_min_m"] > 0.0
+
+
 @pytest.mark.parametrize(
     "spec",
     [

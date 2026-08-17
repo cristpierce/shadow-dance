@@ -19,16 +19,34 @@ def sha256(path: Path) -> str:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--manifest",
-        type=Path,
-        default=Path("data/manifests/shadow-dip-v1.json"),
-    )
-    parser.add_argument("--dataset-root", type=Path, default=Path("data/generated"))
-    parser.add_argument("--splits-root", type=Path, default=Path("data/splits"))
+    parser.add_argument("--profile", choices=("dip-v1", "dance-v2"), default="dip-v1")
+    parser.add_argument("--manifest", type=Path)
+    parser.add_argument("--dataset-root", type=Path)
+    parser.add_argument("--splits-root", type=Path)
     args = parser.parse_args()
 
-    manifest = json.loads(args.manifest.read_text(encoding="utf-8"))
+    profiles = {
+        "dip-v1": {
+            "dataset": "shadow-dip-v1",
+            "manifest": Path("data/manifests/shadow-dip-v1.json"),
+            "dataset_root": Path("data/generated"),
+            "splits_root": Path("data/splits"),
+            "split_counts": {"train": 22, "heldout": 4, "test": 4},
+        },
+        "dance-v2": {
+            "dataset": "shadow-dance-v2",
+            "manifest": Path("data/manifests/shadow-dance-v2.json"),
+            "dataset_root": Path("data/generated-v2"),
+            "splits_root": Path("data/splits-v2"),
+            "split_counts": {"train": 34, "heldout": 8, "preflight": 4, "test": 8},
+        },
+    }
+    profile = profiles[args.profile]
+    manifest_path = args.manifest or profile["manifest"]
+    dataset_root_arg = args.dataset_root or profile["dataset_root"]
+    splits_root = args.splits_root or profile["splits_root"]
+
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     failures: list[str] = []
     checked = 0
     expected_upstream = {
@@ -37,7 +55,7 @@ def main() -> None:
         "mjcf": "gear_sonic/data/assets/robot_description/mjcf/g1_29dof_rev_1_0.xml",
     }
     expected_metadata = {
-        "dataset": "shadow-dip-v1",
+        "dataset": profile["dataset"],
         "generator": "shadow-dance",
         "generator_version": "0.1.0",
         "license": "Apache-2.0",
@@ -57,7 +75,7 @@ def main() -> None:
 
     computed_splits: dict[str, list[str]] = {}
     expected_payloads: set[str] = set()
-    dataset_root = args.dataset_root.resolve()
+    dataset_root = dataset_root_arg.resolve()
     for sequence in sequences:
         split = str(sequence.get("split", ""))
         computed_splits.setdefault(split, []).append(str(sequence.get("id", "")))
@@ -82,7 +100,7 @@ def main() -> None:
             if relative in expected_payloads:
                 failures.append(f"duplicate manifest payload path: {relative}")
             expected_payloads.add(relative)
-            path = (args.dataset_root / relative).resolve()
+            path = (dataset_root_arg / relative).resolve()
             try:
                 path.relative_to(dataset_root)
             except ValueError:
@@ -103,7 +121,7 @@ def main() -> None:
         failures.append("manifest sequence_count does not match sequences array")
     if manifest.get("splits") != computed_splits:
         failures.append("manifest splits do not match sequence order and membership")
-    expected_split_counts = {"train": 22, "heldout": 4, "test": 4}
+    expected_split_counts = profile["split_counts"]
     observed_split_counts = {name: len(values) for name, values in computed_splits.items()}
     if observed_split_counts != expected_split_counts:
         failures.append(
@@ -111,7 +129,7 @@ def main() -> None:
             f"observed={observed_split_counts}"
         )
     for split, expected_ids in computed_splits.items():
-        split_file = args.splits_root / f"{split}.txt"
+        split_file = splits_root / f"{split}.txt"
         if not split_file.is_file():
             failures.append(f"missing split file: {split_file.as_posix()}")
             continue
@@ -122,9 +140,7 @@ def main() -> None:
         ]
         if observed_ids != expected_ids:
             failures.append(f"split file differs from manifest: {split_file.as_posix()}")
-    discovered_split_names = {
-        path.stem for path in args.splits_root.glob("*.txt") if path.is_file()
-    }
+    discovered_split_names = {path.stem for path in splits_root.glob("*.txt") if path.is_file()}
     if discovered_split_names != set(computed_splits):
         failures.append(
             "split-file inventory mismatch: "

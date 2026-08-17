@@ -6,7 +6,7 @@ import argparse
 import json
 from pathlib import Path
 
-from .motion import generate_dataset
+from .motion import COMBINED_DATASET_VERSION, combined_specs, generate_dataset
 from .render import render_reference
 from .validation import validate_dataset
 
@@ -24,13 +24,34 @@ def _default_mjcf(sonic_root: Path) -> Path:
 
 
 def generate_main() -> None:
-    parser = argparse.ArgumentParser(description="Generate Shadow Partner Dip motion data")
+    parser = argparse.ArgumentParser(description="Generate Shadow Dance motion data")
     parser.add_argument("--sonic-root", type=Path, required=True)
-    parser.add_argument("--output", type=Path, default=Path("data/generated"))
-    parser.add_argument("--manifest", type=Path, default=Path("data/manifests/shadow-dip-v1.json"))
+    parser.add_argument("--profile", choices=("dip-v1", "dance-v2"), default="dip-v1")
+    parser.add_argument("--output", type=Path)
+    parser.add_argument("--manifest", type=Path)
+    parser.add_argument("--splits", type=Path)
     args = parser.parse_args()
-    manifest = generate_dataset(args.output, _default_mjcf(args.sonic_root), args.manifest)
-    print(f"Generated {manifest['sequence_count']} sequences at {args.output}")
+    if args.profile == "dance-v2":
+        output = args.output or Path("data/generated-v2")
+        manifest_path = args.manifest or Path("data/manifests/shadow-dance-v2.json")
+        split_dir = args.splits or Path("data/splits-v2")
+        specs = combined_specs()
+        dataset_version = COMBINED_DATASET_VERSION
+    else:
+        output = args.output or Path("data/generated")
+        manifest_path = args.manifest or Path("data/manifests/shadow-dip-v1.json")
+        split_dir = args.splits or Path("data/splits")
+        specs = None
+        dataset_version = "shadow-dip-v1"
+    manifest = generate_dataset(
+        output,
+        _default_mjcf(args.sonic_root),
+        manifest_path,
+        specs=specs,
+        dataset_version=dataset_version,
+        split_dir=split_dir,
+    )
+    print(f"Generated {manifest['sequence_count']} sequences at {output}")
 
 
 def validate_main() -> None:

@@ -41,9 +41,7 @@ def main() -> int:
     parser.add_argument("--image", required=True)
     parser.add_argument("--submission-commit", required=True)
     parser.add_argument("--evidence-s3-uri", required=True)
-    parser.add_argument(
-        "--s3-endpoint", default="https://storage.us-central1.nebius.cloud"
-    )
+    parser.add_argument("--s3-endpoint", default="https://storage.us-central1.nebius.cloud")
     parser.add_argument("--region", default="us-central1")
     parser.add_argument("--hf-model-repo", default="")
     parser.add_argument("--output", type=Path)
@@ -68,9 +66,7 @@ def main() -> int:
     parsed_endpoint = urlparse(args.s3_endpoint)
     if (
         parsed_endpoint.scheme != "https"
-        or not re.fullmatch(
-            r"storage\.[a-z0-9-]+\.nebius\.cloud", parsed_endpoint.netloc
-        )
+        or not re.fullmatch(r"storage\.[a-z0-9-]+\.nebius\.cloud", parsed_endpoint.netloc)
         or parsed_endpoint.path not in {"", "/"}
     ):
         raise ValueError("S3 endpoint must be a regional Nebius HTTPS endpoint")
@@ -153,7 +149,7 @@ def main() -> int:
         "SAVE_LAST_FREQUENCY": "5",
         "RENDER_SEED": "303",
         "HF_MODEL_REPO": args.hf_model_repo,
-        "HF_DATASET_REPO": "cristpierce/shadow-dip-v1",
+        "HF_DATASET_REPO": "cristpierce/shadow-dance-v2",
         "S3_ENDPOINT_URL": args.s3_endpoint,
         **eula_values,
     }

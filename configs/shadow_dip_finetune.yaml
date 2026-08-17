@@ -1,7 +1,7 @@
 # Reproducibility record for the shell wrappers; the upstream Hydra config remains
 # `manager/universal_token/all_modes/sonic_release` at the pinned commit.
 project: shadow-dance
-dataset: shadow-dip-v1
+dataset: shadow-dance-v2
 dataset_validation_upstream_commit: c374bae5b9039cd0ee71377e654d11ce1bc69e1d
 runtime_image: >-
   ghcr.io/nebius/nebius-physical-ai/npa-sonic:cuda13-b300-0.1.2-k8s-runtime-sm80-sm90-sm100-sm103-sm120-20260803T034152Z

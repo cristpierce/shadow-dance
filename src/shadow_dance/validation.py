@@ -264,7 +264,7 @@ class MotionValidator:
         deepest = root[:, 2] <= root[:, 2].min() + 0.003
         deepest_margins = support_margin[deepest & np.isfinite(support_margin)]
         min_deepest_margin = float(np.min(deepest_margins)) if len(deepest_margins) else math.nan
-        is_hero = motion_id.startswith("shadow_dip")
+        is_hero = motion_id.startswith(("shadow_dip", "shadow_gancho"))
         if np.isfinite(min_support_margin) and min_support_margin < -0.03:
             warnings.append(
                 f"dynamic-step COM leaves instantaneous support by {-min_support_margin:.3f} m"

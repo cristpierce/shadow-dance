@@ -5,7 +5,7 @@ set -euo pipefail
 # invocation is preserved in cloud logs without editing the script.
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 SONIC_ROOT="${SONIC_ROOT:-${PROJECT_ROOT}/../GR00T-WholeBodyControl}"
-MOTION_DIR="${MOTION_DIR:-${PROJECT_ROOT}/data/generated/train}"
+MOTION_DIR="${MOTION_DIR:-${PROJECT_ROOT}/data/generated-v2/train}"
 CHECKPOINT="${CHECKPOINT:-${SONIC_ROOT}/sonic_release/last.pt}"
 NUM_ENVS="${NUM_ENVS:-1024}"
 ITERATIONS="${ITERATIONS:-25}"

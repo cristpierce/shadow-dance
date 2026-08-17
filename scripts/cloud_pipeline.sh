@@ -32,6 +32,8 @@ RUNTIME_ROOT="${PROJECT_ROOT}/.runtime/${RUN_ID}"
 BASE_CHECKPOINT="${SONIC_ROOT}/sonic_release/last.pt"
 BASE_CHECKPOINT_SHA256="e6bdab3f64a39336b3d41877d4f497d05f58af275f288ec0e6746c283ded8909"
 BASE_CONFIG_SHA256="f08187795fa16a839a28bc1c18e0555d38d9420e03733744341cdcb56ab629c7"
+DATASET_ROOT="${PROJECT_ROOT}/data/generated-v2"
+SPLITS_ROOT="${PROJECT_ROOT}/data/splits-v2"
 
 if [[ "${ENTRANT_NVIDIA_EULA_ACCEPTED:-}" != "YES" || "${ACCEPT_EULA:-}" != "Y" ]]; then
   echo "Named entrant acceptance and ACCEPT_EULA=Y are required; refusing before any Isaac download." >&2
@@ -106,10 +108,10 @@ persist_failure() {
 }
 trap persist_failure EXIT
 
-"${BASE_PYTHON}" scripts/verify_dataset_bundle.py
-find "${PROJECT_ROOT}/data/generated/train" -maxdepth 1 -type f -name 'retention_*.pkl' \
+"${BASE_PYTHON}" scripts/verify_dataset_bundle.py --profile dance-v2
+find "${DATASET_ROOT}/train" -maxdepth 1 -type f -name 'retention_*.pkl' \
   -exec ln -sf '{}' "${RUNTIME_ROOT}/retention/" \;
-grep '^retention_' "${PROJECT_ROOT}/data/splits/train.txt" > "${RUNTIME_ROOT}/retention.txt"
+grep '^retention_' "${SPLITS_ROOT}/train.txt" > "${RUNTIME_ROOT}/retention.txt"
 if [[ "$(wc -l < "${RUNTIME_ROOT}/retention.txt")" -ne 10 ]]; then
   echo "Expected exactly ten retention motion keys." >&2
   exit 2
@@ -200,7 +202,7 @@ run_eval() {
   local seed="$6"
   local motion_keys_file
   case "${split}" in
-    heldout|test) motion_keys_file="${PROJECT_ROOT}/data/splits/${split}.txt" ;;
+    heldout|test) motion_keys_file="${SPLITS_ROOT}/${split}.txt" ;;
     retention) motion_keys_file="${RUNTIME_ROOT}/retention.txt" ;;
     *) echo "Unsupported evaluation split: ${split}" >&2; exit 2 ;;
   esac
@@ -215,7 +217,7 @@ run_eval() {
     --output "${RUN_ROOT}/summaries/${label}-${split}-seed-${seed}.json"
 }
 
-run_eval "${BASE_CHECKPOINT}" stock heldout "${PROJECT_ROOT}/data/generated/heldout" 4 42
+run_eval "${BASE_CHECKPOINT}" stock heldout "${DATASET_ROOT}/heldout" 8 42
 upload_path "${RUN_ROOT}/eval/stock-heldout-seed-42" eval/stock-heldout-seed-42
 upload_path "${RUN_ROOT}/summaries/stock-heldout-seed-42.json" summaries
 run_eval "${BASE_CHECKPOINT}" stock retention "${RUNTIME_ROOT}/retention" 10 42
@@ -323,7 +325,7 @@ for iterations in "${ladder_values[@]}"; do
   train_status=0
   timeout --signal=TERM --kill-after=15m "${training_timeout}s" env \
     SONIC_ROOT="${SONIC_ROOT}" SONIC_PYTHON="${SONIC_PYTHON}" \
-    MOTION_DIR="${PROJECT_ROOT}/data/generated/train" CHECKPOINT="${BASE_CHECKPOINT}" \
+    MOTION_DIR="${DATASET_ROOT}/train" CHECKPOINT="${BASE_CHECKPOINT}" \
     NUM_ENVS="${env_count}" ITERATIONS="${iterations}" RUN_NAME="${label}" \
     SEED="${TRAIN_SEED}" LEARNING_RATE="${LEARNING_RATE}" \
     REGULAR_SAVE_FREQUENCY="${REGULAR_SAVE_FREQUENCY}" \
@@ -345,7 +347,7 @@ for iterations in "${ladder_values[@]}"; do
   upload_path "${RUN_ROOT}/train/${label}" "train/${label}"
   upload_path "${RUN_ROOT}/checkpoints/${label}" "checkpoints/${label}"
   run_eval "${candidate_checkpoint}" "${label}" heldout \
-    "${PROJECT_ROOT}/data/generated/heldout" 4 42
+    "${DATASET_ROOT}/heldout" 8 42
   upload_path "${RUN_ROOT}/eval/${label}-heldout-seed-42" \
     "eval/${label}-heldout-seed-42"
   upload_path "${RUN_ROOT}/summaries/${label}-heldout-seed-42.json" summaries
@@ -414,9 +416,9 @@ for test_seed in "${final_test_seeds[@]}"; do
   stock_summary="${RUN_ROOT}/summaries/stock-test-seed-${test_seed}.json"
   selected_summary="${RUN_ROOT}/summaries/${selected_label}-test-seed-${test_seed}.json"
   run_eval "${BASE_CHECKPOINT}" stock test \
-    "${PROJECT_ROOT}/data/generated/test" 4 "${test_seed}"
+    "${DATASET_ROOT}/test" 8 "${test_seed}"
   run_eval "${selected_checkpoint}" "${selected_label}" test \
-    "${PROJECT_ROOT}/data/generated/test" 4 "${test_seed}"
+    "${DATASET_ROOT}/test" 8 "${test_seed}"
   upload_path "${RUN_ROOT}/eval/stock-test-seed-${test_seed}" \
     "eval/stock-test-seed-${test_seed}"
   upload_path "${RUN_ROOT}/eval/${selected_label}-test-seed-${test_seed}" \
@@ -441,15 +443,15 @@ upload_path "${RUN_ROOT}/summaries/stock-test-aggregate.json" summaries
 upload_path "${RUN_ROOT}/summaries/${selected_label}-test-aggregate.json" summaries
 upload_path "${RUN_ROOT}/final-comparison.json" final
 
-SONIC_ROOT="${SONIC_ROOT}" SONIC_PYTHON="${SONIC_PYTHON}" NUM_ENVS=4 \
-  SEED="${RENDER_SEED}" MOTION_KEYS_FILE="${PROJECT_ROOT}/data/splits/test.txt" \
+SONIC_ROOT="${SONIC_ROOT}" SONIC_PYTHON="${SONIC_PYTHON}" NUM_ENVS=8 \
+  SEED="${RENDER_SEED}" MOTION_KEYS_FILE="${SPLITS_ROOT}/test.txt" \
   OUTPUT_DIR="${RUN_ROOT}/media/stock" \
-  bash scripts/render_policy.sh "${BASE_CHECKPOINT}" stock "${PROJECT_ROOT}/data/generated/test"
-SONIC_ROOT="${SONIC_ROOT}" SONIC_PYTHON="${SONIC_PYTHON}" NUM_ENVS=4 \
-  SEED="${RENDER_SEED}" MOTION_KEYS_FILE="${PROJECT_ROOT}/data/splits/test.txt" \
+  bash scripts/render_policy.sh "${BASE_CHECKPOINT}" stock "${DATASET_ROOT}/test"
+SONIC_ROOT="${SONIC_ROOT}" SONIC_PYTHON="${SONIC_PYTHON}" NUM_ENVS=8 \
+  SEED="${RENDER_SEED}" MOTION_KEYS_FILE="${SPLITS_ROOT}/test.txt" \
   OUTPUT_DIR="${RUN_ROOT}/media/selected" \
   bash scripts/render_policy.sh "${selected_checkpoint}" selected \
-  "${PROJECT_ROOT}/data/generated/test"
+  "${DATASET_ROOT}/test"
 cp "${PROJECT_ROOT}/media/reference-kinematic.mp4" \
   "${RUN_ROOT}/media/reference-kinematic.mp4"
 "${BASE_PYTHON}" scripts/build_submission_video.py \
@@ -457,14 +459,14 @@ cp "${PROJECT_ROOT}/media/reference-kinematic.mp4" \
   --selected-dir "${RUN_ROOT}/media/selected" \
   --reference "${RUN_ROOT}/media/reference-kinematic.mp4" \
   --comparison "${RUN_ROOT}/final-comparison.json" \
-  --motion-ids "${PROJECT_ROOT}/data/splits/test.txt" \
+  --motion-ids "${SPLITS_ROOT}/test.txt" \
   --output "${RUN_ROOT}/media/hero-before-after.mp4" \
   --manifest "${RUN_ROOT}/media/video-manifest.json" \
   --render-seed "${RENDER_SEED}"
 
 SONIC_ROOT="${SONIC_ROOT}" SONIC_PYTHON="${SONIC_PYTHON}" \
   OUTPUT_DIR="$(dirname -- "${selected_checkpoint}")" \
-  bash scripts/export_onnx.sh "${selected_checkpoint}" "${PROJECT_ROOT}/data/generated/test"
+  bash scripts/export_onnx.sh "${selected_checkpoint}" "${DATASET_ROOT}/test"
 exported_dir="$(dirname "${selected_checkpoint}")/exported"
 if ! find "${exported_dir}" -maxdepth 1 -type f -name '*.onnx' -print -quit | grep -q .; then
   echo "ONNX export produced no graphs under ${exported_dir}" >&2
@@ -509,7 +511,7 @@ if [[ -n "${HF_MODEL_REPO:-}" ]]; then
   "${BASE_PYTHON}" scripts/publish_model.py \
     --run-root "${RUN_ROOT}" \
     --repo-id "${HF_MODEL_REPO}" \
-    --dataset-repo "${HF_DATASET_REPO:-cristpierce/shadow-dip-v1}" \
+    --dataset-repo "${HF_DATASET_REPO:-cristpierce/shadow-dance-v2}" \
     --report "${RUN_ROOT}/huggingface-model-publication.json"
   upload_path "${RUN_ROOT}/huggingface-model-publication.json" final
 fi

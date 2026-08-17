@@ -70,28 +70,28 @@ def collect_files(project_root: Path) -> list[tuple[Path, str]]:
         (project_root / "LICENSE", "LICENSE"),
         (project_root / "NOTICE", "NOTICE"),
         (
-            project_root / "data" / "manifests" / "shadow-dip-v1.json",
-            "manifest/shadow-dip-v1.json",
+            project_root / "data" / "manifests" / "shadow-dance-v2.json",
+            "manifest/shadow-dance-v2.json",
         ),
         (
-            project_root / "results" / "reference-validation.json",
-            "validation/reference-validation.json",
+            project_root / "results" / "reference-validation-v2.json",
+            "validation/reference-validation-v2.json",
         ),
     ]
-    for split_path in sorted((project_root / "data" / "splits").glob("*.txt")):
+    for split_path in sorted((project_root / "data" / "splits-v2").glob("*.txt")):
         mappings.append((split_path, f"splits/{split_path.name}"))
-    for csv_path in sorted((project_root / "data" / "generated" / "csv").glob("**/*.csv")):
-        relative = csv_path.relative_to(project_root / "data" / "generated" / "csv")
+    for csv_path in sorted((project_root / "data" / "generated-v2" / "csv").glob("**/*.csv")):
+        relative = csv_path.relative_to(project_root / "data" / "generated-v2" / "csv")
         mappings.append((csv_path, f"source_csv/{relative.as_posix()}"))
-    for pkl_path in sorted((project_root / "data" / "generated").glob("**/*.pkl")):
-        relative = pkl_path.relative_to(project_root / "data" / "generated")
+    for pkl_path in sorted((project_root / "data" / "generated-v2").glob("**/*.pkl")):
+        relative = pkl_path.relative_to(project_root / "data" / "generated-v2")
         mappings.append((pkl_path, f"motion_lib/{relative.as_posix()}"))
     return mappings
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Publish shadow-dip-v1 after running shadow-generate and shadow-validate"
+        description="Publish shadow-dance-v2 after running shadow-generate and shadow-validate"
     )
     parser.add_argument("--repo-id", required=True, help="Hugging Face namespace/repository")
     parser.add_argument("--private", action="store_true")
@@ -101,14 +101,19 @@ def main() -> None:
 
     project_root = Path(__file__).resolve().parents[1]
     subprocess.run(
-        [sys.executable, str(project_root / "scripts" / "verify_dataset_bundle.py")],
+        [
+            sys.executable,
+            str(project_root / "scripts" / "verify_dataset_bundle.py"),
+            "--profile",
+            "dance-v2",
+        ],
         cwd=project_root,
         check=True,
     )
     report = json.loads(
-        (project_root / "results" / "reference-validation.json").read_text(encoding="utf-8")
+        (project_root / "results" / "reference-validation-v2.json").read_text(encoding="utf-8")
     )
-    manifest_path = project_root / "data" / "manifests" / "shadow-dip-v1.json"
+    manifest_path = project_root / "data" / "manifests" / "shadow-dance-v2.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     validate_reference_report(report, manifest)
     files = collect_files(project_root)
@@ -124,7 +129,7 @@ def main() -> None:
     targets = [target for _, target in files]
     if len(set(targets)) != len(targets):
         raise ValueError("dataset publication contains duplicate target paths")
-    validation_path = project_root / "results" / "reference-validation.json"
+    validation_path = project_root / "results" / "reference-validation-v2.json"
     summary = {
         "repo_id": args.repo_id,
         "private": args.private,
@@ -162,7 +167,7 @@ def main() -> None:
                     for source, target in files
                 ],
             ],
-            commit_message="Publish shadow-dip-v1",
+            commit_message="Publish shadow-dance-v2",
             commit_description=(
                 f"Frozen SuperSONIC reference dataset: {report['passed']}/"
                 f"{report['sequence_count']} motions pass the committed QA report."

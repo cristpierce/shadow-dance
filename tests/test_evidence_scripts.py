@@ -13,6 +13,10 @@ MOTIONS = {
         "shadow_dip_right_heldout_20",
         "shadow_dip_left_heldout_21",
         "shadow_dip_right_heldout_22",
+        "shadow_gancho_left_heldout_01",
+        "shadow_gancho_left_heldout_02",
+        "shadow_gancho_right_heldout_01",
+        "shadow_gancho_right_heldout_02",
     ],
     "retention": [
         "retention_stand_left",
@@ -27,10 +31,14 @@ MOTIONS = {
         "retention_turn_right",
     ],
     "test": [
-        "shadow_dip_left_test_23",
-        "shadow_dip_right_test_24",
-        "shadow_dip_left_test_25",
-        "shadow_dip_right_test_26",
+        "shadow_gancho_left_test_01",
+        "shadow_gancho_left_test_02",
+        "shadow_gancho_right_test_01",
+        "shadow_gancho_right_test_02",
+        "shadow_dip_v2_left_test_01",
+        "shadow_dip_v2_right_test_02",
+        "shadow_dip_v2_left_test_03",
+        "shadow_dip_v2_right_test_04",
     ],
 }
 
@@ -59,9 +67,10 @@ def write_summary(
     *,
     label: str | None = None,
     seed: int = 42,
+    motion_ids: list[str] | None = None,
 ) -> Path:
     payload = json.loads(json.dumps(payload))
-    payload["eval/all_metrics_dict"]["motion_keys"] = MOTIONS[split]
+    payload["eval/all_metrics_dict"]["motion_keys"] = motion_ids or MOTIONS[split]
     raw = tmp_path / f"{name}-raw.json"
     summary = tmp_path / f"{name}.json"
     raw.write_text(json.dumps(payload), encoding="utf-8")
@@ -111,7 +120,7 @@ def test_eval_summary_and_checkpoint_selection(tmp_path: Path) -> None:
         tmp_path,
         "stock-heldout",
         "heldout",
-        metric_payload(terminations=[True] * 4, mpjpe_l=80),
+        metric_payload(terminations=[True] * 8, mpjpe_l=80),
         label="stock",
     )
     stock_ret = write_summary(
@@ -125,7 +134,7 @@ def test_eval_summary_and_checkpoint_selection(tmp_path: Path) -> None:
         tmp_path,
         "tuned-heldout",
         "heldout",
-        metric_payload(terminations=[False] * 4, mpjpe_l=28),
+        metric_payload(terminations=[False] * 8, mpjpe_l=28),
         label="stage-500",
     )
     tuned_ret = write_summary(
@@ -187,7 +196,7 @@ def test_eval_summary_and_checkpoint_selection(tmp_path: Path) -> None:
             tmp_path,
             f"stock-test-seed-{seed}",
             "test",
-            metric_payload(terminations=[True] * 4, mpjpe_l=84),
+            metric_payload(terminations=[True] * 8, mpjpe_l=84),
             label="stock",
             seed=seed,
         )
@@ -198,7 +207,7 @@ def test_eval_summary_and_checkpoint_selection(tmp_path: Path) -> None:
             tmp_path,
             f"stage-500-test-seed-{seed}",
             "test",
-            metric_payload(terminations=[False] * 4, mpjpe_l=30),
+            metric_payload(terminations=[False] * 8, mpjpe_l=30),
             label="stage-500",
             seed=seed,
         )
@@ -237,7 +246,7 @@ def test_eval_summary_and_checkpoint_selection(tmp_path: Path) -> None:
     final_report = json.loads(comparison.read_text(encoding="utf-8"))
     assert final_report["used_for_checkpoint_selection"] is False
     assert final_report["selected_label"] == "stage-500"
-    assert final_report["stock"]["trial_count"] == 12
+    assert final_report["stock"]["trial_count"] == 24
 
     mismatched = json.loads(tuned_test.read_text(encoding="utf-8"))
     mismatched["motion_inventory"][0] = "different_test_motion"
@@ -272,12 +281,69 @@ def test_committed_dataset_bundle_matches_manifest() -> None:
     )
 
 
+def test_committed_v2_dataset_bundle_matches_manifest() -> None:
+    subprocess.run(
+        [
+            sys.executable,
+            str(ROOT / "scripts" / "verify_dataset_bundle.py"),
+            "--profile",
+            "dance-v2",
+        ],
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+
+
+def test_stock_proxy_report_is_bound_to_validation_only() -> None:
+    report = json.loads(
+        (ROOT / "results" / "stock-deployment-proxy-v2.json").read_text(encoding="utf-8")
+    )
+    manifest = json.loads(
+        (ROOT / "data" / "manifests" / "shadow-dance-v2.json").read_text(encoding="utf-8")
+    )
+    by_id = {str(record["id"]): record for record in manifest["sequences"]}
+    heldout = set(manifest["splits"]["heldout"])
+    preflight = set(manifest["splits"]["preflight"])
+    test = set(manifest["splits"]["test"])
+    motions = report["motions"]
+    assert report["official_wbt_bench"] is False
+    assert report["isaac_result"] is False
+    assert report["fine_tuned_result"] is False
+    assert report["v2_test_split_evaluated"] is False
+    assert report["legacy_v1_test_payloads_evaluated_before_v2"] is True
+    assert report["legacy_payload_split_in_v2"] == "preflight"
+    assert len(motions) == len(heldout) == 8
+    assert {record["id"] for record in motions} == heldout
+    assert not ({record["id"] for record in motions} & preflight)
+    assert not ({record["id"] for record in motions} & test)
+    for record in motions:
+        assert record["sha256"] == by_id[record["id"]]["files"]["motion_lib_sha256"]
+
+    families = (("dip_validation", "shadow_dip"), ("gancho_validation", "shadow_gancho"))
+    for family, prefix in families:
+        rows = [record for record in motions if record["id"].startswith(prefix)]
+        aggregate = report["aggregates"][family]
+        assert aggregate["motion_count"] == len(rows) == 4
+        assert aggregate["completed_without_fall"] == sum(
+            bool(record["completed_without_fall"]) for record in rows
+        )
+        assert aggregate["motions_under_30mm"] == sum(bool(record["under_30mm"]) for record in rows)
+        assert aggregate["mpjpe_local_mean_mm"] == round(
+            sum(record["mpjpe_local_mean_mm"] for record in rows) / len(rows), 3
+        )
+        assert aggregate["root_position_mean_mm"] == round(
+            sum(record["root_position_mean_mm"] for record in rows) / len(rows), 3
+        )
+
+
 def test_publisher_recomputes_summary_from_raw_metrics(tmp_path: Path) -> None:
     summary = write_summary(
         tmp_path,
         "stock-heldout-seed-42",
         "heldout",
-        metric_payload(terminations=[True] * 4, mpjpe_l=80),
+        metric_payload(terminations=[True] * 8, mpjpe_l=80),
         label="stock",
     )
     forged = json.loads(summary.read_text(encoding="utf-8"))
@@ -303,6 +369,14 @@ def test_publisher_recomputes_summary_from_raw_metrics(tmp_path: Path) -> None:
 
 
 def test_model_publisher_dry_run_requires_valid_release(tmp_path: Path) -> None:
+    v2_manifest = json.loads(
+        (ROOT / "data" / "manifests" / "shadow-dance-v2.json").read_text(encoding="utf-8")
+    )
+    v2_motions = {
+        split: [str(value) for value in v2_manifest["splits"][split]]
+        for split in ("heldout", "test")
+    }
+    v2_motions["retention"] = MOTIONS["retention"]
     release = tmp_path / "release" / "model"
     release.mkdir(parents=True)
     for name, content in {
@@ -320,7 +394,15 @@ def test_model_publisher_dry_run_requires_valid_release(tmp_path: Path) -> None:
     summaries.mkdir()
 
     def bound_summary(name: str, label: str, split: str, payload: dict, *, seed: int = 42) -> Path:
-        summary = write_summary(summaries, name, split, payload, label=label, seed=seed)
+        summary = write_summary(
+            summaries,
+            name,
+            split,
+            payload,
+            label=label,
+            seed=seed,
+            motion_ids=v2_motions[split],
+        )
         raw_fixture = summaries / f"{name}-raw.json"
         raw_metrics = tmp_path / "eval" / name / "metrics_eval.json"
         raw_metrics.parent.mkdir(parents=True)
@@ -331,7 +413,7 @@ def test_model_publisher_dry_run_requires_valid_release(tmp_path: Path) -> None:
         "stock-heldout-seed-42",
         "stock",
         "heldout",
-        metric_payload(terminations=[True] * 4, mpjpe_l=80),
+        metric_payload(terminations=[True] * 8, mpjpe_l=80),
     )
     stock_retention_summary = bound_summary(
         "stock-retention-seed-42",
@@ -343,7 +425,7 @@ def test_model_publisher_dry_run_requires_valid_release(tmp_path: Path) -> None:
         "stage-500-heldout-seed-42",
         "stage-500",
         "heldout",
-        metric_payload(terminations=[False] * 4, mpjpe_l=28),
+        metric_payload(terminations=[False] * 8, mpjpe_l=28),
     )
     selected_retention_summary = bound_summary(
         "stage-500-retention-seed-42",
@@ -355,7 +437,7 @@ def test_model_publisher_dry_run_requires_valid_release(tmp_path: Path) -> None:
         "stage-5-heldout-seed-42",
         "stage-5",
         "heldout",
-        metric_payload(terminations=[True] * 4, mpjpe_l=79),
+        metric_payload(terminations=[True] * 8, mpjpe_l=79),
     )
     stage_5_retention_summary = bound_summary(
         "stage-5-retention-seed-42",
@@ -367,7 +449,7 @@ def test_model_publisher_dry_run_requires_valid_release(tmp_path: Path) -> None:
         "stage-250-heldout-seed-42",
         "stage-250",
         "heldout",
-        metric_payload(terminations=[False, False, True, True], mpjpe_l=50),
+        metric_payload(terminations=[False, False, True, True] * 2, mpjpe_l=50),
     )
     stage_250_retention_summary = bound_summary(
         "stage-250-retention-seed-42",
@@ -379,7 +461,7 @@ def test_model_publisher_dry_run_requires_valid_release(tmp_path: Path) -> None:
         "stage-4000-heldout-seed-42",
         "stage-4000",
         "heldout",
-        metric_payload(terminations=[False, True, True, True], mpjpe_l=70),
+        metric_payload(terminations=[False, False] + [True] * 6, mpjpe_l=70),
     )
     stage_4000_retention_summary = bound_summary(
         "stage-4000-retention-seed-42",
@@ -397,7 +479,7 @@ def test_model_publisher_dry_run_requires_valid_release(tmp_path: Path) -> None:
         retention_successes: int,
         retention_mpjpe: float,
     ) -> dict:
-        heldout_rate = heldout_successes / 4
+        heldout_rate = heldout_successes / 8
         retention_rate = retention_successes / 10
         success_delta = heldout_rate
         mpjpe_improvement = 1.0 - heldout_mpjpe / 80.0
@@ -413,7 +495,7 @@ def test_model_publisher_dry_run_requires_valid_release(tmp_path: Path) -> None:
             "checkpoint_size_bytes": len(checkpoint_bytes),
             "checkpoint_sha256": hashlib.sha256(checkpoint_bytes).hexdigest(),
             "heldout": {
-                "motion_count": 4,
+                "motion_count": 8,
                 "success_count": heldout_successes,
                 "success_rate": heldout_rate,
                 "mpjpe_l": heldout_mpjpe,
@@ -444,7 +526,7 @@ def test_model_publisher_dry_run_requires_valid_release(tmp_path: Path) -> None:
     stage_250_candidate = candidate_record(
         "stage-250",
         checkpoint_bytes=b"stage-250-checkpoint",
-        heldout_successes=2,
+        heldout_successes=4,
         heldout_mpjpe=50.0,
         retention_successes=10,
         retention_mpjpe=20.5,
@@ -452,7 +534,7 @@ def test_model_publisher_dry_run_requires_valid_release(tmp_path: Path) -> None:
     candidate = candidate_record(
         "stage-500",
         checkpoint_bytes=(release / "last.pt").read_bytes(),
-        heldout_successes=4,
+        heldout_successes=8,
         heldout_mpjpe=28.0,
         retention_successes=10,
         retention_mpjpe=21.0,
@@ -460,7 +542,7 @@ def test_model_publisher_dry_run_requires_valid_release(tmp_path: Path) -> None:
     stage_4000_candidate = candidate_record(
         "stage-4000",
         checkpoint_bytes=b"stage-4000-checkpoint",
-        heldout_successes=1,
+        heldout_successes=2,
         heldout_mpjpe=70.0,
         retention_successes=8,
         retention_mpjpe=25.0,
@@ -476,7 +558,7 @@ def test_model_publisher_dry_run_requires_valid_release(tmp_path: Path) -> None:
             "max_retention_mpjpe_increase": 0.15,
         },
         "stock_heldout": {
-            "motion_count": 4,
+            "motion_count": 8,
             "success_count": 0,
             "success_rate": 0.0,
             "mpjpe_l": 80.0,
@@ -664,7 +746,7 @@ def test_model_publisher_dry_run_requires_valid_release(tmp_path: Path) -> None:
             f"stock-test-seed-{seed}",
             "stock",
             "test",
-            metric_payload(terminations=[True] * 4, mpjpe_l=80),
+            metric_payload(terminations=[True] * 8, mpjpe_l=80),
             seed=seed,
         )
         for seed in test_seeds
@@ -674,7 +756,7 @@ def test_model_publisher_dry_run_requires_valid_release(tmp_path: Path) -> None:
             f"stage-500-test-seed-{seed}",
             "stage-500",
             "test",
-            metric_payload(terminations=[False] * 4, mpjpe_l=28),
+            metric_payload(terminations=[False] * 8, mpjpe_l=28),
             seed=seed,
         )
         for seed in test_seeds
@@ -757,13 +839,13 @@ def test_model_publisher_dry_run_requires_valid_release(tmp_path: Path) -> None:
 
     stock_clips = []
     selected_clips = []
-    for index in range(4):
+    for index in range(8):
         stock_clip = media / "stock" / f"{index:06d}.mp4"
         selected_clip = media / "selected" / f"{index:06d}.mp4"
         stock_clip.write_bytes(f"stock-video-{index}".encode())
         selected_clip.write_bytes(f"selected-video-{index}".encode())
-        stock_clips.append({**media_entry(stock_clip), "motion": MOTIONS["test"][index]})
-        selected_clips.append({**media_entry(selected_clip), "motion": MOTIONS["test"][index]})
+        stock_clips.append({**media_entry(stock_clip), "motion": v2_motions["test"][index]})
+        selected_clips.append({**media_entry(selected_clip), "motion": v2_motions["test"][index]})
     reference_video = media / "reference-kinematic.mp4"
     reference_video.write_bytes(b"reference-video")
     hero_video = media / "hero-before-after.mp4"

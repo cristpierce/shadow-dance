@@ -11,7 +11,7 @@ import csv
 import hashlib
 import json
 import math
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
 from pathlib import Path
 from typing import Any
 
@@ -22,6 +22,7 @@ from scipy.optimize import least_squares
 from scipy.spatial.transform import Rotation
 
 DATASET_VERSION = "shadow-dip-v1"
+COMBINED_DATASET_VERSION = "shadow-dance-v2"
 UPSTREAM_COMMIT = "c374bae5b9039cd0ee71377e654d11ce1bc69e1d"
 FPS = 50
 
@@ -379,6 +380,170 @@ def _phase_contract(spec: SequenceSpec) -> tuple[np.ndarray, dict[str, list[floa
     return fractions * duration, windows
 
 
+def _rotation_series(times: np.ndarray, key_times: np.ndarray, keys: np.ndarray) -> np.ndarray:
+    """Interpolate rotation-matrix keyframes with the generator's C2 timing curve."""
+
+    result = np.empty((len(times), 3, 3), dtype=np.float64)
+    for frame, time_s in enumerate(times):
+        index = int(np.searchsorted(key_times, time_s, side="right") - 1)
+        index = min(max(index, 0), len(key_times) - 2)
+        span = key_times[index + 1] - key_times[index]
+        alpha = 0.0 if span <= 0 else float((time_s - key_times[index]) / span)
+        blend = float(smootherstep(alpha))
+        relative = Rotation.from_matrix(keys[index].T @ keys[index + 1]).as_rotvec()
+        result[frame] = keys[index] @ Rotation.from_rotvec(relative * blend).as_matrix()
+    return result
+
+
+def _generate_gancho_motion(
+    spec: SequenceSpec, kinematics: G1Kinematics, fps: int
+) -> GeneratedMotion:
+    """Generate a planted-pivot dip followed by an aerial hooked-leg sweep."""
+
+    sign = 1.0 if spec.direction == "left" else -1.0
+    stance = "left" if spec.direction == "left" else "right"
+    moving = "right" if stance == "left" else "left"
+    stance_indices = LEFT_LEG if stance == "left" else RIGHT_LEG
+    moving_indices = RIGHT_LEG if moving == "right" else LEFT_LEG
+
+    times = np.linspace(0.0, spec.duration_s, int(round(spec.duration_s * fps)) + 1)
+    fractions = np.asarray([0.0, 0.12, 0.27, 0.40, 0.52, 0.64, 0.76, 0.88, 1.0])
+    key_times = fractions * spec.duration_s
+    phase_windows = {
+        "establish_frame": [0.0, round(key_times[1], 3)],
+        "step_and_pivot": [round(key_times[1], 3), round(key_times[2], 3)],
+        "lift": [round(key_times[2], 3), round(key_times[3], 3)],
+        "hook_and_hold": [round(key_times[3], 3), round(key_times[5], 3)],
+        "recover": [round(key_times[5], 3), round(key_times[7], 3)],
+        "settle": [round(key_times[7], 3), round(key_times[8], 3)],
+    }
+
+    hero = _hero_upper_body_keyframes(spec.amplitude, spec.direction)
+    upper_keys = hero[[0, 1, 2, 3, 3, 3, 2, 1, 0]].copy()
+    joints = _interpolate_keyframes(times, key_times, upper_keys)
+
+    # The published family stays near the two proxy-calibrated anchors: 0.92 is the
+    # moderate take and 0.98 is the strong take. Geometry varies continuously between
+    # takes so no held-out sequence duplicates a training trajectory.
+    normalized = (spec.amplitude - 0.92) / 0.06
+    root_drop = max(0.077, 0.085 + 0.010 * normalized)
+    root_lateral = 0.150 + 0.005 * normalized
+    hook_lift = 0.100 + 0.030 * normalized
+    hook_back = spec.step_back_m + 0.040 + 0.020 * normalized
+
+    neutral_root, feet = kinematics.neutral_geometry(neutral_pose())
+    root_keys = np.repeat(neutral_root[None, :], len(key_times), axis=0)
+    root_keys[1:8, 1] += root_lateral * sign
+    root_keys[2:7, 0] += 0.008
+    root_keys[4:6, 2] -= root_drop
+    transition_drop = 0.028 if spec.amplitude <= 0.86 else 0.035
+    root_keys[2:4, 2] -= transition_drop
+    root_keys[6, 2] -= transition_drop
+    roots = _interpolate_keyframes(times, key_times, root_keys)
+
+    root_yaw_keys = (
+        math.radians(7.0) * sign * np.asarray([0.0, 0.0, 0.35, 0.75, 1.0, 0.8, 0.35, 0.0, 0.0])
+    )
+    root_yaws = _interpolate_keyframes(times, key_times, root_yaw_keys[:, None])[:, 0]
+    root_quats = Rotation.from_rotvec(
+        np.column_stack([np.zeros_like(root_yaws), np.zeros_like(root_yaws), root_yaws])
+    ).as_quat()
+
+    targets = {
+        side: np.repeat(feet[side][0][None, :], len(key_times), axis=0)
+        for side in ("left", "right")
+    }
+    moving_keys = targets[moving]
+    moving_keys[2:7, 0] -= spec.step_back_m
+    moving_keys[2:7, 1] -= 0.035 * sign
+    moving_keys[3, 0] -= 0.45 * (hook_back - spec.step_back_m)
+    moving_keys[3, 2] += 0.55 * hook_lift
+    moving_keys[4:6, 0] -= hook_back - spec.step_back_m
+    moving_keys[4:6, 1] += (0.035 + spec.step_width_m) * sign
+    moving_keys[4:6, 2] += hook_lift
+    moving_keys[6, 2] += 0.45 * hook_lift
+    target_series = {
+        side: _interpolate_keyframes(times, key_times, keys) for side, keys in targets.items()
+    }
+    moving_series = target_series[moving]
+    for frame, time_s in enumerate(times):
+        for start, end, height in (
+            (key_times[1], key_times[2], 0.055),
+            (key_times[6], key_times[7], 0.065),
+        ):
+            if start <= time_s <= end:
+                progress = (time_s - start) / (end - start)
+                moving_series[frame, 2] += height * 16.0 * progress**2 * (1.0 - progress) ** 2
+
+    rotations = {
+        side: np.repeat(feet[side][1][None, :, :], len(key_times), axis=0)
+        for side in ("left", "right")
+    }
+    moving_rotations = rotations[moving]
+    for index, angle in ((2, -5.0), (3, -8.0), (4, 6.0), (5, 6.0), (6, -4.0)):
+        yaw = Rotation.from_euler("z", math.radians(angle) * sign).as_matrix()
+        moving_rotations[index] = yaw @ feet[moving][1]
+    rotation_series = {
+        side: _rotation_series(times, key_times, keys) for side, keys in rotations.items()
+    }
+
+    # The free leg is joint-authored once airborne. Both landings and the continuously
+    # planted stance foot remain IK-constrained. This avoids over-constraining an aerial
+    # leg with an arbitrary six-DOF sole orientation.
+    neutral_leg = neutral_pose()[moving_indices]
+    free_keys = np.repeat(neutral_leg[None, :], len(key_times), axis=0)
+    prep = np.asarray([0.15, -0.08, -0.12, 1.25, -0.65, 0.06])
+    hook = np.asarray([0.28, 0.12, -0.30, 1.35, -0.72, -0.12])
+    if moving == "left":
+        prep[[1, 2, 5]] *= -1.0
+        hook[[1, 2, 5]] *= -1.0
+    free_keys[3] = prep
+    free_keys[4:6] = hook
+    free_keys[6] = prep
+    free_series = _interpolate_keyframes(times, key_times, free_keys)
+    hook_weight_keys = np.asarray([0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0, 0.0])
+    hook_weights = _interpolate_keyframes(times, key_times, hook_weight_keys[:, None])[:, 0]
+
+    max_pos_error = 0.0
+    max_ori_error = 0.0
+    previous = joints[0].copy()
+    for frame in range(len(times)):
+        pose = joints[frame].copy()
+        for side, indices in ((stance, stance_indices), (moving, moving_indices)):
+            solved, pos_error, ori_error = kinematics.solve_leg(
+                side,
+                roots[frame],
+                pose,
+                target_series[side][frame],
+                rotation_series[side][frame],
+                previous[indices],
+                root_quats[frame],
+            )
+            if side == moving:
+                weight = hook_weights[frame]
+                solved = solved * (1.0 - weight) + free_series[frame] * weight
+            else:
+                max_pos_error = max(max_pos_error, pos_error)
+                max_ori_error = max(max_ori_error, ori_error)
+            pose[indices] = solved
+            previous[indices] = solved
+        joints[frame] = pose
+        previous = pose
+
+    pose_aa = np.zeros((len(times), 30, 3), dtype=np.float32)
+    pose_aa[:, 0, :] = Rotation.from_quat(root_quats).as_rotvec().astype(np.float32)
+    pose_aa[:, 1:, :] = DOF_AXIS[None, :, :] * joints[:, :, None]
+    entry = {
+        "root_trans_offset": roots.astype(np.float32),
+        "pose_aa": pose_aa,
+        "dof": joints.astype(np.float32),
+        "root_rot": root_quats.astype(np.float32),
+        "smpl_joints": np.zeros((len(times), 24, 3), dtype=np.float32),
+        "fps": fps,
+    }
+    return GeneratedMotion(entry, max_pos_error, max_ori_error, phase_windows)
+
+
 def generate_motion(
     spec: SequenceSpec, kinematics: G1Kinematics, fps: int = FPS
 ) -> GeneratedMotion:
@@ -388,6 +553,8 @@ def generate_motion(
         raise ValueError("direction must be 'left' or 'right'")
     if not 0.45 <= spec.amplitude <= 1.05:
         raise ValueError("amplitude must be between 0.45 and 1.05")
+    if spec.kind == "shadow_gancho":
+        return _generate_gancho_motion(spec, kinematics, fps)
 
     times = np.linspace(0.0, spec.duration_s, int(round(spec.duration_s * fps)) + 1)
     key_times, phase_windows = _phase_contract(spec)
@@ -744,6 +911,115 @@ def default_specs() -> list[SequenceSpec]:
     return specs
 
 
+def gancho_specs() -> list[SequenceSpec]:
+    """Return the v2 gancho curriculum with separate selection and final splits."""
+
+    specs: list[SequenceSpec] = []
+    train_takes = [
+        (0.86, 5.40, 0.100, 0.090),
+        (0.90, 5.00, 0.103, 0.095),
+        (0.92, 4.80, 0.105, 0.100),
+        (0.94, 5.20, 0.109, 0.101),
+        (0.96, 4.70, 0.112, 0.105),
+        (0.98, 5.00, 0.115, 0.110),
+    ]
+    for direction in ("left", "right"):
+        for index, (amplitude, duration, step, cross) in enumerate(train_takes, start=1):
+            specs.append(
+                SequenceSpec(
+                    id=f"shadow_gancho_{direction}_train_{index:02d}",
+                    split="train",
+                    kind="shadow_gancho",
+                    direction=direction,
+                    amplitude=amplitude,
+                    duration_s=duration + (0.08 if direction == "right" else 0.0),
+                    step_back_m=step,
+                    step_width_m=cross,
+                    hold_s=0.60,
+                    seed=2000 + index + (100 if direction == "right" else 0),
+                )
+            )
+
+    for direction in ("left", "right"):
+        for index, (amplitude, duration, step, cross) in enumerate(
+            [(0.89, 4.90, 0.102, 0.093), (0.97, 5.15, 0.114, 0.108)], start=1
+        ):
+            specs.append(
+                SequenceSpec(
+                    id=f"shadow_gancho_{direction}_heldout_{index:02d}",
+                    split="heldout",
+                    kind="shadow_gancho",
+                    direction=direction,
+                    amplitude=amplitude,
+                    duration_s=duration + (0.07 if direction == "right" else 0.0),
+                    step_back_m=step,
+                    step_width_m=cross,
+                    hold_s=0.62,
+                    seed=2200 + index + (100 if direction == "right" else 0),
+                )
+            )
+
+    for direction in ("left", "right"):
+        for index, (amplitude, duration, step, cross) in enumerate(
+            [(0.91, 5.30, 0.104, 0.097), (0.99, 4.95, 0.117, 0.112)], start=1
+        ):
+            specs.append(
+                SequenceSpec(
+                    id=f"shadow_gancho_{direction}_test_{index:02d}",
+                    split="test",
+                    kind="shadow_gancho",
+                    direction=direction,
+                    amplitude=amplitude,
+                    duration_s=duration + (0.09 if direction == "right" else 0.0),
+                    step_back_m=step,
+                    step_width_m=cross,
+                    hold_s=0.64,
+                    seed=2400 + index + (100 if direction == "right" else 0),
+                )
+            )
+    return specs
+
+
+def v2_dip_test_specs() -> list[SequenceSpec]:
+    """Return fresh v2 dip tests that were not used during target preflight."""
+
+    takes = [
+        ("left", 0.80, 5.15, 0.144, 0.052, 0.57),
+        ("right", 0.84, 5.08, 0.146, 0.056, 0.53),
+        ("left", 0.93, 5.32, 0.153, 0.060, 0.61),
+        ("right", 0.96, 5.38, 0.157, 0.049, 0.63),
+    ]
+    return [
+        SequenceSpec(
+            id=f"shadow_dip_v2_{direction}_test_{index:02d}",
+            split="test",
+            direction=direction,
+            amplitude=amplitude,
+            duration_s=duration,
+            step_back_m=step,
+            step_width_m=width,
+            hold_s=hold,
+            seed=2600 + index,
+        )
+        for index, (direction, amplitude, duration, step, width, hold) in enumerate(takes, start=1)
+    ]
+
+
+def combined_specs() -> list[SequenceSpec]:
+    """Return v1 plus v2 heroes, with explored v1 tests isolated as preflight."""
+
+    v1 = default_specs()
+    legacy_preflight = [replace(spec, split="preflight") for spec in v1 if spec.split == "test"]
+    specs = (
+        [spec for spec in v1 if spec.split != "test"]
+        + legacy_preflight
+        + gancho_specs()
+        + v2_dip_test_specs()
+    )
+    split_order = ("train", "heldout", "preflight", "test")
+    return [spec for split in split_order for spec in specs if spec.split == split]
+
+
 def write_motion_csv(path: Path, entry: dict[str, Any]) -> None:
     """Write a transparent Bones-compatible source CSV (degrees and centimetres)."""
 
@@ -781,6 +1057,8 @@ def generate_dataset(
     mjcf_path: Path,
     manifest_path: Path,
     specs: list[SequenceSpec] | None = None,
+    dataset_version: str = DATASET_VERSION,
+    split_dir: Path | None = None,
 ) -> dict[str, Any]:
     """Generate all frozen sequences, their source CSVs, PKLs, splits, and manifest."""
 
@@ -792,9 +1070,9 @@ def generate_dataset(
 
     for spec in specs:
         generated = generate_motion(spec, kinematics)
-        split_dir = output_dir / spec.split
-        split_dir.mkdir(parents=True, exist_ok=True)
-        pkl_path = split_dir / f"{spec.id}.pkl"
+        payload_split_dir = output_dir / spec.split
+        payload_split_dir.mkdir(parents=True, exist_ok=True)
+        pkl_path = payload_split_dir / f"{spec.id}.pkl"
         csv_path = output_dir / "csv" / spec.split / f"{spec.id}.csv"
         joblib.dump({spec.id: generated.entry}, pkl_path, compress=3)
         write_motion_csv(csv_path, generated.entry)
@@ -822,7 +1100,7 @@ def generate_dataset(
         )
 
     manifest = {
-        "dataset": DATASET_VERSION,
+        "dataset": dataset_version,
         "created_by": "Team SELTZER",
         "generator": "shadow-dance",
         "generator_version": "0.1.0",
@@ -843,9 +1121,13 @@ def generate_dataset(
     manifest_path.parent.mkdir(parents=True, exist_ok=True)
     with manifest_path.open("w", encoding="utf-8", newline="\n") as stream:
         stream.write(json.dumps(manifest, indent=2) + "\n")
-    split_dir = manifest_path.parent.parent / "splits"
-    split_dir.mkdir(parents=True, exist_ok=True)
+    split_output_dir = (
+        Path(split_dir) if split_dir is not None else manifest_path.parent.parent / "splits"
+    )
+    split_output_dir.mkdir(parents=True, exist_ok=True)
     for split, identifiers in manifest["splits"].items():
-        with (split_dir / f"{split}.txt").open("w", encoding="utf-8", newline="\n") as stream:
+        with (split_output_dir / f"{split}.txt").open(
+            "w", encoding="utf-8", newline="\n"
+        ) as stream:
             stream.write("\n".join(identifiers) + "\n")
     return manifest

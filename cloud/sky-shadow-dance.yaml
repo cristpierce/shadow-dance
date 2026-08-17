@@ -37,7 +37,7 @@ envs:
   SAVE_LAST_FREQUENCY: "5"
   RENDER_SEED: "303"
   HF_MODEL_REPO: ${HF_MODEL_REPO}
-  HF_DATASET_REPO: cristpierce/shadow-dip-v1
+  HF_DATASET_REPO: cristpierce/shadow-dance-v2
   ENTRANT_NVIDIA_EULA_ACCEPTED: ${ENTRANT_NVIDIA_EULA_ACCEPTED}
   ACCEPT_EULA: ${ACCEPT_EULA}
   S3_ENDPOINT_URL: ${S3_ENDPOINT_URL}
@@ -56,7 +56,7 @@ setup: |
   test "${NPA_IMAGE_PYTHON:-}" = /opt/npa/venv/bin/python
   test "${LOCAL_ONLY:-}" = 0
   "${NPA_IMAGE_PYTHON}" -c 'import boto3, huggingface_hub, imageio, numpy, onnx, PIL'
-  "${NPA_IMAGE_PYTHON}" scripts/verify_dataset_bundle.py
+  "${NPA_IMAGE_PYTHON}" scripts/verify_dataset_bundle.py --profile dance-v2
 run: |
   set -euo pipefail
   cd "${HOME}/shadow-dance"

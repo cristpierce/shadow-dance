@@ -10,7 +10,7 @@ Required release set:
 - `novelty.json` bound to the stock validation summary and preregistered thresholds;
 - `selection.json` with every validation/retention summary hash and the selected
   checkpoint's byte size and SHA-256;
-- `final-comparison.json` bound to the frozen selection plus all 12 stock and 12
+- `final-comparison.json` bound to the frozen selection plus all 24 stock and 24
   selected final-test trials;
 - combined G1 ONNX policy (the `_g1.onnx` portal nominee);
 - combined SMPL and teleop ONNX policies;

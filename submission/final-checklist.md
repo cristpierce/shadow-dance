@@ -31,13 +31,18 @@
 
 ## Evidence
 
-- [x] Reference validator overall pass and visual inspection.
-- [ ] Stock baseline establishes a real novelty gap; otherwise revise hero before train.
+- [x] Combined v2 reference validator passes 54/54 with zero warnings; all original v1
+  payload hashes remain identical. Four previously explored v1 tests are disclosed as
+  preflight-only, and all eight final-test policy inputs are fresh and unopened.
+- [x] Account-free public stock ONNX/MuJoCo preflight motivated the gancho revision and
+  shows 114.50 mm mean root error across its four validation motions. It is labelled a
+  proxy and does not satisfy the official Isaac novelty gate.
+- [ ] Official stock Isaac baseline establishes the preregistered novelty gap.
 - [ ] `ladder-plan.json` preserves the evidence/portal reserves and
   `ladder-outcome.json` exactly discloses every completed or omitted candidate.
 - [ ] Selected checkpoint wins on validation—not only train—references.
 - [ ] Final headline comes from test motions first opened after the winner was frozen.
-- [ ] Stock and selected policy each have all 12 final trials (4 motions × 3 seeds).
+- [ ] Stock and selected policy each have all 24 final trials (8 motions × 3 seeds).
 - [ ] `final-comparison.json` hash-binds test summaries to `selection.json`.
 - [ ] The complete 10-motion fundamentals-retention result is disclosed, including
   forward walking and heading turns in both directions.

@@ -1,0 +1,2996 @@
+{
+  "dataset": "shadow-dance-v2",
+  "created_by": "Team SELTZER",
+  "generator": "shadow-dance",
+  "generator_version": "0.1.0",
+  "upstream": {
+    "repository": "https://github.com/NVlabs/GR00T-WholeBodyControl",
+    "commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+    "mjcf": "gear_sonic/data/assets/robot_description/mjcf/g1_29dof_rev_1_0.xml"
+  },
+  "license": "Apache-2.0",
+  "contains_bones_seed": false,
+  "sequence_count": 54,
+  "splits": {
+    "heldout": [
+      "shadow_dip_left_heldout_19",
+      "shadow_dip_right_heldout_20",
+      "shadow_dip_left_heldout_21",
+      "shadow_dip_right_heldout_22",
+      "shadow_gancho_left_heldout_01",
+      "shadow_gancho_left_heldout_02",
+      "shadow_gancho_right_heldout_01",
+      "shadow_gancho_right_heldout_02"
+    ],
+    "preflight": [
+      "shadow_dip_left_test_23",
+      "shadow_dip_right_test_24",
+      "shadow_dip_left_test_25",
+      "shadow_dip_right_test_26"
+    ],
+    "test": [
+      "shadow_gancho_left_test_01",
+      "shadow_gancho_left_test_02",
+      "shadow_gancho_right_test_01",
+      "shadow_gancho_right_test_02",
+      "shadow_dip_v2_left_test_01",
+      "shadow_dip_v2_right_test_02",
+      "shadow_dip_v2_left_test_03",
+      "shadow_dip_v2_right_test_04"
+    ],
+    "train": [
+      "shadow_dip_left_train_01",
+      "shadow_dip_left_train_02",
+      "shadow_dip_left_train_03",
+      "shadow_dip_right_train_04",
+      "shadow_dip_right_train_05",
+      "shadow_dip_right_train_06",
+      "shadow_dip_left_train_07",
+      "shadow_dip_right_train_08",
+      "shadow_dip_left_train_09",
+      "shadow_dip_right_train_10",
+      "shadow_dip_left_train_11",
+      "shadow_dip_right_train_12",
+      "retention_stand_left",
+      "retention_squat_left",
+      "retention_sway_left",
+      "retention_sway_right",
+      "retention_torso_turn_left",
+      "retention_torso_turn_right",
+      "retention_walk_left",
+      "retention_walk_right",
+      "retention_turn_left",
+      "retention_turn_right",
+      "shadow_gancho_left_train_01",
+      "shadow_gancho_left_train_02",
+      "shadow_gancho_left_train_03",
+      "shadow_gancho_left_train_04",
+      "shadow_gancho_left_train_05",
+      "shadow_gancho_left_train_06",
+      "shadow_gancho_right_train_01",
+      "shadow_gancho_right_train_02",
+      "shadow_gancho_right_train_03",
+      "shadow_gancho_right_train_04",
+      "shadow_gancho_right_train_05",
+      "shadow_gancho_right_train_06"
+    ]
+  },
+  "sequences": [
+    {
+      "id": "shadow_dip_left_train_01",
+      "split": "train",
+      "kind": "shadow_dip",
+      "direction": "left",
+      "amplitude": 0.62,
+      "duration_s": 5.7,
+      "step_back_m": 0.1286,
+      "step_width_m": 0.05,
+      "hold_s": 0.482,
+      "seed": 1,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 286,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.684
+        ],
+        "step_and_pivot": [
+          0.684,
+          1.596
+        ],
+        "descend": [
+          1.596,
+          2.736
+        ],
+        "hold": [
+          2.736,
+          3.218
+        ],
+        "recover": [
+          3.218,
+          4.902
+        ],
+        "settle": [
+          4.902,
+          5.7
+        ]
+      },
+      "ik_max_position_error_m": 0.0007620699131238207,
+      "ik_max_orientation_error_deg": 0.40038089709163904,
+      "files": {
+        "motion_lib": "train/shadow_dip_left_train_01.pkl",
+        "source_csv": "csv/train/shadow_dip_left_train_01.csv",
+        "motion_lib_sha256": "376bcfbfab1fb262cefdb46ed1075956f15ae4123c0a50acf33249b400d93d91",
+        "source_csv_sha256": "1c3902e24bd9893f4a973a923c61375c1cd4a5cf753acfa90390a89ad06e335c"
+      }
+    },
+    {
+      "id": "shadow_dip_left_train_02",
+      "split": "train",
+      "kind": "shadow_dip",
+      "direction": "left",
+      "amplitude": 0.76,
+      "duration_s": 5.2,
+      "step_back_m": 0.1328,
+      "step_width_m": 0.05,
+      "hold_s": 0.496,
+      "seed": 2,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 261,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.624
+        ],
+        "step_and_pivot": [
+          0.624,
+          1.456
+        ],
+        "descend": [
+          1.456,
+          2.496
+        ],
+        "hold": [
+          2.496,
+          2.992
+        ],
+        "recover": [
+          2.992,
+          4.472
+        ],
+        "settle": [
+          4.472,
+          5.2
+        ]
+      },
+      "ik_max_position_error_m": 0.002740285326533476,
+      "ik_max_orientation_error_deg": 1.4460385530239719,
+      "files": {
+        "motion_lib": "train/shadow_dip_left_train_02.pkl",
+        "source_csv": "csv/train/shadow_dip_left_train_02.csv",
+        "motion_lib_sha256": "acbc7b314f747e92b40453a28b9182c7b0521aa61bc426d441f667e6a9c5b705",
+        "source_csv_sha256": "3a4bb14dc845fb8cf1e215ba0e10b8769697de18f0189cc455df1f7b4f9b2fc5"
+      }
+    },
+    {
+      "id": "shadow_dip_left_train_03",
+      "split": "train",
+      "kind": "shadow_dip",
+      "direction": "left",
+      "amplitude": 0.88,
+      "duration_s": 4.8,
+      "step_back_m": 0.1364,
+      "step_width_m": 0.05,
+      "hold_s": 0.508,
+      "seed": 3,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 241,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.576
+        ],
+        "step_and_pivot": [
+          0.576,
+          1.344
+        ],
+        "descend": [
+          1.344,
+          2.304
+        ],
+        "hold": [
+          2.304,
+          2.812
+        ],
+        "recover": [
+          2.812,
+          4.128
+        ],
+        "settle": [
+          4.128,
+          4.8
+        ]
+      },
+      "ik_max_position_error_m": 0.0045327293326743,
+      "ik_max_orientation_error_deg": 2.4039472588234143,
+      "files": {
+        "motion_lib": "train/shadow_dip_left_train_03.pkl",
+        "source_csv": "csv/train/shadow_dip_left_train_03.csv",
+        "motion_lib_sha256": "3bde873410ede2ba077fe4fb86a9a424360c0dd629f185286099ee97c3528c5b",
+        "source_csv_sha256": "d1bf33302ce1c8ad6630d6a257500ef1edf81edb1296cfa667b442c51eb53249"
+      }
+    },
+    {
+      "id": "shadow_dip_right_train_04",
+      "split": "train",
+      "kind": "shadow_dip",
+      "direction": "right",
+      "amplitude": 0.62,
+      "duration_s": 5.7,
+      "step_back_m": 0.1286,
+      "step_width_m": 0.05,
+      "hold_s": 0.482,
+      "seed": 4,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 286,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.684
+        ],
+        "step_and_pivot": [
+          0.684,
+          1.596
+        ],
+        "descend": [
+          1.596,
+          2.736
+        ],
+        "hold": [
+          2.736,
+          3.218
+        ],
+        "recover": [
+          3.218,
+          4.902
+        ],
+        "settle": [
+          4.902,
+          5.7
+        ]
+      },
+      "ik_max_position_error_m": 0.0007620699140252539,
+      "ik_max_orientation_error_deg": 0.40038089700151547,
+      "files": {
+        "motion_lib": "train/shadow_dip_right_train_04.pkl",
+        "source_csv": "csv/train/shadow_dip_right_train_04.csv",
+        "motion_lib_sha256": "dc6f3235a6ea992a688f2d523513687543331225b1a72520343e39379fb291cc",
+        "source_csv_sha256": "28ce11f51868961c8695bc69bca6ef102a08ddac390b7badeb0a822559fe055d"
+      }
+    },
+    {
+      "id": "shadow_dip_right_train_05",
+      "split": "train",
+      "kind": "shadow_dip",
+      "direction": "right",
+      "amplitude": 0.76,
+      "duration_s": 5.2,
+      "step_back_m": 0.1328,
+      "step_width_m": 0.05,
+      "hold_s": 0.496,
+      "seed": 5,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 261,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.624
+        ],
+        "step_and_pivot": [
+          0.624,
+          1.456
+        ],
+        "descend": [
+          1.456,
+          2.496
+        ],
+        "hold": [
+          2.496,
+          2.992
+        ],
+        "recover": [
+          2.992,
+          4.472
+        ],
+        "settle": [
+          4.472,
+          5.2
+        ]
+      },
+      "ik_max_position_error_m": 0.0027402853184822157,
+      "ik_max_orientation_error_deg": 1.4460385545882606,
+      "files": {
+        "motion_lib": "train/shadow_dip_right_train_05.pkl",
+        "source_csv": "csv/train/shadow_dip_right_train_05.csv",
+        "motion_lib_sha256": "ed8e3740224e8c589a279e71748917e74c2abadc0e382e639495ac5f9dce6804",
+        "source_csv_sha256": "383a74496533e992817acd381af17122b2ea1604589184f74b5538fb94fbe5b6"
+      }
+    },
+    {
+      "id": "shadow_dip_right_train_06",
+      "split": "train",
+      "kind": "shadow_dip",
+      "direction": "right",
+      "amplitude": 0.88,
+      "duration_s": 4.8,
+      "step_back_m": 0.1364,
+      "step_width_m": 0.05,
+      "hold_s": 0.508,
+      "seed": 6,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 241,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.576
+        ],
+        "step_and_pivot": [
+          0.576,
+          1.344
+        ],
+        "descend": [
+          1.344,
+          2.304
+        ],
+        "hold": [
+          2.304,
+          2.812
+        ],
+        "recover": [
+          2.812,
+          4.128
+        ],
+        "settle": [
+          4.128,
+          4.8
+        ]
+      },
+      "ik_max_position_error_m": 0.0045327293310567255,
+      "ik_max_orientation_error_deg": 2.403947258983614,
+      "files": {
+        "motion_lib": "train/shadow_dip_right_train_06.pkl",
+        "source_csv": "csv/train/shadow_dip_right_train_06.csv",
+        "motion_lib_sha256": "c20582d98f72c784286a9f8acc35ee3f37641609984b6f1f1b16d2bca3429919",
+        "source_csv_sha256": "df69b16b80b9bc730a1a4577b6922444b936a031ba4aa954735ed36c563170c1"
+      }
+    },
+    {
+      "id": "shadow_dip_left_train_07",
+      "split": "train",
+      "kind": "shadow_dip",
+      "direction": "left",
+      "amplitude": 0.7,
+      "duration_s": 4.5,
+      "step_back_m": 0.12,
+      "step_width_m": 0.05,
+      "hold_s": 0.38,
+      "seed": 7,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 226,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.54
+        ],
+        "step_and_pivot": [
+          0.54,
+          1.26
+        ],
+        "descend": [
+          1.26,
+          2.16
+        ],
+        "hold": [
+          2.16,
+          2.54
+        ],
+        "recover": [
+          2.54,
+          3.87
+        ],
+        "settle": [
+          3.87,
+          4.5
+        ]
+      },
+      "ik_max_position_error_m": 0.0017137748071510079,
+      "ik_max_orientation_error_deg": 0.8997807391412731,
+      "files": {
+        "motion_lib": "train/shadow_dip_left_train_07.pkl",
+        "source_csv": "csv/train/shadow_dip_left_train_07.csv",
+        "motion_lib_sha256": "780cc3781f65b6bfce2e61f8826de2609b3f3697b871662cdc06ab1b607aef7a",
+        "source_csv_sha256": "a75c0973949264561b107b5886782a45075a24d20171fbe09533514f67febd16"
+      }
+    },
+    {
+      "id": "shadow_dip_right_train_08",
+      "split": "train",
+      "kind": "shadow_dip",
+      "direction": "right",
+      "amplitude": 0.7,
+      "duration_s": 4.6,
+      "step_back_m": 0.12,
+      "step_width_m": 0.05,
+      "hold_s": 0.4,
+      "seed": 8,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 231,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.552
+        ],
+        "step_and_pivot": [
+          0.552,
+          1.288
+        ],
+        "descend": [
+          1.288,
+          2.208
+        ],
+        "hold": [
+          2.208,
+          2.608
+        ],
+        "recover": [
+          2.608,
+          3.956
+        ],
+        "settle": [
+          3.956,
+          4.6
+        ]
+      },
+      "ik_max_position_error_m": 0.0017115517517883234,
+      "ik_max_orientation_error_deg": 0.9005710009116379,
+      "files": {
+        "motion_lib": "train/shadow_dip_right_train_08.pkl",
+        "source_csv": "csv/train/shadow_dip_right_train_08.csv",
+        "motion_lib_sha256": "9fd1f3b5aeeb69c8474f249b03a3211b9ff206c2635d88440f4d4bbe493cc033",
+        "source_csv_sha256": "ca7d55933676ff39b707490ec14962b64a1a1b929bf82abf916befe754db4507"
+      }
+    },
+    {
+      "id": "shadow_dip_left_train_09",
+      "split": "train",
+      "kind": "shadow_dip",
+      "direction": "left",
+      "amplitude": 0.94,
+      "duration_s": 5.5,
+      "step_back_m": 0.16,
+      "step_width_m": 0.05,
+      "hold_s": 0.62,
+      "seed": 9,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 276,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.66
+        ],
+        "step_and_pivot": [
+          0.66,
+          1.54
+        ],
+        "descend": [
+          1.54,
+          2.64
+        ],
+        "hold": [
+          2.64,
+          3.26
+        ],
+        "recover": [
+          3.26,
+          4.73
+        ],
+        "settle": [
+          4.73,
+          5.5
+        ]
+      },
+      "ik_max_position_error_m": 0.005952825553517436,
+      "ik_max_orientation_error_deg": 3.1925025273667287,
+      "files": {
+        "motion_lib": "train/shadow_dip_left_train_09.pkl",
+        "source_csv": "csv/train/shadow_dip_left_train_09.csv",
+        "motion_lib_sha256": "2c628a139ae24e5d2368ec463f2ceb85d343b82b5fa0e8bc91eaf981451dbaf9",
+        "source_csv_sha256": "2cf99b389d005798430ec4025df7abaa5b89c3c93284db3f0f85ee4e60aa96de"
+      }
+    },
+    {
+      "id": "shadow_dip_right_train_10",
+      "split": "train",
+      "kind": "shadow_dip",
+      "direction": "right",
+      "amplitude": 0.94,
+      "duration_s": 5.4,
+      "step_back_m": 0.16,
+      "step_width_m": 0.05,
+      "hold_s": 0.6,
+      "seed": 10,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 271,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.648
+        ],
+        "step_and_pivot": [
+          0.648,
+          1.512
+        ],
+        "descend": [
+          1.512,
+          2.592
+        ],
+        "hold": [
+          2.592,
+          3.192
+        ],
+        "recover": [
+          3.192,
+          4.644
+        ],
+        "settle": [
+          4.644,
+          5.4
+        ]
+      },
+      "ik_max_position_error_m": 0.005950736298285878,
+      "ik_max_orientation_error_deg": 3.191394151798183,
+      "files": {
+        "motion_lib": "train/shadow_dip_right_train_10.pkl",
+        "source_csv": "csv/train/shadow_dip_right_train_10.csv",
+        "motion_lib_sha256": "bd8b4028423352ed06b986da2af73fe3579aad306d5bff8b568a7523730b6ea5",
+        "source_csv_sha256": "b97594e398bb8de9cfa4e6644adf1dcf8cdf34b6ba2cb199c11b8a0ecf517b03"
+      }
+    },
+    {
+      "id": "shadow_dip_left_train_11",
+      "split": "train",
+      "kind": "shadow_dip",
+      "direction": "left",
+      "amplitude": 0.94,
+      "duration_s": 5.0,
+      "step_back_m": 0.15,
+      "step_width_m": 0.05,
+      "hold_s": 0.52,
+      "seed": 11,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 251,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.6
+        ],
+        "step_and_pivot": [
+          0.6,
+          1.4
+        ],
+        "descend": [
+          1.4,
+          2.4
+        ],
+        "hold": [
+          2.4,
+          2.92
+        ],
+        "recover": [
+          2.92,
+          4.3
+        ],
+        "settle": [
+          4.3,
+          5.0
+        ]
+      },
+      "ik_max_position_error_m": 0.005730303827745624,
+      "ik_max_orientation_error_deg": 3.061922456113797,
+      "files": {
+        "motion_lib": "train/shadow_dip_left_train_11.pkl",
+        "source_csv": "csv/train/shadow_dip_left_train_11.csv",
+        "motion_lib_sha256": "ecd304a3b2aca81f2d0c1d8124155e75c9bb740d9c1bccc90881a052e6ea7b24",
+        "source_csv_sha256": "5b54ff2b656b3ae656f7c509e4951856e002af4e94539148d17c2bce0d3700ea"
+      }
+    },
+    {
+      "id": "shadow_dip_right_train_12",
+      "split": "train",
+      "kind": "shadow_dip",
+      "direction": "right",
+      "amplitude": 0.94,
+      "duration_s": 5.1,
+      "step_back_m": 0.15,
+      "step_width_m": 0.05,
+      "hold_s": 0.54,
+      "seed": 12,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 256,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.612
+        ],
+        "step_and_pivot": [
+          0.612,
+          1.428
+        ],
+        "descend": [
+          1.428,
+          2.448
+        ],
+        "hold": [
+          2.448,
+          2.988
+        ],
+        "recover": [
+          2.988,
+          4.386
+        ],
+        "settle": [
+          4.386,
+          5.1
+        ]
+      },
+      "ik_max_position_error_m": 0.0057275494542062865,
+      "ik_max_orientation_error_deg": 3.0604781935664005,
+      "files": {
+        "motion_lib": "train/shadow_dip_right_train_12.pkl",
+        "source_csv": "csv/train/shadow_dip_right_train_12.csv",
+        "motion_lib_sha256": "6af7c00bea1c38827b4db191a0508f53a7e697eec396a0793c875531999b4d9f",
+        "source_csv_sha256": "1c09baa84db983ad89b12d95f0f7f63016f0167b267b6ea97a8051d0fee2d907"
+      }
+    },
+    {
+      "id": "retention_stand_left",
+      "split": "train",
+      "kind": "stand",
+      "direction": "left",
+      "amplitude": 0.72,
+      "duration_s": 4.0,
+      "step_back_m": 0.0,
+      "step_width_m": 0.0,
+      "hold_s": 0.5,
+      "seed": 13,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 201,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.48
+        ],
+        "step_and_pivot": [
+          0.48,
+          1.12
+        ],
+        "descend": [
+          1.12,
+          1.92
+        ],
+        "hold": [
+          1.92,
+          2.42
+        ],
+        "recover": [
+          2.42,
+          3.44
+        ],
+        "settle": [
+          3.44,
+          4.0
+        ]
+      },
+      "ik_max_position_error_m": 2.2204471080412447e-16,
+      "ik_max_orientation_error_deg": 0.0,
+      "files": {
+        "motion_lib": "train/retention_stand_left.pkl",
+        "source_csv": "csv/train/retention_stand_left.csv",
+        "motion_lib_sha256": "d6ca8ab9c423a1866e198edf71263eedee480bc97047eda1eec75e9c06b84635",
+        "source_csv_sha256": "b4915bb8c7266da5825b5520a24da67eb8cf49795468450ddeb645fbaabdc403"
+      }
+    },
+    {
+      "id": "retention_squat_left",
+      "split": "train",
+      "kind": "squat",
+      "direction": "left",
+      "amplitude": 0.72,
+      "duration_s": 4.0,
+      "step_back_m": 0.0,
+      "step_width_m": 0.0,
+      "hold_s": 0.5,
+      "seed": 14,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 201,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.48
+        ],
+        "step_and_pivot": [
+          0.48,
+          1.12
+        ],
+        "descend": [
+          1.12,
+          1.92
+        ],
+        "hold": [
+          1.92,
+          2.42
+        ],
+        "recover": [
+          2.42,
+          3.44
+        ],
+        "settle": [
+          3.44,
+          4.0
+        ]
+      },
+      "ik_max_position_error_m": 1.1605324635159965e-10,
+      "ik_max_orientation_error_deg": 3.841481876178847e-11,
+      "files": {
+        "motion_lib": "train/retention_squat_left.pkl",
+        "source_csv": "csv/train/retention_squat_left.csv",
+        "motion_lib_sha256": "6ba676896060ba9de40c9d9b726f9558917c89a4f4cd8101d770927879a152bd",
+        "source_csv_sha256": "c245e07d01fd71e1bfa22c6343fd2d42e6a491614019fa9c2217eec572bd07a9"
+      }
+    },
+    {
+      "id": "retention_sway_left",
+      "split": "train",
+      "kind": "sway",
+      "direction": "left",
+      "amplitude": 0.72,
+      "duration_s": 4.0,
+      "step_back_m": 0.0,
+      "step_width_m": 0.0,
+      "hold_s": 0.5,
+      "seed": 15,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 201,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.48
+        ],
+        "step_and_pivot": [
+          0.48,
+          1.12
+        ],
+        "descend": [
+          1.12,
+          1.92
+        ],
+        "hold": [
+          1.92,
+          2.42
+        ],
+        "recover": [
+          2.42,
+          3.44
+        ],
+        "settle": [
+          3.44,
+          4.0
+        ]
+      },
+      "ik_max_position_error_m": 5.867997295942231e-11,
+      "ik_max_orientation_error_deg": 1.9567721069174843e-09,
+      "files": {
+        "motion_lib": "train/retention_sway_left.pkl",
+        "source_csv": "csv/train/retention_sway_left.csv",
+        "motion_lib_sha256": "60c6b0528d80e1aea7130feae6cf000f1e7f913fdc27664d0a13b39c686ad3cf",
+        "source_csv_sha256": "11c19bbc49ebec6a9e4987af7718037573a501d295b916e03bd2d74e18e477b8"
+      }
+    },
+    {
+      "id": "retention_sway_right",
+      "split": "train",
+      "kind": "sway",
+      "direction": "right",
+      "amplitude": 0.72,
+      "duration_s": 4.0,
+      "step_back_m": 0.0,
+      "step_width_m": 0.0,
+      "hold_s": 0.5,
+      "seed": 16,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 201,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.48
+        ],
+        "step_and_pivot": [
+          0.48,
+          1.12
+        ],
+        "descend": [
+          1.12,
+          1.92
+        ],
+        "hold": [
+          1.92,
+          2.42
+        ],
+        "recover": [
+          2.42,
+          3.44
+        ],
+        "settle": [
+          3.44,
+          4.0
+        ]
+      },
+      "ik_max_position_error_m": 5.849514116524062e-11,
+      "ik_max_orientation_error_deg": 1.956771756504608e-09,
+      "files": {
+        "motion_lib": "train/retention_sway_right.pkl",
+        "source_csv": "csv/train/retention_sway_right.csv",
+        "motion_lib_sha256": "1b154552d87af5c43088b9aebb0d2fad9f3f484d87025a6fe02e506d494aa76c",
+        "source_csv_sha256": "6575b83ecc77b0b4eea013128d597b4cc20e533581efd6f32b1dc33d502e41d4"
+      }
+    },
+    {
+      "id": "retention_torso_turn_left",
+      "split": "train",
+      "kind": "torso_turn",
+      "direction": "left",
+      "amplitude": 0.72,
+      "duration_s": 4.0,
+      "step_back_m": 0.0,
+      "step_width_m": 0.0,
+      "hold_s": 0.5,
+      "seed": 17,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 201,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.48
+        ],
+        "step_and_pivot": [
+          0.48,
+          1.12
+        ],
+        "descend": [
+          1.12,
+          1.92
+        ],
+        "hold": [
+          1.92,
+          2.42
+        ],
+        "recover": [
+          2.42,
+          3.44
+        ],
+        "settle": [
+          3.44,
+          4.0
+        ]
+      },
+      "ik_max_position_error_m": 2.2204471080412447e-16,
+      "ik_max_orientation_error_deg": 0.0,
+      "files": {
+        "motion_lib": "train/retention_torso_turn_left.pkl",
+        "source_csv": "csv/train/retention_torso_turn_left.csv",
+        "motion_lib_sha256": "c774a2fd1dcbf52e7c757dc20e5aba2bfe9706970a99fc82fe9e16e08ebd80d3",
+        "source_csv_sha256": "a531215b1c378851c796051bbf27c4a1ca12ba590f457685273fae946aee412c"
+      }
+    },
+    {
+      "id": "retention_torso_turn_right",
+      "split": "train",
+      "kind": "torso_turn",
+      "direction": "right",
+      "amplitude": 0.72,
+      "duration_s": 4.0,
+      "step_back_m": 0.0,
+      "step_width_m": 0.0,
+      "hold_s": 0.5,
+      "seed": 18,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 201,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.48
+        ],
+        "step_and_pivot": [
+          0.48,
+          1.12
+        ],
+        "descend": [
+          1.12,
+          1.92
+        ],
+        "hold": [
+          1.92,
+          2.42
+        ],
+        "recover": [
+          2.42,
+          3.44
+        ],
+        "settle": [
+          3.44,
+          4.0
+        ]
+      },
+      "ik_max_position_error_m": 2.2204471080412447e-16,
+      "ik_max_orientation_error_deg": 0.0,
+      "files": {
+        "motion_lib": "train/retention_torso_turn_right.pkl",
+        "source_csv": "csv/train/retention_torso_turn_right.csv",
+        "motion_lib_sha256": "985805f65c64ffeb5f49e421952fa4630957023c97f912ff280ce91877969f27",
+        "source_csv_sha256": "7abfbf3b87d597a0824c89eb402e0833436c3cded5449c4b1499c321052bddd3"
+      }
+    },
+    {
+      "id": "retention_walk_left",
+      "split": "train",
+      "kind": "walk",
+      "direction": "left",
+      "amplitude": 0.82,
+      "duration_s": 4.6,
+      "step_back_m": 0.21,
+      "step_width_m": 0.0,
+      "hold_s": 0.5,
+      "seed": 119,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 231,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.552
+        ],
+        "step_and_pivot": [
+          0.552,
+          1.288
+        ],
+        "descend": [
+          1.288,
+          2.208
+        ],
+        "hold": [
+          2.208,
+          2.708
+        ],
+        "recover": [
+          2.708,
+          3.956
+        ],
+        "settle": [
+          3.956,
+          4.6
+        ]
+      },
+      "ik_max_position_error_m": 7.631177048990192e-11,
+      "ik_max_orientation_error_deg": 2.4164085634061694e-09,
+      "files": {
+        "motion_lib": "train/retention_walk_left.pkl",
+        "source_csv": "csv/train/retention_walk_left.csv",
+        "motion_lib_sha256": "697d2cee51b600c8c7176cb099d2e98c91a4997adf57640a7e765417c710ee78",
+        "source_csv_sha256": "73a080de6c36fd68e862cba68e41d9b343d853a184a4bcf2f86a900149cfcb8a"
+      }
+    },
+    {
+      "id": "retention_walk_right",
+      "split": "train",
+      "kind": "walk",
+      "direction": "right",
+      "amplitude": 0.82,
+      "duration_s": 5.2,
+      "step_back_m": 0.2,
+      "step_width_m": 0.0,
+      "hold_s": 0.5,
+      "seed": 120,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 261,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.624
+        ],
+        "step_and_pivot": [
+          0.624,
+          1.456
+        ],
+        "descend": [
+          1.456,
+          2.496
+        ],
+        "hold": [
+          2.496,
+          2.996
+        ],
+        "recover": [
+          2.996,
+          4.472
+        ],
+        "settle": [
+          4.472,
+          5.2
+        ]
+      },
+      "ik_max_position_error_m": 1.3300332412711684e-10,
+      "ik_max_orientation_error_deg": 1.3768886026071876e-09,
+      "files": {
+        "motion_lib": "train/retention_walk_right.pkl",
+        "source_csv": "csv/train/retention_walk_right.csv",
+        "motion_lib_sha256": "aff9bf81233c7e32ab13d193c49ef3db66a7c11a190a00849255b5ef17efe95b",
+        "source_csv_sha256": "50062dcf248aea2ab89cded5ca46c0d03551d12b56c7221ae2e0139d4b1c27e7"
+      }
+    },
+    {
+      "id": "retention_turn_left",
+      "split": "train",
+      "kind": "turn",
+      "direction": "left",
+      "amplitude": 0.86,
+      "duration_s": 4.4,
+      "step_back_m": 0.0,
+      "step_width_m": 0.0,
+      "hold_s": 0.5,
+      "seed": 121,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 221,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.528
+        ],
+        "step_and_pivot": [
+          0.528,
+          1.232
+        ],
+        "descend": [
+          1.232,
+          2.112
+        ],
+        "hold": [
+          2.112,
+          2.612
+        ],
+        "recover": [
+          2.612,
+          3.784
+        ],
+        "settle": [
+          3.784,
+          4.4
+        ]
+      },
+      "ik_max_position_error_m": 7.525936122282129e-11,
+      "ik_max_orientation_error_deg": 3.749698006525352e-09,
+      "files": {
+        "motion_lib": "train/retention_turn_left.pkl",
+        "source_csv": "csv/train/retention_turn_left.csv",
+        "motion_lib_sha256": "e58700893f746e0f750652869541559787c35383a3976bc63b0450b8a52d5318",
+        "source_csv_sha256": "d8773debfd854b942e32b7d5560cbcf88cc8719e1be3a4ab4c0b942520fc7023"
+      }
+    },
+    {
+      "id": "retention_turn_right",
+      "split": "train",
+      "kind": "turn",
+      "direction": "right",
+      "amplitude": 0.94,
+      "duration_s": 4.6,
+      "step_back_m": 0.0,
+      "step_width_m": 0.0,
+      "hold_s": 0.5,
+      "seed": 122,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 231,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.552
+        ],
+        "step_and_pivot": [
+          0.552,
+          1.288
+        ],
+        "descend": [
+          1.288,
+          2.208
+        ],
+        "hold": [
+          2.208,
+          2.708
+        ],
+        "recover": [
+          2.708,
+          3.956
+        ],
+        "settle": [
+          3.956,
+          4.6
+        ]
+      },
+      "ik_max_position_error_m": 9.929036051279416e-11,
+      "ik_max_orientation_error_deg": 9.869153527360429e-10,
+      "files": {
+        "motion_lib": "train/retention_turn_right.pkl",
+        "source_csv": "csv/train/retention_turn_right.csv",
+        "motion_lib_sha256": "ed0e418de57973d3c8346370fbf23738c0af8a896826ff39f9fbedfe4f91cf27",
+        "source_csv_sha256": "8e0834568c9f01bcff6862d4ce7a61dfefb04fe6ce8d5008a4d65359b1388840"
+      }
+    },
+    {
+      "id": "shadow_gancho_left_train_01",
+      "split": "train",
+      "kind": "shadow_gancho",
+      "direction": "left",
+      "amplitude": 0.86,
+      "duration_s": 5.4,
+      "step_back_m": 0.1,
+      "step_width_m": 0.09,
+      "hold_s": 0.6,
+      "seed": 2001,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 271,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.648
+        ],
+        "step_and_pivot": [
+          0.648,
+          1.458
+        ],
+        "lift": [
+          1.458,
+          2.16
+        ],
+        "hook_and_hold": [
+          2.16,
+          3.456
+        ],
+        "recover": [
+          3.456,
+          4.752
+        ],
+        "settle": [
+          4.752,
+          5.4
+        ]
+      },
+      "ik_max_position_error_m": 0.0025878479334028037,
+      "ik_max_orientation_error_deg": 1.0213082956465562,
+      "files": {
+        "motion_lib": "train/shadow_gancho_left_train_01.pkl",
+        "source_csv": "csv/train/shadow_gancho_left_train_01.csv",
+        "motion_lib_sha256": "6467376c7d5c3e700b8d6ec4fd67b80aa089eb06c6ef03a066c852d82328dde1",
+        "source_csv_sha256": "f62b2ae35a2c79a0c45a5b43f6c0e0d95bd35eb23e5d137ff1d140e92ca90a71"
+      }
+    },
+    {
+      "id": "shadow_gancho_left_train_02",
+      "split": "train",
+      "kind": "shadow_gancho",
+      "direction": "left",
+      "amplitude": 0.9,
+      "duration_s": 5.0,
+      "step_back_m": 0.103,
+      "step_width_m": 0.095,
+      "hold_s": 0.6,
+      "seed": 2002,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 251,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.6
+        ],
+        "step_and_pivot": [
+          0.6,
+          1.35
+        ],
+        "lift": [
+          1.35,
+          2.0
+        ],
+        "hook_and_hold": [
+          2.0,
+          3.2
+        ],
+        "recover": [
+          3.2,
+          4.4
+        ],
+        "settle": [
+          4.4,
+          5.0
+        ]
+      },
+      "ik_max_position_error_m": 0.0033575543799928918,
+      "ik_max_orientation_error_deg": 1.3868460812033234,
+      "files": {
+        "motion_lib": "train/shadow_gancho_left_train_02.pkl",
+        "source_csv": "csv/train/shadow_gancho_left_train_02.csv",
+        "motion_lib_sha256": "40b42b7d634ac53e8e11445d490ed689c12dba02f6cca57b6c1795557d2dcb8b",
+        "source_csv_sha256": "6e34f63401094ebb4a6ff68f2cbe78f25d6da63f649852fc43c13fe7ae942217"
+      }
+    },
+    {
+      "id": "shadow_gancho_left_train_03",
+      "split": "train",
+      "kind": "shadow_gancho",
+      "direction": "left",
+      "amplitude": 0.92,
+      "duration_s": 4.8,
+      "step_back_m": 0.105,
+      "step_width_m": 0.1,
+      "hold_s": 0.6,
+      "seed": 2003,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 241,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.576
+        ],
+        "step_and_pivot": [
+          0.576,
+          1.296
+        ],
+        "lift": [
+          1.296,
+          1.92
+        ],
+        "hook_and_hold": [
+          1.92,
+          3.072
+        ],
+        "recover": [
+          3.072,
+          4.224
+        ],
+        "settle": [
+          4.224,
+          4.8
+        ]
+      },
+      "ik_max_position_error_m": 0.0037483301011811713,
+      "ik_max_orientation_error_deg": 1.5908973246473772,
+      "files": {
+        "motion_lib": "train/shadow_gancho_left_train_03.pkl",
+        "source_csv": "csv/train/shadow_gancho_left_train_03.csv",
+        "motion_lib_sha256": "f0e944ebdfbb404ee1813e44506e2dac04e1d075b7064b20a5731165f5f8ad2f",
+        "source_csv_sha256": "bed2c8bc30e99e61c2e8e20953879ea121d23411669a2d982c24056ac8062b69"
+      }
+    },
+    {
+      "id": "shadow_gancho_left_train_04",
+      "split": "train",
+      "kind": "shadow_gancho",
+      "direction": "left",
+      "amplitude": 0.94,
+      "duration_s": 5.2,
+      "step_back_m": 0.109,
+      "step_width_m": 0.101,
+      "hold_s": 0.6,
+      "seed": 2004,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 261,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.624
+        ],
+        "step_and_pivot": [
+          0.624,
+          1.404
+        ],
+        "lift": [
+          1.404,
+          2.08
+        ],
+        "hook_and_hold": [
+          2.08,
+          3.328
+        ],
+        "recover": [
+          3.328,
+          4.576
+        ],
+        "settle": [
+          4.576,
+          5.2
+        ]
+      },
+      "ik_max_position_error_m": 0.00414342349527221,
+      "ik_max_orientation_error_deg": 1.7962016897486477,
+      "files": {
+        "motion_lib": "train/shadow_gancho_left_train_04.pkl",
+        "source_csv": "csv/train/shadow_gancho_left_train_04.csv",
+        "motion_lib_sha256": "3f2bd8095fd625dd4ce2715453e8f1c2fc545124c883337a0ca5e2db6b7ddcea",
+        "source_csv_sha256": "462ef30a79102f39d368bbd4b56c8fe5eec67d531f16ba01956d7fdcff2fb67f"
+      }
+    },
+    {
+      "id": "shadow_gancho_left_train_05",
+      "split": "train",
+      "kind": "shadow_gancho",
+      "direction": "left",
+      "amplitude": 0.96,
+      "duration_s": 4.7,
+      "step_back_m": 0.112,
+      "step_width_m": 0.105,
+      "hold_s": 0.6,
+      "seed": 2005,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 236,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.564
+        ],
+        "step_and_pivot": [
+          0.564,
+          1.269
+        ],
+        "lift": [
+          1.269,
+          1.88
+        ],
+        "hook_and_hold": [
+          1.88,
+          3.008
+        ],
+        "recover": [
+          3.008,
+          4.136
+        ],
+        "settle": [
+          4.136,
+          4.7
+        ]
+      },
+      "ik_max_position_error_m": 0.004549368141692061,
+      "ik_max_orientation_error_deg": 2.002767906112439,
+      "files": {
+        "motion_lib": "train/shadow_gancho_left_train_05.pkl",
+        "source_csv": "csv/train/shadow_gancho_left_train_05.csv",
+        "motion_lib_sha256": "c248470a7bdd82813f314641efcf5981174e4467821287dcf33c28f2ff02adeb",
+        "source_csv_sha256": "7587582c2be4905589eb4c0d486e0d4d8d34194debfc7fbe552916b7654e3983"
+      }
+    },
+    {
+      "id": "shadow_gancho_left_train_06",
+      "split": "train",
+      "kind": "shadow_gancho",
+      "direction": "left",
+      "amplitude": 0.98,
+      "duration_s": 5.0,
+      "step_back_m": 0.115,
+      "step_width_m": 0.11,
+      "hold_s": 0.6,
+      "seed": 2006,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 251,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.6
+        ],
+        "step_and_pivot": [
+          0.6,
+          1.35
+        ],
+        "lift": [
+          1.35,
+          2.0
+        ],
+        "hook_and_hold": [
+          2.0,
+          3.2
+        ],
+        "recover": [
+          3.2,
+          4.4
+        ],
+        "settle": [
+          4.4,
+          5.0
+        ]
+      },
+      "ik_max_position_error_m": 0.004968209854771299,
+      "ik_max_orientation_error_deg": 2.210604593889166,
+      "files": {
+        "motion_lib": "train/shadow_gancho_left_train_06.pkl",
+        "source_csv": "csv/train/shadow_gancho_left_train_06.csv",
+        "motion_lib_sha256": "0944a66f23e9e5c52eb1293da93daa0d9ecaffccbb2193ec95a2ca405adc5478",
+        "source_csv_sha256": "d971ea1c1e48277fc07c6b622f80d4a08f8141944bcd12fec65fa0f049a37a48"
+      }
+    },
+    {
+      "id": "shadow_gancho_right_train_01",
+      "split": "train",
+      "kind": "shadow_gancho",
+      "direction": "right",
+      "amplitude": 0.86,
+      "duration_s": 5.48,
+      "step_back_m": 0.1,
+      "step_width_m": 0.09,
+      "hold_s": 0.6,
+      "seed": 2101,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 275,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.658
+        ],
+        "step_and_pivot": [
+          0.658,
+          1.48
+        ],
+        "lift": [
+          1.48,
+          2.192
+        ],
+        "hook_and_hold": [
+          2.192,
+          3.507
+        ],
+        "recover": [
+          3.507,
+          4.822
+        ],
+        "settle": [
+          4.822,
+          5.48
+        ]
+      },
+      "ik_max_position_error_m": 0.0025884523528342217,
+      "ik_max_orientation_error_deg": 1.0213091837501582,
+      "files": {
+        "motion_lib": "train/shadow_gancho_right_train_01.pkl",
+        "source_csv": "csv/train/shadow_gancho_right_train_01.csv",
+        "motion_lib_sha256": "ef0ae45801c40e0372300ed70b9e666fd6e8a0081530a150f35d514b7b8267ce",
+        "source_csv_sha256": "5209e637b044a94234f7aab71bae28360bd531ed6f61f85beefff1da5ed6c7b2"
+      }
+    },
+    {
+      "id": "shadow_gancho_right_train_02",
+      "split": "train",
+      "kind": "shadow_gancho",
+      "direction": "right",
+      "amplitude": 0.9,
+      "duration_s": 5.08,
+      "step_back_m": 0.103,
+      "step_width_m": 0.095,
+      "hold_s": 0.6,
+      "seed": 2102,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 255,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.61
+        ],
+        "step_and_pivot": [
+          0.61,
+          1.372
+        ],
+        "lift": [
+          1.372,
+          2.032
+        ],
+        "hook_and_hold": [
+          2.032,
+          3.251
+        ],
+        "recover": [
+          3.251,
+          4.47
+        ],
+        "settle": [
+          4.47,
+          5.08
+        ]
+      },
+      "ik_max_position_error_m": 0.0033567067337668616,
+      "ik_max_orientation_error_deg": 1.3868459039333967,
+      "files": {
+        "motion_lib": "train/shadow_gancho_right_train_02.pkl",
+        "source_csv": "csv/train/shadow_gancho_right_train_02.csv",
+        "motion_lib_sha256": "63203d18e284fd5440f70f64bbd65c176fb1073f08dbc52a8753cc0ec1aeb854",
+        "source_csv_sha256": "246c907e6d6d8654619a7bd1bfeedac373dc4ad27032ae175370a0d28fab7eb3"
+      }
+    },
+    {
+      "id": "shadow_gancho_right_train_03",
+      "split": "train",
+      "kind": "shadow_gancho",
+      "direction": "right",
+      "amplitude": 0.92,
+      "duration_s": 4.88,
+      "step_back_m": 0.105,
+      "step_width_m": 0.1,
+      "hold_s": 0.6,
+      "seed": 2103,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 245,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.586
+        ],
+        "step_and_pivot": [
+          0.586,
+          1.318
+        ],
+        "lift": [
+          1.318,
+          1.952
+        ],
+        "hook_and_hold": [
+          1.952,
+          3.123
+        ],
+        "recover": [
+          3.123,
+          4.294
+        ],
+        "settle": [
+          4.294,
+          4.88
+        ]
+      },
+      "ik_max_position_error_m": 0.0037480831056434607,
+      "ik_max_orientation_error_deg": 1.5908974307933443,
+      "files": {
+        "motion_lib": "train/shadow_gancho_right_train_03.pkl",
+        "source_csv": "csv/train/shadow_gancho_right_train_03.csv",
+        "motion_lib_sha256": "8ecb848a4836967ab64f0ff7004be161a1e310622a86caf629b73087e1c6ee92",
+        "source_csv_sha256": "5b7ce92aa0b746a2d2987cb48c9b9046d2f6afcaeac8360e344aad97e336266d"
+      }
+    },
+    {
+      "id": "shadow_gancho_right_train_04",
+      "split": "train",
+      "kind": "shadow_gancho",
+      "direction": "right",
+      "amplitude": 0.94,
+      "duration_s": 5.28,
+      "step_back_m": 0.109,
+      "step_width_m": 0.101,
+      "hold_s": 0.6,
+      "seed": 2104,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 265,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.634
+        ],
+        "step_and_pivot": [
+          0.634,
+          1.426
+        ],
+        "lift": [
+          1.426,
+          2.112
+        ],
+        "hook_and_hold": [
+          2.112,
+          3.379
+        ],
+        "recover": [
+          3.379,
+          4.646
+        ],
+        "settle": [
+          4.646,
+          5.28
+        ]
+      },
+      "ik_max_position_error_m": 0.004143340961179681,
+      "ik_max_orientation_error_deg": 1.796200193260916,
+      "files": {
+        "motion_lib": "train/shadow_gancho_right_train_04.pkl",
+        "source_csv": "csv/train/shadow_gancho_right_train_04.csv",
+        "motion_lib_sha256": "c9c776c6e6b7b5da0e960d944707f23ba92a86d0e45e64f28e450c7c734e0162",
+        "source_csv_sha256": "d5fbc58948979fcc5181a79586a9da4e73a88088218bd929553d491374f3f3b3"
+      }
+    },
+    {
+      "id": "shadow_gancho_right_train_05",
+      "split": "train",
+      "kind": "shadow_gancho",
+      "direction": "right",
+      "amplitude": 0.96,
+      "duration_s": 4.78,
+      "step_back_m": 0.112,
+      "step_width_m": 0.105,
+      "hold_s": 0.6,
+      "seed": 2105,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 240,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.574
+        ],
+        "step_and_pivot": [
+          0.574,
+          1.291
+        ],
+        "lift": [
+          1.291,
+          1.912
+        ],
+        "hook_and_hold": [
+          1.912,
+          3.059
+        ],
+        "recover": [
+          3.059,
+          4.206
+        ],
+        "settle": [
+          4.206,
+          4.78
+        ]
+      },
+      "ik_max_position_error_m": 0.004549264746439983,
+      "ik_max_orientation_error_deg": 2.002766185317193,
+      "files": {
+        "motion_lib": "train/shadow_gancho_right_train_05.pkl",
+        "source_csv": "csv/train/shadow_gancho_right_train_05.csv",
+        "motion_lib_sha256": "fd301c5ca1a4775ed7a39484b7898425f1c372d68ff9d73d63a15ab3d1915c37",
+        "source_csv_sha256": "aa3b82d423e487880f5d630f02c3ee7208e5eadf66577036416dd3e24b726b09"
+      }
+    },
+    {
+      "id": "shadow_gancho_right_train_06",
+      "split": "train",
+      "kind": "shadow_gancho",
+      "direction": "right",
+      "amplitude": 0.98,
+      "duration_s": 5.08,
+      "step_back_m": 0.115,
+      "step_width_m": 0.11,
+      "hold_s": 0.6,
+      "seed": 2106,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 255,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.61
+        ],
+        "step_and_pivot": [
+          0.61,
+          1.372
+        ],
+        "lift": [
+          1.372,
+          2.032
+        ],
+        "hook_and_hold": [
+          2.032,
+          3.251
+        ],
+        "recover": [
+          3.251,
+          4.47
+        ],
+        "settle": [
+          4.47,
+          5.08
+        ]
+      },
+      "ik_max_position_error_m": 0.004967371283227142,
+      "ik_max_orientation_error_deg": 2.210604353706619,
+      "files": {
+        "motion_lib": "train/shadow_gancho_right_train_06.pkl",
+        "source_csv": "csv/train/shadow_gancho_right_train_06.csv",
+        "motion_lib_sha256": "750a9fd1fee302117df0c3d1cb0e6939ff162af92329b6387cc73a37ee34c3e2",
+        "source_csv_sha256": "0a6c4bf756d88ab486d2a54d48e9423ed2ef3b4b5925926c9dd539ace58ab122"
+      }
+    },
+    {
+      "id": "shadow_dip_left_heldout_19",
+      "split": "heldout",
+      "kind": "shadow_dip",
+      "direction": "left",
+      "amplitude": 0.82,
+      "duration_s": 4.65,
+      "step_back_m": 0.135,
+      "step_width_m": 0.05,
+      "hold_s": 0.47,
+      "seed": 19,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 234,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.558
+        ],
+        "step_and_pivot": [
+          0.558,
+          1.302
+        ],
+        "descend": [
+          1.302,
+          2.232
+        ],
+        "hold": [
+          2.232,
+          2.702
+        ],
+        "recover": [
+          2.702,
+          3.999
+        ],
+        "settle": [
+          3.999,
+          4.65
+        ]
+      },
+      "ik_max_position_error_m": 0.003633991604004922,
+      "ik_max_orientation_error_deg": 1.9221171691822219,
+      "files": {
+        "motion_lib": "heldout/shadow_dip_left_heldout_19.pkl",
+        "source_csv": "csv/heldout/shadow_dip_left_heldout_19.csv",
+        "motion_lib_sha256": "1a6641979d803a3e2a9fa9ecf7b23bd29d53391edcbd425d6efaade0a28dd5c7",
+        "source_csv_sha256": "235f149f9aeb071dc544e911d27eacf214021f6e2420188653284106ed8f7509"
+      }
+    },
+    {
+      "id": "shadow_dip_right_heldout_20",
+      "split": "heldout",
+      "kind": "shadow_dip",
+      "direction": "right",
+      "amplitude": 0.82,
+      "duration_s": 4.75,
+      "step_back_m": 0.135,
+      "step_width_m": 0.05,
+      "hold_s": 0.49,
+      "seed": 20,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 239,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.57
+        ],
+        "step_and_pivot": [
+          0.57,
+          1.33
+        ],
+        "descend": [
+          1.33,
+          2.28
+        ],
+        "hold": [
+          2.28,
+          2.77
+        ],
+        "recover": [
+          2.77,
+          4.085
+        ],
+        "settle": [
+          4.085,
+          4.75
+        ]
+      },
+      "ik_max_position_error_m": 0.003632304386620803,
+      "ik_max_orientation_error_deg": 1.9231343361980746,
+      "files": {
+        "motion_lib": "heldout/shadow_dip_right_heldout_20.pkl",
+        "source_csv": "csv/heldout/shadow_dip_right_heldout_20.csv",
+        "motion_lib_sha256": "f275ce038ef8e33e8def6d3b581be6cdef11772586a3f7cc5233558b92136265",
+        "source_csv_sha256": "9f64cb3cf308038992b2759842bae1d87ee3327769062251b30518f5687f33d6"
+      }
+    },
+    {
+      "id": "shadow_dip_left_heldout_21",
+      "split": "heldout",
+      "kind": "shadow_dip",
+      "direction": "left",
+      "amplitude": 0.95,
+      "duration_s": 5.25,
+      "step_back_m": 0.155,
+      "step_width_m": 0.05,
+      "hold_s": 0.58,
+      "seed": 21,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 263,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.63
+        ],
+        "step_and_pivot": [
+          0.63,
+          1.47
+        ],
+        "descend": [
+          1.47,
+          2.52
+        ],
+        "hold": [
+          2.52,
+          3.1
+        ],
+        "recover": [
+          3.1,
+          4.515
+        ],
+        "settle": [
+          4.515,
+          5.25
+        ]
+      },
+      "ik_max_position_error_m": 0.0059967398721849025,
+      "ik_max_orientation_error_deg": 3.2116471497827845,
+      "files": {
+        "motion_lib": "heldout/shadow_dip_left_heldout_21.pkl",
+        "source_csv": "csv/heldout/shadow_dip_left_heldout_21.csv",
+        "motion_lib_sha256": "aa7b3a3c467b38b47353aa3dbe95415017c5ae7ab4b5b1964145ee1e0d5d77e7",
+        "source_csv_sha256": "98cb1437fcec8ef3fc1119d19e796c7ef2ec67a1da6de4cc35c8d74846cf0494"
+      }
+    },
+    {
+      "id": "shadow_dip_right_heldout_22",
+      "split": "heldout",
+      "kind": "shadow_dip",
+      "direction": "right",
+      "amplitude": 0.95,
+      "duration_s": 5.35,
+      "step_back_m": 0.155,
+      "step_width_m": 0.05,
+      "hold_s": 0.6,
+      "seed": 22,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 269,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.642
+        ],
+        "step_and_pivot": [
+          0.642,
+          1.498
+        ],
+        "descend": [
+          1.498,
+          2.568
+        ],
+        "hold": [
+          2.568,
+          3.168
+        ],
+        "recover": [
+          3.168,
+          4.601
+        ],
+        "settle": [
+          4.601,
+          5.35
+        ]
+      },
+      "ik_max_position_error_m": 0.005998244852333646,
+      "ik_max_orientation_error_deg": 3.212304012107442,
+      "files": {
+        "motion_lib": "heldout/shadow_dip_right_heldout_22.pkl",
+        "source_csv": "csv/heldout/shadow_dip_right_heldout_22.csv",
+        "motion_lib_sha256": "f43b423ac7bee93bceadcccdbfb755fae1452703c16edb887fb98f0b62d9bf16",
+        "source_csv_sha256": "6e5f9d30543275fc7fb820686944caed859b4eab6aa1378360c499dcc55afc6b"
+      }
+    },
+    {
+      "id": "shadow_gancho_left_heldout_01",
+      "split": "heldout",
+      "kind": "shadow_gancho",
+      "direction": "left",
+      "amplitude": 0.89,
+      "duration_s": 4.9,
+      "step_back_m": 0.102,
+      "step_width_m": 0.093,
+      "hold_s": 0.62,
+      "seed": 2201,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 246,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.588
+        ],
+        "step_and_pivot": [
+          0.588,
+          1.323
+        ],
+        "lift": [
+          1.323,
+          1.96
+        ],
+        "hook_and_hold": [
+          1.96,
+          3.136
+        ],
+        "recover": [
+          3.136,
+          4.312
+        ],
+        "settle": [
+          4.312,
+          4.9
+        ]
+      },
+      "ik_max_position_error_m": 0.0031628633511725473,
+      "ik_max_orientation_error_deg": 1.2852867146745106,
+      "files": {
+        "motion_lib": "heldout/shadow_gancho_left_heldout_01.pkl",
+        "source_csv": "csv/heldout/shadow_gancho_left_heldout_01.csv",
+        "motion_lib_sha256": "371f4e4aa0ccb0ae72e3efbaf2376275cef9813e837bc03333848b8802d421ac",
+        "source_csv_sha256": "cf6309fbccd899a562c9d2990788bf65e2917e6eafc57a80b1078248d25b948d"
+      }
+    },
+    {
+      "id": "shadow_gancho_left_heldout_02",
+      "split": "heldout",
+      "kind": "shadow_gancho",
+      "direction": "left",
+      "amplitude": 0.97,
+      "duration_s": 5.15,
+      "step_back_m": 0.114,
+      "step_width_m": 0.108,
+      "hold_s": 0.62,
+      "seed": 2202,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 259,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.618
+        ],
+        "step_and_pivot": [
+          0.618,
+          1.391
+        ],
+        "lift": [
+          1.391,
+          2.06
+        ],
+        "hook_and_hold": [
+          2.06,
+          3.296
+        ],
+        "recover": [
+          3.296,
+          4.532
+        ],
+        "settle": [
+          4.532,
+          5.15
+        ]
+      },
+      "ik_max_position_error_m": 0.004757411646475627,
+      "ik_max_orientation_error_deg": 2.106528309676375,
+      "files": {
+        "motion_lib": "heldout/shadow_gancho_left_heldout_02.pkl",
+        "source_csv": "csv/heldout/shadow_gancho_left_heldout_02.csv",
+        "motion_lib_sha256": "69c36381b4bd16d8826f6de6981c18d75e01f795bfd30432248f7ed9d715fe18",
+        "source_csv_sha256": "f2d3fc72f882c9d90e5c54a6d9c7f9194bb692b48676e761dcd278c52d5ddb1a"
+      }
+    },
+    {
+      "id": "shadow_gancho_right_heldout_01",
+      "split": "heldout",
+      "kind": "shadow_gancho",
+      "direction": "right",
+      "amplitude": 0.89,
+      "duration_s": 4.970000000000001,
+      "step_back_m": 0.102,
+      "step_width_m": 0.093,
+      "hold_s": 0.62,
+      "seed": 2301,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 250,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.596
+        ],
+        "step_and_pivot": [
+          0.596,
+          1.342
+        ],
+        "lift": [
+          1.342,
+          1.988
+        ],
+        "hook_and_hold": [
+          1.988,
+          3.181
+        ],
+        "recover": [
+          3.181,
+          4.374
+        ],
+        "settle": [
+          4.374,
+          4.97
+        ]
+      },
+      "ik_max_position_error_m": 0.0031636963898109124,
+      "ik_max_orientation_error_deg": 1.285287916864585,
+      "files": {
+        "motion_lib": "heldout/shadow_gancho_right_heldout_01.pkl",
+        "source_csv": "csv/heldout/shadow_gancho_right_heldout_01.csv",
+        "motion_lib_sha256": "0255bc15f0c64232b54ebf8c66f1b154fb9fdc8af93b29816342e9ad2689c91b",
+        "source_csv_sha256": "f2e4993770e088f606da672758fc03ca014f7da4235f6b5b98677f297a7788a2"
+      }
+    },
+    {
+      "id": "shadow_gancho_right_heldout_02",
+      "split": "heldout",
+      "kind": "shadow_gancho",
+      "direction": "right",
+      "amplitude": 0.97,
+      "duration_s": 5.220000000000001,
+      "step_back_m": 0.114,
+      "step_width_m": 0.108,
+      "hold_s": 0.62,
+      "seed": 2302,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 262,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.626
+        ],
+        "step_and_pivot": [
+          0.626,
+          1.409
+        ],
+        "lift": [
+          1.409,
+          2.088
+        ],
+        "hook_and_hold": [
+          2.088,
+          3.341
+        ],
+        "recover": [
+          3.341,
+          4.594
+        ],
+        "settle": [
+          4.594,
+          5.22
+        ]
+      },
+      "ik_max_position_error_m": 0.004757005364445804,
+      "ik_max_orientation_error_deg": 2.1065297600649253,
+      "files": {
+        "motion_lib": "heldout/shadow_gancho_right_heldout_02.pkl",
+        "source_csv": "csv/heldout/shadow_gancho_right_heldout_02.csv",
+        "motion_lib_sha256": "315dbab8e1ae3b4a8834b8faacf02a8a999fd6e681ef91409cd1183b0193e84a",
+        "source_csv_sha256": "e46a6fd86bc8874d4b479a1f5c65bcd14b85f92ece448745f80a28cb3125cee1"
+      }
+    },
+    {
+      "id": "shadow_dip_left_test_23",
+      "split": "preflight",
+      "kind": "shadow_dip",
+      "direction": "left",
+      "amplitude": 0.78,
+      "duration_s": 5.05,
+      "step_back_m": 0.142,
+      "step_width_m": 0.045,
+      "hold_s": 0.55,
+      "seed": 23,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 253,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.606
+        ],
+        "step_and_pivot": [
+          0.606,
+          1.414
+        ],
+        "descend": [
+          1.414,
+          2.424
+        ],
+        "hold": [
+          2.424,
+          2.974
+        ],
+        "recover": [
+          2.974,
+          4.343
+        ],
+        "settle": [
+          4.343,
+          5.05
+        ]
+      },
+      "ik_max_position_error_m": 0.0026075217848352643,
+      "ik_max_orientation_error_deg": 1.3764752452991096,
+      "files": {
+        "motion_lib": "preflight/shadow_dip_left_test_23.pkl",
+        "source_csv": "csv/preflight/shadow_dip_left_test_23.csv",
+        "motion_lib_sha256": "21e5da4b0a2baeb1f06580196a87a52991a20372ab6e0308ea024628c4fadf02",
+        "source_csv_sha256": "a2eb7405ab84e57d07d397da312f3b076ef3ada01c367826c47ba0f0bf6cd37e"
+      }
+    },
+    {
+      "id": "shadow_dip_right_test_24",
+      "split": "preflight",
+      "kind": "shadow_dip",
+      "direction": "right",
+      "amplitude": 0.86,
+      "duration_s": 4.95,
+      "step_back_m": 0.148,
+      "step_width_m": 0.058,
+      "hold_s": 0.51,
+      "seed": 24,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 249,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.594
+        ],
+        "step_and_pivot": [
+          0.594,
+          1.386
+        ],
+        "descend": [
+          1.386,
+          2.376
+        ],
+        "hold": [
+          2.376,
+          2.886
+        ],
+        "recover": [
+          2.886,
+          4.257
+        ],
+        "settle": [
+          4.257,
+          4.95
+        ]
+      },
+      "ik_max_position_error_m": 0.005466204665462524,
+      "ik_max_orientation_error_deg": 2.9171462203155363,
+      "files": {
+        "motion_lib": "preflight/shadow_dip_right_test_24.pkl",
+        "source_csv": "csv/preflight/shadow_dip_right_test_24.csv",
+        "motion_lib_sha256": "4fd83fc2f4dd9bf4b478b972a4491c2ac4fb2b3863f33e332ae9e2e9559bcd1d",
+        "source_csv_sha256": "fe3f3f8ad9a2f5d24b14a9f169d81b75f897b793856205c5d3464e4ecdba340a"
+      }
+    },
+    {
+      "id": "shadow_dip_left_test_25",
+      "split": "preflight",
+      "kind": "shadow_dip",
+      "direction": "left",
+      "amplitude": 0.98,
+      "duration_s": 5.45,
+      "step_back_m": 0.158,
+      "step_width_m": 0.047,
+      "hold_s": 0.65,
+      "seed": 25,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 273,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.654
+        ],
+        "step_and_pivot": [
+          0.654,
+          1.526
+        ],
+        "descend": [
+          1.526,
+          2.616
+        ],
+        "hold": [
+          2.616,
+          3.266
+        ],
+        "recover": [
+          3.266,
+          4.687
+        ],
+        "settle": [
+          4.687,
+          5.45
+        ]
+      },
+      "ik_max_position_error_m": 0.006122243392120507,
+      "ik_max_orientation_error_deg": 3.283545020177961,
+      "files": {
+        "motion_lib": "preflight/shadow_dip_left_test_25.pkl",
+        "source_csv": "csv/preflight/shadow_dip_left_test_25.csv",
+        "motion_lib_sha256": "6f3f0ab69f69a8254e95fe8e2eaffc8185b9bf663473b800d1312ad685716951",
+        "source_csv_sha256": "29e597b4354489b434a9d60063d40ae7c405931dc5489f803b6b14df30c6ce1d"
+      }
+    },
+    {
+      "id": "shadow_dip_right_test_26",
+      "split": "preflight",
+      "kind": "shadow_dip",
+      "direction": "right",
+      "amplitude": 0.9,
+      "duration_s": 4.85,
+      "step_back_m": 0.15,
+      "step_width_m": 0.062,
+      "hold_s": 0.56,
+      "seed": 26,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 243,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.582
+        ],
+        "step_and_pivot": [
+          0.582,
+          1.358
+        ],
+        "descend": [
+          1.358,
+          2.328
+        ],
+        "hold": [
+          2.328,
+          2.888
+        ],
+        "recover": [
+          2.888,
+          4.171
+        ],
+        "settle": [
+          4.171,
+          4.85
+        ]
+      },
+      "ik_max_position_error_m": 0.0066567046323804495,
+      "ik_max_orientation_error_deg": 3.568187806309022,
+      "files": {
+        "motion_lib": "preflight/shadow_dip_right_test_26.pkl",
+        "source_csv": "csv/preflight/shadow_dip_right_test_26.csv",
+        "motion_lib_sha256": "2a186cd65c1f9beac33aee3c6e869bd0a74011f05c10efd90096d7a271ee92c8",
+        "source_csv_sha256": "19b99cc95405f2e137f8e6417b43769540154859542e31536b6dc738ad105153"
+      }
+    },
+    {
+      "id": "shadow_gancho_left_test_01",
+      "split": "test",
+      "kind": "shadow_gancho",
+      "direction": "left",
+      "amplitude": 0.91,
+      "duration_s": 5.3,
+      "step_back_m": 0.104,
+      "step_width_m": 0.097,
+      "hold_s": 0.64,
+      "seed": 2401,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 266,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.636
+        ],
+        "step_and_pivot": [
+          0.636,
+          1.431
+        ],
+        "lift": [
+          1.431,
+          2.12
+        ],
+        "hook_and_hold": [
+          2.12,
+          3.392
+        ],
+        "recover": [
+          3.392,
+          4.664
+        ],
+        "settle": [
+          4.664,
+          5.3
+        ]
+      },
+      "ik_max_position_error_m": 0.003552405130517309,
+      "ik_max_orientation_error_deg": 1.4887149723330435,
+      "files": {
+        "motion_lib": "test/shadow_gancho_left_test_01.pkl",
+        "source_csv": "csv/test/shadow_gancho_left_test_01.csv",
+        "motion_lib_sha256": "010d2f68306904f607333621a9d81be2bf4c24050e7c9c6a69fb8dad24e2635d",
+        "source_csv_sha256": "52da814676b3d3b09407724bdf6b592361c3f07951b4ebcf49c8c9730ac14825"
+      }
+    },
+    {
+      "id": "shadow_gancho_left_test_02",
+      "split": "test",
+      "kind": "shadow_gancho",
+      "direction": "left",
+      "amplitude": 0.99,
+      "duration_s": 4.95,
+      "step_back_m": 0.117,
+      "step_width_m": 0.112,
+      "hold_s": 0.64,
+      "seed": 2402,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 249,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.594
+        ],
+        "step_and_pivot": [
+          0.594,
+          1.337
+        ],
+        "lift": [
+          1.337,
+          1.98
+        ],
+        "hook_and_hold": [
+          1.98,
+          3.168
+        ],
+        "recover": [
+          3.168,
+          4.356
+        ],
+        "settle": [
+          4.356,
+          4.95
+        ]
+      },
+      "ik_max_position_error_m": 0.005181567209710526,
+      "ik_max_orientation_error_deg": 2.3149964555054123,
+      "files": {
+        "motion_lib": "test/shadow_gancho_left_test_02.pkl",
+        "source_csv": "csv/test/shadow_gancho_left_test_02.csv",
+        "motion_lib_sha256": "803c4ae6e954af34c47d1368b43bd598c0bd768b00d1d6e4bd482659b67e2c37",
+        "source_csv_sha256": "54f082fb95576e4b9d285c37fcd6fdbe70f3d1dfe28f4ebbd37a47f7307088ec"
+      }
+    },
+    {
+      "id": "shadow_gancho_right_test_01",
+      "split": "test",
+      "kind": "shadow_gancho",
+      "direction": "right",
+      "amplitude": 0.91,
+      "duration_s": 5.39,
+      "step_back_m": 0.104,
+      "step_width_m": 0.097,
+      "hold_s": 0.64,
+      "seed": 2501,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 271,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.647
+        ],
+        "step_and_pivot": [
+          0.647,
+          1.455
+        ],
+        "lift": [
+          1.455,
+          2.156
+        ],
+        "hook_and_hold": [
+          2.156,
+          3.45
+        ],
+        "recover": [
+          3.45,
+          4.743
+        ],
+        "settle": [
+          4.743,
+          5.39
+        ]
+      },
+      "ik_max_position_error_m": 0.0035518020733955828,
+      "ik_max_orientation_error_deg": 1.4887126633863688,
+      "files": {
+        "motion_lib": "test/shadow_gancho_right_test_01.pkl",
+        "source_csv": "csv/test/shadow_gancho_right_test_01.csv",
+        "motion_lib_sha256": "0aabafeb5762e41ac8462ed4aeaa322185e2c02aaa6109b1c1635097026656d0",
+        "source_csv_sha256": "891a8644ef52e33d767ab3c75a10b5f640bbfa700abbedaf39a43c17627aa19c"
+      }
+    },
+    {
+      "id": "shadow_gancho_right_test_02",
+      "split": "test",
+      "kind": "shadow_gancho",
+      "direction": "right",
+      "amplitude": 0.99,
+      "duration_s": 5.04,
+      "step_back_m": 0.117,
+      "step_width_m": 0.112,
+      "hold_s": 0.64,
+      "seed": 2502,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 253,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.605
+        ],
+        "step_and_pivot": [
+          0.605,
+          1.361
+        ],
+        "lift": [
+          1.361,
+          2.016
+        ],
+        "hook_and_hold": [
+          2.016,
+          3.226
+        ],
+        "recover": [
+          3.226,
+          4.435
+        ],
+        "settle": [
+          4.435,
+          5.04
+        ]
+      },
+      "ik_max_position_error_m": 0.005181458208011592,
+      "ik_max_orientation_error_deg": 2.31499641792776,
+      "files": {
+        "motion_lib": "test/shadow_gancho_right_test_02.pkl",
+        "source_csv": "csv/test/shadow_gancho_right_test_02.csv",
+        "motion_lib_sha256": "7307977b8e7fba5dbf408736082ffca7cd6c6ad1744f7833f85b5fc173b1342d",
+        "source_csv_sha256": "b21e6e891b47fc670795d3ad84b1a7b92a8f13d3731f14491b325e2f6798ef74"
+      }
+    },
+    {
+      "id": "shadow_dip_v2_left_test_01",
+      "split": "test",
+      "kind": "shadow_dip",
+      "direction": "left",
+      "amplitude": 0.8,
+      "duration_s": 5.15,
+      "step_back_m": 0.144,
+      "step_width_m": 0.052,
+      "hold_s": 0.57,
+      "seed": 2601,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 259,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.618
+        ],
+        "step_and_pivot": [
+          0.618,
+          1.442
+        ],
+        "descend": [
+          1.442,
+          2.472
+        ],
+        "hold": [
+          2.472,
+          3.042
+        ],
+        "recover": [
+          3.042,
+          4.429
+        ],
+        "settle": [
+          4.429,
+          5.15
+        ]
+      },
+      "ik_max_position_error_m": 0.0037422382115801667,
+      "ik_max_orientation_error_deg": 1.985693224964136,
+      "files": {
+        "motion_lib": "test/shadow_dip_v2_left_test_01.pkl",
+        "source_csv": "csv/test/shadow_dip_v2_left_test_01.csv",
+        "motion_lib_sha256": "d32ffb1dda1531efa3363eca57483e022ba885f93e550eeb45afd1cec54d8c66",
+        "source_csv_sha256": "bbe4b812c3ec918b9caf1b9611bd65084148c56e1f1d0ed2754ba139e4097c9f"
+      }
+    },
+    {
+      "id": "shadow_dip_v2_right_test_02",
+      "split": "test",
+      "kind": "shadow_dip",
+      "direction": "right",
+      "amplitude": 0.84,
+      "duration_s": 5.08,
+      "step_back_m": 0.146,
+      "step_width_m": 0.056,
+      "hold_s": 0.53,
+      "seed": 2602,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 255,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.61
+        ],
+        "step_and_pivot": [
+          0.61,
+          1.422
+        ],
+        "descend": [
+          1.422,
+          2.438
+        ],
+        "hold": [
+          2.438,
+          2.968
+        ],
+        "recover": [
+          2.968,
+          4.369
+        ],
+        "settle": [
+          4.369,
+          5.08
+        ]
+      },
+      "ik_max_position_error_m": 0.004864623278215627,
+      "ik_max_orientation_error_deg": 2.5910892580361904,
+      "files": {
+        "motion_lib": "test/shadow_dip_v2_right_test_02.pkl",
+        "source_csv": "csv/test/shadow_dip_v2_right_test_02.csv",
+        "motion_lib_sha256": "bb4596d4567e96ab7dc3a46fbe6633000327437238de38bd4fff6e2cd7631151",
+        "source_csv_sha256": "b038fde39a78424dcbd8e95d7b90f3171ab4157869a7dcf992ce46173d114cbf"
+      }
+    },
+    {
+      "id": "shadow_dip_v2_left_test_03",
+      "split": "test",
+      "kind": "shadow_dip",
+      "direction": "left",
+      "amplitude": 0.93,
+      "duration_s": 5.32,
+      "step_back_m": 0.153,
+      "step_width_m": 0.06,
+      "hold_s": 0.61,
+      "seed": 2603,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 267,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.638
+        ],
+        "step_and_pivot": [
+          0.638,
+          1.49
+        ],
+        "descend": [
+          1.49,
+          2.554
+        ],
+        "hold": [
+          2.554,
+          3.164
+        ],
+        "recover": [
+          3.164,
+          4.575
+        ],
+        "settle": [
+          4.575,
+          5.32
+        ]
+      },
+      "ik_max_position_error_m": 0.006957293544818803,
+      "ik_max_orientation_error_deg": 3.735938014242404,
+      "files": {
+        "motion_lib": "test/shadow_dip_v2_left_test_03.pkl",
+        "source_csv": "csv/test/shadow_dip_v2_left_test_03.csv",
+        "motion_lib_sha256": "a40a531e9c079a96bc39767307d617b77bad8dd13a810f5e296b47c9ca479b97",
+        "source_csv_sha256": "850468cc0a12a76a9e98de777091551b4659f6a4bb05aedd1dda7a738baade1f"
+      }
+    },
+    {
+      "id": "shadow_dip_v2_right_test_04",
+      "split": "test",
+      "kind": "shadow_dip",
+      "direction": "right",
+      "amplitude": 0.96,
+      "duration_s": 5.38,
+      "step_back_m": 0.157,
+      "step_width_m": 0.049,
+      "hold_s": 0.63,
+      "seed": 2604,
+      "robot": "unitree_g1_29dof",
+      "source": "team-authored procedural keyframes plus MuJoCo foot IK",
+      "source_license": "Apache-2.0",
+      "performer_consent": "not_applicable_synthetic",
+      "upstream_mjcf_commit": "c374bae5b9039cd0ee71377e654d11ce1bc69e1d",
+      "fps": 50,
+      "frames": 270,
+      "smpl": "dummy",
+      "phase_windows_s": {
+        "establish_frame": [
+          0.0,
+          0.646
+        ],
+        "step_and_pivot": [
+          0.646,
+          1.506
+        ],
+        "descend": [
+          1.506,
+          2.582
+        ],
+        "hold": [
+          2.582,
+          3.212
+        ],
+        "recover": [
+          3.212,
+          4.627
+        ],
+        "settle": [
+          4.627,
+          5.38
+        ]
+      },
+      "ik_max_position_error_m": 0.006064019046417565,
+      "ik_max_orientation_error_deg": 3.2502373805244034,
+      "files": {
+        "motion_lib": "test/shadow_dip_v2_right_test_04.pkl",
+        "source_csv": "csv/test/shadow_dip_v2_right_test_04.csv",
+        "motion_lib_sha256": "09d9b29495e9f365153a2fe2a01413aef54cef3e4a53820089cff34e0b207335",
+        "source_csv_sha256": "03acfbca506e362cc32f23519490ef5e73588cb0222dd6937272f2df26cdb049"
+      }
+    }
+  ]
+}

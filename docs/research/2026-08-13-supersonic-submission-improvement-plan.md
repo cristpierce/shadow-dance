@@ -1436,6 +1436,59 @@ outcome is no policy claim—not synthetic or estimated evidence.
   Ruff passes, both modified shell scripts parse, and the pre-acceptance wrapper still
   returns exit 78 before an image pull.
 
+### Account-free stock-policy preflight and v2 decision (August 16, 19:11 PT)
+
+- **Public artifact identity:** NVIDIA's top-level GEAR-SONIC deployment encoder and
+  decoder were downloaded anonymously from model revision
+  `9c0ff22b4ffec27c5392e8e284eb2f2df7a5b4e2`. The encoder is 50,100,513 bytes with
+  SHA-256 `013ab0287236aa2721e13f1e936d699db982302d0de0bfcdae76d5c3245362d3`;
+  the decoder is 40,900,688 bytes with SHA-256
+  `c7241a123eaa36b5d64bad19540efde93cac1ad443bd4572fd12ca99898118ed`.
+  Both pass ONNX checker and finite CPU Runtime probes. The matched deployment scene
+  SHA-256 is `28e120602f1530ac9604f0bdbea975df67a62e4e68365840814fc7c2ce14ccd0`.
+- **Method and limit:** a local Python port of NVIDIA's public MuJoCo deployment
+  observation/action contract ran those exact graphs at 50 Hz. It uses CPU ONNX Runtime
+  instead of TensorRT, pre-fills history from the first reference frame, and is neither
+  Isaac Lab nor organizer WBT-Bench. A known public NVIDIA squat completed without a
+  fall at 37.65 mm local MPJPE, providing a coarse calibration check rather than a
+  benchmark equivalence claim.
+- **Finding that changed the target:** stock completed all four original dip validation
+  motions. Their macro mean was 28.958 mm local MPJPE, 8.812° joint RMSE, and 42.709 mm
+  root-position error; two of four were below the guide's 30 mm local target. Deeper
+  and faster dip-only probes did not materially separate stock. The frozen dip remains
+  useful curriculum data, but no longer carries the novelty story alone.
+- **Candidate search:** deeper dip variants with 15–19 mm foot penetration were
+  rejected. A tempo-only 3.0-second dip still tracked at about 26.9 mm. The selected
+  Shadow Gancho adds a planted pivot, one-foot off-axis hold, and an aerial hooked free
+  leg. Early candidates with 33–82 mm IK residual or negative support margin were
+  rejected. The final family uses stance-foot and landing IK plus a joint-authored
+  aerial leg, with 29.4–31.4 cm clearance, positive deep-hold support, and no contact.
+- **Committed validation-only proxy result:** on the four actual v2 gancho `heldout`
+  motions, stock completed without the proxy fall cutoff and averaged 28.881 mm local
+  MPJPE, 10.139° joint RMSE, and 114.498 mm root error. Three of four were below 30 mm;
+  the strongest right validation take was 30.774 mm. Compared with the dip family, the
+  mean root error is 2.68× and the mean p95 root error is 4.12×. This supports a global
+  tracking weakness, not a stock-collapse claim. Four old v1 test payloads had been
+  explored before v2 existed, so v2 explicitly isolates them as `preflight`. The eight
+  newly generated v2 final-test policy inputs have not been run.
+- **Dataset decision:** preserve the immutable 30-motion `shadow-dip-v1` release and
+  make the separately versioned `shadow-dance-v2` bundle the training default. V2 has
+  34 train/rehearsal, eight validation, four disclosed preflight-only legacy motions,
+  and eight fresh final-test motions. Its manifest-bound QA passes 54/54 with zero
+  warnings, all 60 v1 PKL/CSV payload hashes remain identical, and the v2 manifest/report
+  hashes are `20803a03...d21bb1` and `a9199a29...cec5b4`.
+- **Pipeline decision:** official Isaac novelty remains the fail-closed gate. The proxy
+  numbers cannot populate the challenge score or “before” video. Train/eval/render,
+  managed cloud, 24-trial final comparison, model publication, and dataset publication
+  now default to v2; the v1 verifier/release remains available for audit and rollback.
+- **Live requirement recheck (August 16, 19:36 PT):** the organizer page still states
+  the hard close as August 16 at 11:59 p.m. PT and maps the portal loadout to five
+  required artifacts: fine-tuned ONNX policy, dataset/method, reproducible training
+  config, short simulation demo, and stock before/after. Judging still names WBT-Bench,
+  difficulty/originality, execution/reliability, and pipeline cleanliness. The public
+  page's header says July 18–August 18 because August 18 is the winner announcement;
+  it does not extend the submission deadline.
+
 ## Primary sources
 
 - [Ultimate Bots Trial 03 challenge page](https://www.ultimatebots.com/hackathon)
@@ -1443,6 +1496,7 @@ outcome is no policy claim—not synthetic or estimated evidence.
 - [NVIDIA GR00T Whole-Body Control repository](https://github.com/NVlabs/GR00T-WholeBodyControl)
 - [NVIDIA SONIC training guide](https://nvlabs.github.io/GR00T-WholeBodyControl/user_guide/training.html)
 - [NVIDIA SONIC model card](https://nvlabs.github.io/GR00T-WholeBodyControl/model_card.html)
+- [NVIDIA GEAR-SONIC files and deployment notes](https://huggingface.co/nvidia/GEAR-SONIC)
 - [Isaac Sim 5.1 system requirements](https://docs.isaacsim.omniverse.nvidia.com/5.1.0/installation/requirements.html)
 - [Isaac Lab 2.3 pip installation](https://isaac-sim.github.io/IsaacLab/v2.3.0/source/setup/installation/pip_installation.html)
 - [NVIDIA Kimodo project](https://research.nvidia.com/labs/sil/projects/kimodo/)

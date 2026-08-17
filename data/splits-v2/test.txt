@@ -1,0 +1,8 @@
+shadow_gancho_left_test_01
+shadow_gancho_left_test_02
+shadow_gancho_right_test_01
+shadow_gancho_right_test_02
+shadow_dip_v2_left_test_01
+shadow_dip_v2_right_test_02
+shadow_dip_v2_left_test_03
+shadow_dip_v2_right_test_04

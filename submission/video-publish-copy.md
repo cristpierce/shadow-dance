@@ -16,8 +16,8 @@ The opening trajectory is clearly labelled **KINEMATIC TARGET — NOT POLICY OUT
 Every before/after panel is a matched, uncut Isaac simulation run at display seed 303.
 The shorter panel freezes and says `RUN ENDED`; no fall or reset is edited away.
 
-Across 12 untouched final-test trials per policy (4 motions × 3 seeds), stock SONIC
-completed **[x/12]** and the selected **[stage]** checkpoint completed **[y/12]**.
+Across 24 untouched final-test trials per policy (8 motions × 3 seeds), stock SONIC
+completed **[x/24]** and the selected **[stage]** checkpoint completed **[y/24]**.
 Local MPJPE changed from **[a] mm** to **[b] mm**. The winner was frozen using held-out
 validation plus a preregistered training-rehearsal retention check before this final
 test was opened.

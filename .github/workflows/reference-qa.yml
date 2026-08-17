@@ -11,7 +11,7 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
       - name: Check out Shadow Dance
         uses: actions/checkout@v4
@@ -48,33 +48,37 @@ jobs:
             --sonic-root "$QA_ROOT/runtime-sonic" \
             --report "$QA_ROOT/sonic-assets.json"
 
-      - name: Regenerate and validate the complete frozen set
+      - name: Regenerate and validate the complete v2 set
         env:
           QA_ROOT: ${{ runner.temp }}/shadow-qa
           SONIC_ROOT: ${{ github.workspace }}/external/GR00T-WholeBodyControl
         run: |
-          shadow-generate \
+          shadow-generate --profile dance-v2 \
             --sonic-root "$SONIC_ROOT" \
-            --output "$QA_ROOT/generated" \
-            --manifest "$QA_ROOT/manifests/shadow-dip-v1.json"
+            --output "$QA_ROOT/generated-v2" \
+            --manifest "$QA_ROOT/manifests/shadow-dance-v2.json" \
+            --splits "$QA_ROOT/splits-v2"
           shadow-validate \
             --sonic-root "$SONIC_ROOT" \
-            --dataset "$QA_ROOT/generated" \
-            --manifest "$QA_ROOT/manifests/shadow-dip-v1.json" \
-            --report "$QA_ROOT/reference-validation.json"
+            --dataset "$QA_ROOT/generated-v2" \
+            --manifest "$QA_ROOT/manifests/shadow-dance-v2.json" \
+            --report "$QA_ROOT/reference-validation-v2.json"
 
       - name: Prove the committed bundle is reproducible
         env:
           QA_ROOT: ${{ runner.temp }}/shadow-qa
         run: |
           python scripts/compare_regenerated_bundle.py \
-            --candidate-root "$QA_ROOT/generated" \
-            --candidate-manifest "$QA_ROOT/manifests/shadow-dip-v1.json" \
-            --candidate-report "$QA_ROOT/reference-validation.json" \
+            --candidate-root "$QA_ROOT/generated-v2" \
+            --candidate-manifest "$QA_ROOT/manifests/shadow-dance-v2.json" \
+            --candidate-report "$QA_ROOT/reference-validation-v2.json" \
+            --reference-root data/generated-v2 \
+            --reference-manifest data/manifests/shadow-dance-v2.json \
+            --reference-report results/reference-validation-v2.json \
             --csv-atol 2e-5 \
             --atol 1e-6
-          for split in train heldout test; do
-            cmp "data/splits/${split}.txt" "$QA_ROOT/splits/${split}.txt"
+          for split in train heldout preflight test; do
+            cmp "data/splits-v2/${split}.txt" "$QA_ROOT/splits-v2/${split}.txt"
           done
 
       - name: Upload QA evidence
@@ -83,9 +87,9 @@ jobs:
         with:
           name: reference-validation
           path: |
-            ${{ runner.temp }}/shadow-qa/reference-validation.json
+            ${{ runner.temp }}/shadow-qa/reference-validation-v2.json
             ${{ runner.temp }}/shadow-qa/sonic-assets.json
             ${{ runner.temp }}/shadow-qa/manifests
-            ${{ runner.temp }}/shadow-qa/splits
-            ${{ runner.temp }}/shadow-qa/generated
+            ${{ runner.temp }}/shadow-qa/splits-v2
+            ${{ runner.temp }}/shadow-qa/generated-v2
           if-no-files-found: warn

@@ -1,0 +1,149 @@
+{
+  "format": "shadow_dance_stock_deployment_proxy_v1",
+  "generated_utc": "2026-08-17T02:11:00Z",
+  "purpose": "account-free target selection preflight",
+  "official_wbt_bench": false,
+  "isaac_result": false,
+  "fine_tuned_result": false,
+  "v2_test_split_evaluated": false,
+  "legacy_v1_test_payloads_evaluated_before_v2": true,
+  "legacy_payload_split_in_v2": "preflight",
+  "model": {
+    "repository": "nvidia/GEAR-SONIC",
+    "revision": "9c0ff22b4ffec27c5392e8e284eb2f2df7a5b4e2",
+    "encoder_sha256": "013ab0287236aa2721e13f1e936d699db982302d0de0bfcdae76d5c3245362d3",
+    "decoder_sha256": "c7241a123eaa36b5d64bad19540efde93cac1ad443bd4572fd12ca99898118ed"
+  },
+  "simulator": {
+    "name": "MuJoCo 3.x",
+    "contract": "Python port of NVIDIA public deployment observation/action loop",
+    "scene_sha256": "28e120602f1530ac9604f0bdbea975df67a62e4e68365840814fc7c2ce14ccd0",
+    "inference_backend": "ONNX Runtime CPU"
+  },
+  "limitations": [
+    "This is not the organizer WBT-Bench package.",
+    "This is not Isaac Lab evaluation and is not a final challenge score.",
+    "CPU ONNX Runtime replaces the upstream TensorRT backend.",
+    "Initial observation history is prefilled from the first frozen reference pose.",
+    "completed_without_fall is a local proxy cutoff, not official SONIC success.",
+    "Four v1 test payloads explored before v2 were isolated in v2/preflight and are excluded from the fresh v2 final test."
+  ],
+  "calibration": {
+    "motion": "NVIDIA public squat_001__A359",
+    "completed_without_fall": true,
+    "mpjpe_local_mean_mm": 37.65,
+    "joint_rmse_mean_deg": 6.76
+  },
+  "aggregates": {
+    "dip_validation": {
+      "motion_count": 4,
+      "completed_without_fall": 4,
+      "mpjpe_local_mean_mm": 28.958,
+      "motions_under_30mm": 2,
+      "root_position_mean_mm": 42.709,
+      "root_position_p95_macro_mean_mm": 62.17,
+      "joint_rmse_mean_deg": 8.812
+    },
+    "gancho_validation": {
+      "motion_count": 4,
+      "completed_without_fall": 4,
+      "mpjpe_local_mean_mm": 28.881,
+      "motions_under_30mm": 3,
+      "root_position_mean_mm": 114.498,
+      "root_position_p95_macro_mean_mm": 256.199,
+      "joint_rmse_mean_deg": 10.139
+    },
+    "gancho_to_dip_root_mean_ratio": 2.681,
+    "gancho_to_dip_root_p95_macro_mean_ratio": 4.121
+  },
+  "motions": [
+    {
+      "id": "shadow_dip_left_heldout_19",
+      "sha256": "1a6641979d803a3e2a9fa9ecf7b23bd29d53391edcbd425d6efaade0a28dd5c7",
+      "mpjpe_local_mean_mm": 27.903207423335342,
+      "mpjpe_local_p95_mm": 52.565344301162206,
+      "root_position_mean_mm": 38.55468023709143,
+      "root_position_p95_mm": 58.69217465478027,
+      "joint_rmse_mean_deg": 7.952520041664656,
+      "completed_without_fall": true,
+      "under_30mm": true
+    },
+    {
+      "id": "shadow_dip_right_heldout_20",
+      "sha256": "f275ce038ef8e33e8def6d3b581be6cdef11772586a3f7cc5233558b92136265",
+      "mpjpe_local_mean_mm": 25.73575293498768,
+      "mpjpe_local_p95_mm": 47.92532478740793,
+      "root_position_mean_mm": 42.979685085686754,
+      "root_position_p95_mm": 62.17007525068685,
+      "joint_rmse_mean_deg": 8.730146347538595,
+      "completed_without_fall": true,
+      "under_30mm": true
+    },
+    {
+      "id": "shadow_dip_left_heldout_21",
+      "sha256": "aa7b3a3c467b38b47353aa3dbe95415017c5ae7ab4b5b1964145ee1e0d5d77e7",
+      "mpjpe_local_mean_mm": 32.16748598190717,
+      "mpjpe_local_p95_mm": 60.646431280919856,
+      "root_position_mean_mm": 43.76613297087478,
+      "root_position_p95_mm": 63.23934836337163,
+      "joint_rmse_mean_deg": 8.650258897218436,
+      "completed_without_fall": true,
+      "under_30mm": false
+    },
+    {
+      "id": "shadow_dip_right_heldout_22",
+      "sha256": "f43b423ac7bee93bceadcccdbfb755fae1452703c16edb887fb98f0b62d9bf16",
+      "mpjpe_local_mean_mm": 30.023653171191764,
+      "mpjpe_local_p95_mm": 57.51639407511359,
+      "root_position_mean_mm": 45.533916190949206,
+      "root_position_p95_mm": 64.57750764414222,
+      "joint_rmse_mean_deg": 9.91392101243551,
+      "completed_without_fall": true,
+      "under_30mm": false
+    },
+    {
+      "id": "shadow_gancho_left_heldout_01",
+      "sha256": "371f4e4aa0ccb0ae72e3efbaf2376275cef9813e837bc03333848b8802d421ac",
+      "mpjpe_local_mean_mm": 26.901314797189908,
+      "mpjpe_local_p95_mm": 52.21424288235089,
+      "root_position_mean_mm": 121.6674685270199,
+      "root_position_p95_mm": 254.7425826494022,
+      "joint_rmse_mean_deg": 9.252288639690494,
+      "completed_without_fall": true,
+      "under_30mm": true
+    },
+    {
+      "id": "shadow_gancho_left_heldout_02",
+      "sha256": "69c36381b4bd16d8826f6de6981c18d75e01f795bfd30432248f7ed9d715fe18",
+      "mpjpe_local_mean_mm": 29.113168644857186,
+      "mpjpe_local_p95_mm": 56.21064376873959,
+      "root_position_mean_mm": 133.2088289565407,
+      "root_position_p95_mm": 324.82093276864055,
+      "joint_rmse_mean_deg": 9.725265290627503,
+      "completed_without_fall": true,
+      "under_30mm": true
+    },
+    {
+      "id": "shadow_gancho_right_heldout_01",
+      "sha256": "0255bc15f0c64232b54ebf8c66f1b154fb9fdc8af93b29816342e9ad2689c91b",
+      "mpjpe_local_mean_mm": 28.7371881378441,
+      "mpjpe_local_p95_mm": 58.364354691796784,
+      "root_position_mean_mm": 90.68184329116298,
+      "root_position_p95_mm": 187.8310123617368,
+      "joint_rmse_mean_deg": 10.552933421031474,
+      "completed_without_fall": true,
+      "under_30mm": true
+    },
+    {
+      "id": "shadow_gancho_right_heldout_02",
+      "sha256": "315dbab8e1ae3b4a8834b8faacf02a8a999fd6e681ef91409cd1183b0193e84a",
+      "mpjpe_local_mean_mm": 30.774159232636066,
+      "mpjpe_local_p95_mm": 64.03341034626627,
+      "root_position_mean_mm": 112.43204520977851,
+      "root_position_p95_mm": 257.3994962597151,
+      "joint_rmse_mean_deg": 11.023947340516818,
+      "completed_without_fall": true,
+      "under_30mm": false
+    }
+  ]
+}

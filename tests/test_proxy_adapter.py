@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import subprocess
 import sys
@@ -71,3 +72,19 @@ def test_adapter_fit_rejects_heldout_report(tmp_path: Path) -> None:
 
     assert process.returncode != 0
     assert "refusing non-training motion" in process.stderr
+
+
+def test_committed_proxy_reports_bind_their_dependencies() -> None:
+    comparison_path = ROOT / "results" / "proxy-adapter-final-comparison.json"
+    validation_path = ROOT / "results" / "proxy-adapter-onnx-validation.json"
+    video_path = ROOT / "results" / "proxy-adapter-video-manifest.json"
+
+    comparison = json.loads(comparison_path.read_text(encoding="utf-8"))
+    video = json.loads(video_path.read_text(encoding="utf-8"))
+
+    assert comparison["onnx_validation"]["sha256"] == hashlib.sha256(
+        validation_path.read_bytes()
+    ).hexdigest()
+    assert video["comparison"]["sha256"] == hashlib.sha256(
+        comparison_path.read_bytes()
+    ).hexdigest()

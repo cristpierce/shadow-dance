@@ -218,6 +218,10 @@ status here must remain truthful.
 - [x] Updated the train/eval/render/export, managed-cloud, model-publication, and dataset
   publication defaults to v2. Both v1 and v2 bundle verifiers pass; the v2 Hugging Face
   dry-run packages 117 files, 54 PKLs, and 7,211,442 bytes without authentication.
+- [x] Published the immutable public `shadow-dance-v2.0.0` GitHub release at commit
+  `dc393f1`. Its 4,179,263-byte archive SHA-256 is `c1bde31a...b84217b`; both assets
+  redownload anonymously with matching hashes, and the extracted 108-file payload
+  bundle passes the frozen manifest verifier.
 
 ## Ready after entrant handoff
 

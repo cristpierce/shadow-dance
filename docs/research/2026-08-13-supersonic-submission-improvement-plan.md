@@ -1488,6 +1488,11 @@ outcome is no policy claim—not synthetic or estimated evidence.
   difficulty/originality, execution/reliability, and pipeline cleanliness. The public
   page's header says July 18–August 18 because August 18 is the winner announcement;
   it does not extend the submission deadline.
+- **Public v2 distribution (August 16, 19:40 PT):** GitHub release
+  `shadow-dance-v2.0.0` is pinned to commit `dc393f1`. The dataset archive is 4,179,263
+  bytes with SHA-256 `c1bde31a...b84217b`; its labelled reference MP4 has SHA-256
+  `6a43b203...026f714`. Both direct assets redownloaded anonymously with matching hashes,
+  and the extracted archive passed the 54-sequence / 108-file manifest verifier.
 
 ## Primary sources
 

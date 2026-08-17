@@ -21,8 +21,8 @@ fills result tables with estimates.
 > stock deployment proxy found a clear
 > global-position weakness on the gancho validation family, but it is not Isaac or
 > WBT-Bench evidence. The
-> immutable [Shadow Dip v1.0.0 reference release](https://github.com/cristpierce/shadow-dance/releases/tag/shadow-dip-v1.0.0)
-> is public. Stock/fine-tuned metrics, final ONNX links, and the policy before/after
+> immutable [Shadow Dance v2.0.0 reference release](https://github.com/cristpierce/shadow-dance/releases/tag/shadow-dance-v2.0.0)
+> is public, with v1 retained as its audit anchor. Stock/fine-tuned metrics, final ONNX links, and the policy before/after
 > video remain pending authorized compute access.
 > See [PROGRESS.md](PROGRESS.md).
 > The exact Nebius execution and publication handoff is in
@@ -114,10 +114,13 @@ The small frozen PKLs, source CSVs, manifest, validator report, code, hashes, an
 watermarked reference preview are committed so the cloud job needs no hidden local
 input. Policy renders remain ignored until they are packaged with their run evidence.
 The exact frozen bundle is also available in the public
-[GitHub reference release](https://github.com/cristpierce/shadow-dance/releases/tag/shadow-dip-v1.0.0),
-whose archive SHA-256 is
-`94099f031b8a0b5ea36c809e705f77088342a6b54d73f9735508b146841c1370`.
-It will be mirrored to a versioned Hugging Face dataset after entrant authentication.
+[Shadow Dance v2.0.0 reference release](https://github.com/cristpierce/shadow-dance/releases/tag/shadow-dance-v2.0.0).
+Its 4,179,263-byte archive SHA-256 is
+`c1bde31a71e5d596f5018e01da8bcdb097ae314bd65c98c2aefa69fadb84217b`;
+an anonymous redownload and full 108-file manifest verification passed. The immutable
+[v1.0.0 release](https://github.com/cristpierce/shadow-dance/releases/tag/shadow-dip-v1.0.0)
+remains the byte-preservation audit anchor. V2 will also be mirrored to a versioned
+Hugging Face dataset after entrant authentication.
 
 ### Frozen v2 reference QA
 

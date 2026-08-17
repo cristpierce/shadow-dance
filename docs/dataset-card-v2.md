@@ -121,6 +121,11 @@ The authoritative manifest SHA-256 is
 validation report SHA-256 is
 `a9199a29d258d50eae2408bc55df3cb4989e2c5107734e684a777a15dbcec5b4`.
 
+The immutable [GitHub v2.0.0 release](https://github.com/cristpierce/shadow-dance/releases/tag/shadow-dance-v2.0.0)
+contains the exact committed bundle. Its 4,179,263-byte archive SHA-256 is
+`c1bde31a71e5d596f5018e01da8bcdb097ae314bd65c98c2aefa69fadb84217b`;
+the archive passed an anonymous redownload and full manifest verification.
+
 ## Limitations
 
 - The data is procedural and measures interpolation within two declared motion

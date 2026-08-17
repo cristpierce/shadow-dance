@@ -26,8 +26,9 @@
 - [ ] Click **Submit entry**, confirm the status is submitted and the action changes to
   **Resubmit entry**, and capture the confirmation before 2026-08-16 23:59 PT. A saved
   7/7 draft is not submitted.
-- [x] Immutable public reference-dataset fallback release works anonymously: both
-  assets return HTTP 200 with matching SHA-256, and the archive inventory was inspected.
+- [x] Immutable public v2 reference-dataset fallback release works anonymously: both
+  assets return HTTP 200 with matching SHA-256, and the extracted 108-file bundle
+  passes the manifest verifier.
 
 ## Evidence
 

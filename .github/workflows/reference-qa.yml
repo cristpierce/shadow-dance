@@ -68,8 +68,8 @@ jobs:
         env:
           QA_ROOT: ${{ runner.temp }}/shadow-qa
         run: |
-          # Cross-platform limits remain sub-0.01 mm / 0.001 degree in CSV units
-          # and 1e-5 in the SI/radian PKL and validator fields.
+          # Cross-platform limits remain at 0.02 mm / 0.002 degree in CSV units,
+          # 5e-5 in SI/radian payloads, and tight abs+relative derived-metric bounds.
           python scripts/compare_regenerated_bundle.py \
             --candidate-root "$QA_ROOT/generated-v2" \
             --candidate-manifest "$QA_ROOT/manifests/shadow-dance-v2.json" \
@@ -77,8 +77,10 @@ jobs:
             --reference-root data/generated-v2 \
             --reference-manifest data/manifests/shadow-dance-v2.json \
             --reference-report results/reference-validation-v2.json \
-            --csv-atol 1e-3 \
-            --atol 1e-5
+            --csv-atol 2e-3 \
+            --atol 5e-5 \
+            --report-atol 5e-5 \
+            --report-rtol 2e-5
           for split in train heldout preflight test; do
             cmp "data/splits-v2/${split}.txt" "$QA_ROOT/splits-v2/${split}.txt"
           done

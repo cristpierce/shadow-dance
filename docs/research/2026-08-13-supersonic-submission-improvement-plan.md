@@ -1493,6 +1493,13 @@ outcome is no policy claim—not synthetic or estimated evidence.
   bytes with SHA-256 `c1bde31a...b84217b`; its labelled reference MP4 has SHA-256
   `6a43b203...026f714`. Both direct assets redownloaded anonymously with matching hashes,
   and the extracted archive passed the 54-sequence / 108-file manifest verifier.
+- **Independent Linux v2 regeneration (August 16, 19:58 PT):** a clean Linux
+  Python 3.12 environment regenerated and validated all 54 sequences against the pinned
+  MJCF. The full inventory and contracts match. Maximum Windows/Linux drift is
+  0.0013639 in CSV degree/cm units, `2.38035e-5` in SI/radian PKL arrays, `6.741e-9`
+  in manifest IK residuals, and `0.0030365` in derived validation metrics. The CI
+  comparator now separates strict payload tolerances from an absolute-plus-relative
+  metric tolerance, avoiding both a false failure and an overly broad raw-array bound.
 
 ## Primary sources
 

@@ -222,6 +222,11 @@ status here must remain truthful.
   `dc393f1`. Its 4,179,263-byte archive SHA-256 is `c1bde31a...b84217b`; both assets
   redownload anonymously with matching hashes, and the extracted 108-file payload
   bundle passes the frozen manifest verifier.
+- [x] Independently regenerated and validated all 54 v2 sequences under Linux. The
+  complete 54-CSV/54-PKL inventory is equivalent to the Windows freeze; measured maxima
+  are 0.0013639 degree/cm in CSV values, `2.38035e-5` in SI/radian arrays,
+  `6.741e-9` in manifest IK residuals, and `0.0030365` in derived QA metrics. CI uses
+  separate strict payload and abs+relative metric bounds based on those measurements.
 
 ## Ready after entrant handoff
 

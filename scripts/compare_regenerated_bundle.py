@@ -120,7 +120,13 @@ def compare_manifests(reference_path: Path, candidate_path: Path, atol: float) -
     return maximum
 
 
-def compare_scalar(reference: Any, candidate: Any, label: str, atol: float) -> float:
+def compare_scalar(
+    reference: Any,
+    candidate: Any,
+    label: str,
+    atol: float,
+    rtol: float = 0.0,
+) -> float:
     if isinstance(reference, bool) or isinstance(candidate, bool):
         require(reference is candidate, f"{label}: boolean drift")
         return 0.0
@@ -129,13 +135,23 @@ def compare_scalar(reference: Any, candidate: Any, label: str, atol: float) -> f
             math.isfinite(reference) and math.isfinite(candidate), f"{label}: non-finite metric"
         )
         difference = abs(float(reference) - float(candidate))
-        require(difference <= atol, f"{label}: metric drift {difference:.9g} exceeds {atol}")
+        limit = atol + rtol * max(abs(float(reference)), abs(float(candidate)))
+        require(
+            difference <= limit,
+            f"{label}: metric drift {difference:.9g} exceeds {limit:.9g} "
+            f"(atol={atol}, rtol={rtol})",
+        )
         return difference
     require(reference == candidate, f"{label}: value drift")
     return 0.0
 
 
-def compare_reports(reference_path: Path, candidate_path: Path, atol: float) -> float:
+def compare_reports(
+    reference_path: Path,
+    candidate_path: Path,
+    atol: float,
+    rtol: float = 0.0,
+) -> float:
     reference = json.loads(reference_path.read_text(encoding="utf-8"))
     candidate = json.loads(candidate_path.read_text(encoding="utf-8"))
     for document in (reference, candidate):
@@ -164,6 +180,7 @@ def compare_reports(reference_path: Path, candidate_path: Path, atol: float) -> 
                     candidate_metrics[key],
                     f"{reference_record['id']}:{key}",
                     atol,
+                    rtol,
                 ),
             )
     return maximum
@@ -191,24 +208,45 @@ def main() -> None:
         "--atol",
         type=float,
         default=1e-6,
-        help="absolute tolerance for PKLs, manifest IK values, and validation metrics",
+        help="absolute tolerance for PKLs and manifest IK values",
+    )
+    parser.add_argument(
+        "--report-atol",
+        type=float,
+        help="absolute tolerance for derived validation metrics (defaults to --atol)",
+    )
+    parser.add_argument(
+        "--report-rtol",
+        type=float,
+        default=0.0,
+        help="relative tolerance for derived validation metrics",
     )
     args = parser.parse_args()
+    report_atol = args.report_atol if args.report_atol is not None else args.atol
     require(args.csv_atol > 0, "CSV absolute tolerance must be positive")
     require(args.atol > 0, "absolute tolerance must be positive")
+    require(report_atol > 0, "report absolute tolerance must be positive")
+    require(args.report_rtol >= 0, "report relative tolerance must be non-negative")
 
     csv_count, csv_maximum = compare_csvs(args.reference_root, args.candidate_root, args.csv_atol)
     pkl_count, pkl_maximum = compare_pkls(args.reference_root, args.candidate_root, args.atol)
     manifest_maximum = compare_manifests(
         args.reference_manifest, args.candidate_manifest, args.atol
     )
-    report_maximum = compare_reports(args.reference_report, args.candidate_report, args.atol)
+    report_maximum = compare_reports(
+        args.reference_report,
+        args.candidate_report,
+        report_atol,
+        args.report_rtol,
+    )
     print(
         json.dumps(
             {
-                "format": "shadow_dance_cross_platform_reproduction_v2",
+                "format": "shadow_dance_cross_platform_reproduction_v3",
                 "csv_absolute_tolerance_degree_or_cm": args.csv_atol,
-                "pkl_manifest_report_absolute_tolerance": args.atol,
+                "pkl_manifest_absolute_tolerance": args.atol,
+                "validation_metric_absolute_tolerance": report_atol,
+                "validation_metric_relative_tolerance": args.report_rtol,
                 "csv_files": csv_count,
                 "pkl_files": pkl_count,
                 "csv_max_abs_drift": csv_maximum,

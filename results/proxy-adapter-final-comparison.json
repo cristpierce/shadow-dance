@@ -12,7 +12,7 @@
   },
   "onnx_validation": {
     "path": ".runtime/adapter-model/onnx-validation.json",
-    "sha256": "f241925af094014279cdb2f85e6c684efdf9a5bb24f3b6c44c1c72d4d4c904bb"
+    "sha256": "8c06b7c0c576a212897e576c8143359dc7d4e5651b43287445210288bf8f6a34"
   },
   "stock_decoder_sha256": "c7241a123eaa36b5d64bad19540efde93cac1ad443bd4572fd12ca99898118ed",
   "selected_decoder_sha256": "caf8b40ca7de141498b3d1160654a2531ce45c149f6768d6cc0a2474bd5add27",

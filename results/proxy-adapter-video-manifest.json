@@ -17,7 +17,7 @@
   },
   "comparison": {
     "path": ".runtime/adapter-model/final-comparison.json",
-    "sha256": "331c6e4ce4b45d1604de19d6481b9fe46d56d1ae72b8585c0adfcb73d7cd2305",
+    "sha256": "9c05e91b9168fc957c3fce18dbd3b3e7a0e86c3201d8b5e2b2c4815787a96152",
     "selected_decoder_sha256": "caf8b40ca7de141498b3d1160654a2531ce45c149f6768d6cc0a2474bd5add27"
   },
   "output": {

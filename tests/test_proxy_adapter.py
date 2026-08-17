@@ -82,9 +82,10 @@ def test_committed_proxy_reports_bind_their_dependencies() -> None:
     comparison = json.loads(comparison_path.read_text(encoding="utf-8"))
     video = json.loads(video_path.read_text(encoding="utf-8"))
 
-    assert comparison["onnx_validation"]["sha256"] == hashlib.sha256(
-        validation_path.read_bytes()
-    ).hexdigest()
-    assert video["comparison"]["sha256"] == hashlib.sha256(
-        comparison_path.read_bytes()
-    ).hexdigest()
+    def canonical_text_sha256(path: Path) -> str:
+        return hashlib.sha256(path.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
+
+    assert comparison["onnx_validation"]["sha256"] == canonical_text_sha256(
+        validation_path
+    )
+    assert video["comparison"]["sha256"] == canonical_text_sha256(comparison_path)

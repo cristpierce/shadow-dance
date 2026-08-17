@@ -1,0 +1,28 @@
+{
+  "format": "shadow_dance_proxy_adapter_video_v1",
+  "official_sonic_recipe": false,
+  "official_wbt_bench": false,
+  "isaac_result": false,
+  "motion_selection": "first lexicographic fresh gancho test; not selected by result",
+  "frames": 266,
+  "fps": 50.0,
+  "duration_seconds": 5.32,
+  "stock_source": {
+    "path": ".runtime/adapter-video/stock-raw.mp4",
+    "sha256": "9663e29767ffc64cabcc2fdba07ca4829f1baf1c25211d2bd4079bf293f5989b"
+  },
+  "selected_source": {
+    "path": ".runtime/adapter-video/selected-raw.mp4",
+    "sha256": "0ee05958e44f8bfc04795d373adec33587c660da226e307a9a465098df6f9cac"
+  },
+  "comparison": {
+    "path": ".runtime/adapter-model/final-comparison.json",
+    "sha256": "e4cf5c4d56a313ac9fb32c0c7055df721ff72f904b28c58a89a5943b41a59e46",
+    "selected_decoder_sha256": "caf8b40ca7de141498b3d1160654a2531ce45c149f6768d6cc0a2474bd5add27"
+  },
+  "output": {
+    "path": ".runtime/shadow-dance-stock-vs-affine-proxy-adapter-not-official.mp4",
+    "sha256": "bb9a7f636ff1cba48008ebe02311bcc4d15bb2c5751087881f40d3d760e558a3",
+    "bytes": 2488490
+  }
+}

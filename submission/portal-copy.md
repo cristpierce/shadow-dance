@@ -3,6 +3,11 @@
 Use this only after replacing every bracket from raw artifacts and testing every public
 link in a logged-out/clean session.
 
+> **Official-run draft only:** the eight v2 test motions were opened after the separate
+> experimental affine proxy adapter was frozen. Do not call them previously unseen in a
+> later official result; reserve a new final-test family or disclose the prior proxy use.
+> The proxy adapter's mixed MuJoCo result does not fill the bracketed Isaac/PPO claims.
+
 ## Project name
 
 G1 Shadow Dance: Dip + Gancho

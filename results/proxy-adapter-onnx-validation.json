@@ -1,0 +1,35 @@
+{
+  "format": "shadow_dance_affine_decoder_onnx_validation_v1",
+  "official_sonic_recipe": false,
+  "official_wbt_bench": false,
+  "isaac_result": false,
+  "parent_decoder": {
+    "path": ".runtime/stock-deploy/model_decoder.onnx",
+    "sha256": "c7241a123eaa36b5d64bad19540efde93cac1ad443bd4572fd12ca99898118ed"
+  },
+  "adapter": {
+    "path": ".runtime/adapter-candidates/alpha-0.10.json",
+    "sha256": "ea38d0f98c96649eb7f4a5e19b73524e9ac971721b194bf5590301f438035935"
+  },
+  "output": {
+    "path": ".runtime/adapter-model/shadow-dance-affine-proxy-decoder.onnx",
+    "sha256": "caf8b40ca7de141498b3d1160654a2531ce45c149f6768d6cc0a2474bd5add27",
+    "bytes": 40901894
+  },
+  "onnx_checker_passed": true,
+  "onnxruntime_cpu_probes": 5,
+  "all_outputs_finite": true,
+  "max_affine_equivalence_error": 0.0,
+  "input_contract": {
+    "obs_dict": [
+      1,
+      994
+    ]
+  },
+  "output_contract": {
+    "action": [
+      1,
+      29
+    ]
+  }
+}

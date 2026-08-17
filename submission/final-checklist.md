@@ -34,15 +34,21 @@
 
 - [x] Combined v2 reference validator passes 54/54 with zero warnings; all original v1
   payload hashes remain identical. Four previously explored v1 tests are disclosed as
-  preflight-only, and all eight final-test policy inputs are fresh and unopened.
+  preflight-only. The eight v2 test inputs were opened only after the experimental
+  affine proxy adapter was frozen; they are no longer previously unopened for a later
+  official run.
 - [x] Account-free public stock ONNX/MuJoCo preflight motivated the gancho revision and
   shows 114.50 mm mean root error across its four validation motions. It is labelled a
   proxy and does not satisfy the official Isaac novelty gate.
+- [x] Experimental affine proxy adapter is fully disclosed: 8/8 upright, joint RMSE
+  -9.60%, global MPJPE -0.72%, root error -1.26%, and local MPJPE +0.75% (worse).
+  Its checked ONNX/video are supplemental only and are not called an Isaac/PPO fine-tune.
 - [ ] Official stock Isaac baseline establishes the preregistered novelty gap.
 - [ ] `ladder-plan.json` preserves the evidence/portal reserves and
   `ladder-outcome.json` exactly discloses every completed or omitted candidate.
 - [ ] Selected checkpoint wins on validation—not only train—references.
-- [ ] Final headline comes from test motions first opened after the winner was frozen.
+- [ ] Official final headline comes from a newly reserved test family (preferred), or
+  explicitly discloses that v2 test was previously used once after proxy-adapter freeze.
 - [ ] Stock and selected policy each have all 24 final trials (8 motions × 3 seeds).
 - [ ] `final-comparison.json` hash-binds test summaries to `selection.json`.
 - [ ] The complete 10-motion fundamentals-retention result is disclosed, including

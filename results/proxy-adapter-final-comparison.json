@@ -1,0 +1,289 @@
+{
+  "format": "shadow_dance_proxy_adapter_final_comparison_v1",
+  "generated_utc": "2026-08-17T04:03:43.736574Z",
+  "official_sonic_recipe": false,
+  "official_wbt_bench": false,
+  "isaac_result": false,
+  "fine_tuned_ppo_checkpoint": false,
+  "simulator": "MuJoCo 3.x deployment proxy",
+  "selection": {
+    "path": ".runtime/adapter-selection-v1.json",
+    "sha256": "508c3dd0c3eea175c91e227030745df5d14c1404abf1930cc83fbd8ceb724ca8"
+  },
+  "onnx_validation": {
+    "path": ".runtime/adapter-model/onnx-validation.json",
+    "sha256": "9c31f405cd44edd2a15b414bf40d89a87c17541b16d09723c46a4e089b9e18c8"
+  },
+  "stock_decoder_sha256": "c7241a123eaa36b5d64bad19540efde93cac1ad443bd4572fd12ca99898118ed",
+  "selected_decoder_sha256": "caf8b40ca7de141498b3d1160654a2531ce45c149f6768d6cc0a2474bd5add27",
+  "test_protocol": {
+    "motion_count": 8,
+    "deterministic_trials_per_motion": 1,
+    "test_inputs_first_opened_after_selection_freeze": true,
+    "motion_families": [
+      "dip",
+      "gancho"
+    ]
+  },
+  "macro": {
+    "stock": {
+      "motion_count": 8,
+      "deterministic_trials_per_motion": 1,
+      "completed_without_fall": 8,
+      "mpjpe_local_mean_mm": 29.228715222408965,
+      "mpjpe_global_mean_mm": 85.42737791332353,
+      "root_position_mean_mm": 77.68745927515258,
+      "joint_rmse_mean_deg": 9.544412704453602,
+      "pelvis_height_min_m": 0.6667622109265833
+    },
+    "selected": {
+      "motion_count": 8,
+      "deterministic_trials_per_motion": 1,
+      "completed_without_fall": 8,
+      "mpjpe_local_mean_mm": 29.447697305063944,
+      "mpjpe_global_mean_mm": 84.81034247597522,
+      "root_position_mean_mm": 76.70580976693638,
+      "joint_rmse_mean_deg": 8.627775078303166,
+      "pelvis_height_min_m": 0.6365312157588238
+    }
+  },
+  "relative_change_percent": {
+    "mpjpe_local_mean_mm": 0.7492018755825836,
+    "mpjpe_global_mean_mm": -0.7222923756062927,
+    "root_position_mean_mm": -1.2635881226845114,
+    "joint_rmse_mean_deg": -9.603918591268744
+  },
+  "motions": [
+    {
+      "id": "shadow_dip_v2_left_test_01",
+      "motion_sha256": "d32ffb1dda1531efa3363eca57483e022ba885f93e550eeb45afd1cec54d8c66",
+      "stock": {
+        "report": ".runtime/adapter-final-test/stock-shadow_dip_v2_left_test_01.json",
+        "report_sha256": "322e3b5fcefca7d38c114fa158923b79989aa2b72562cf0910cf74be7d02106a",
+        "metrics": {
+          "mpjpe_local_mean_mm": 27.772776910190203,
+          "mpjpe_global_mean_mm": 51.73274213757139,
+          "root_position_mean_mm": 37.43358209948219,
+          "joint_rmse_mean_deg": 7.971509125530833,
+          "pelvis_height_min_m": 0.681016968642935
+        },
+        "completed_without_fall": true
+      },
+      "selected": {
+        "report": ".runtime/adapter-exported-eval/test-shadow_dip_v2_left_test_01.json",
+        "report_sha256": "69c14c83fa3849c059bd3ea5ae86e4bfce8466d4c10f025041763e179a23c3f9",
+        "metrics": {
+          "mpjpe_local_mean_mm": 27.28472208917732,
+          "mpjpe_global_mean_mm": 47.562633014302726,
+          "root_position_mean_mm": 33.33671896572416,
+          "joint_rmse_mean_deg": 6.95716887505547,
+          "pelvis_height_min_m": 0.6720874189242597
+        },
+        "completed_without_fall": true
+      }
+    },
+    {
+      "id": "shadow_dip_v2_left_test_03",
+      "motion_sha256": "a40a531e9c079a96bc39767307d617b77bad8dd13a810f5e296b47c9ca479b97",
+      "stock": {
+        "report": ".runtime/adapter-final-test/stock-shadow_dip_v2_left_test_03.json",
+        "report_sha256": "f564b5ba010408f459bcb231322eae855baf992c80e294f979f4ddd500824278",
+        "metrics": {
+          "mpjpe_local_mean_mm": 31.79498161837774,
+          "mpjpe_global_mean_mm": 59.18349916607686,
+          "root_position_mean_mm": 42.10077411358763,
+          "joint_rmse_mean_deg": 8.590558460188989,
+          "pelvis_height_min_m": 0.6725428423198511
+        },
+        "completed_without_fall": true
+      },
+      "selected": {
+        "report": ".runtime/adapter-exported-eval/test-shadow_dip_v2_left_test_03.json",
+        "report_sha256": "016a08c1d4c6e384ffdd55f9633a7ffccc08d22bc9892a3d0f400856c20ac00a",
+        "metrics": {
+          "mpjpe_local_mean_mm": 31.188756898691043,
+          "mpjpe_global_mean_mm": 55.17623038793083,
+          "root_position_mean_mm": 37.94990689523859,
+          "joint_rmse_mean_deg": 7.637277546707136,
+          "pelvis_height_min_m": 0.665372744706999
+        },
+        "completed_without_fall": true
+      }
+    },
+    {
+      "id": "shadow_dip_v2_right_test_02",
+      "motion_sha256": "bb4596d4567e96ab7dc3a46fbe6633000327437238de38bd4fff6e2cd7631151",
+      "stock": {
+        "report": ".runtime/adapter-final-test/stock-shadow_dip_v2_right_test_02.json",
+        "report_sha256": "4c25a3a4490f87fa8436fa5fb8dd0fc88f2db81805af6e1cd292445a0efeeef5",
+        "metrics": {
+          "mpjpe_local_mean_mm": 26.574994039115733,
+          "mpjpe_global_mean_mm": 50.58883183322252,
+          "root_position_mean_mm": 42.442390106965696,
+          "joint_rmse_mean_deg": 8.929105610643555,
+          "pelvis_height_min_m": 0.6838812031909336
+        },
+        "completed_without_fall": true
+      },
+      "selected": {
+        "report": ".runtime/adapter-exported-eval/test-shadow_dip_v2_right_test_02.json",
+        "report_sha256": "4de1d24ed5b60311c4640017bb5c6d302eb7adcaa209c24d74bed927fc0f4ab0",
+        "metrics": {
+          "mpjpe_local_mean_mm": 26.441821995191866,
+          "mpjpe_global_mean_mm": 49.97525965627207,
+          "root_position_mean_mm": 41.393270633817856,
+          "joint_rmse_mean_deg": 7.460083723820065,
+          "pelvis_height_min_m": 0.6779131412737353
+        },
+        "completed_without_fall": true
+      }
+    },
+    {
+      "id": "shadow_dip_v2_right_test_04",
+      "motion_sha256": "09d9b29495e9f365153a2fe2a01413aef54cef3e4a53820089cff34e0b207335",
+      "stock": {
+        "report": ".runtime/adapter-final-test/stock-shadow_dip_v2_right_test_04.json",
+        "report_sha256": "39fd94b80fce4bebc57a1bf6c2b68bdace552e22ff38721c63fee2c0210febcc",
+        "metrics": {
+          "mpjpe_local_mean_mm": 30.420885711482967,
+          "mpjpe_global_mean_mm": 57.86679328581423,
+          "root_position_mean_mm": 45.89827274241576,
+          "joint_rmse_mean_deg": 10.002817691366982,
+          "pelvis_height_min_m": 0.6725712772932576
+        },
+        "completed_without_fall": true
+      },
+      "selected": {
+        "report": ".runtime/adapter-exported-eval/test-shadow_dip_v2_right_test_04.json",
+        "report_sha256": "0305f659e3f9c2f9a8321a20ebb6727e642663f9793057f6eada10c500789274",
+        "metrics": {
+          "mpjpe_local_mean_mm": 32.27332325541057,
+          "mpjpe_global_mean_mm": 62.22871158659521,
+          "root_position_mean_mm": 46.872554653570084,
+          "joint_rmse_mean_deg": 8.47327435970759,
+          "pelvis_height_min_m": 0.6665842252475203
+        },
+        "completed_without_fall": true
+      }
+    },
+    {
+      "id": "shadow_gancho_left_test_01",
+      "motion_sha256": "010d2f68306904f607333621a9d81be2bf4c24050e7c9c6a69fb8dad24e2635d",
+      "stock": {
+        "report": ".runtime/adapter-final-test/stock-shadow_gancho_left_test_01.json",
+        "report_sha256": "6d266b025051981601ab9fe4e145609c28ad883837c9b5d902c80b34247152a7",
+        "metrics": {
+          "mpjpe_local_mean_mm": 27.260705442188286,
+          "mpjpe_global_mean_mm": 114.70138126898944,
+          "root_position_mean_mm": 114.06611759813417,
+          "joint_rmse_mean_deg": 9.234298195259022,
+          "pelvis_height_min_m": 0.6870678941318736
+        },
+        "completed_without_fall": true
+      },
+      "selected": {
+        "report": ".runtime/adapter-exported-eval/test-shadow_gancho_left_test_01.json",
+        "report_sha256": "c39753497a1c7b0234eb401582e55ebf9291c56ebaa3caed4073c066ff46e134",
+        "metrics": {
+          "mpjpe_local_mean_mm": 27.30264423409838,
+          "mpjpe_global_mean_mm": 127.28155956951905,
+          "root_position_mean_mm": 126.13200506922196,
+          "joint_rmse_mean_deg": 8.884091520405178,
+          "pelvis_height_min_m": 0.6741799564434124
+        },
+        "completed_without_fall": true
+      }
+    },
+    {
+      "id": "shadow_gancho_left_test_02",
+      "motion_sha256": "803c4ae6e954af34c47d1368b43bd598c0bd768b00d1d6e4bd482659b67e2c37",
+      "stock": {
+        "report": ".runtime/adapter-final-test/stock-shadow_gancho_left_test_02.json",
+        "report_sha256": "88f0e24709a0e81d90cc0785fab0ea745617e4e7259ad5dcb4e72d3a57df8020",
+        "metrics": {
+          "mpjpe_local_mean_mm": 29.605545784250793,
+          "mpjpe_global_mean_mm": 127.35305249849687,
+          "root_position_mean_mm": 122.09862208239048,
+          "joint_rmse_mean_deg": 9.773072692530295,
+          "pelvis_height_min_m": 0.6667622109265833
+        },
+        "completed_without_fall": true
+      },
+      "selected": {
+        "report": ".runtime/adapter-exported-eval/test-shadow_gancho_left_test_02.json",
+        "report_sha256": "02e857995a6b9842676ca00f9cc573e1f396a468eaa69efec4b039746fb1125c",
+        "metrics": {
+          "mpjpe_local_mean_mm": 30.17986155025206,
+          "mpjpe_global_mean_mm": 165.54725051472707,
+          "root_position_mean_mm": 161.68909196882788,
+          "joint_rmse_mean_deg": 9.33296486114011,
+          "pelvis_height_min_m": 0.6365312157588238
+        },
+        "completed_without_fall": true
+      }
+    },
+    {
+      "id": "shadow_gancho_right_test_01",
+      "motion_sha256": "0aabafeb5762e41ac8462ed4aeaa322185e2c02aaa6109b1c1635097026656d0",
+      "stock": {
+        "report": ".runtime/adapter-final-test/stock-shadow_gancho_right_test_01.json",
+        "report_sha256": "3f5524dad261c849edc119ab880cefeb9ebb0d73cc49170d20505b06c1ef0070",
+        "metrics": {
+          "mpjpe_local_mean_mm": 29.179657215676954,
+          "mpjpe_global_mean_mm": 118.09400987983045,
+          "root_position_mean_mm": 115.46587617858768,
+          "joint_rmse_mean_deg": 10.605314501972634,
+          "pelvis_height_min_m": 0.6746954920939779
+        },
+        "completed_without_fall": true
+      },
+      "selected": {
+        "report": ".runtime/adapter-exported-eval/test-shadow_gancho_right_test_01.json",
+        "report_sha256": "a7b4e610bbe1aa27344378b5645a333ed207633807b6c5ebd47780a12a7442a1",
+        "metrics": {
+          "mpjpe_local_mean_mm": 29.28918042520267,
+          "mpjpe_global_mean_mm": 87.25098165218158,
+          "root_position_mean_mm": 84.98287519314582,
+          "joint_rmse_mean_deg": 9.835830110100845,
+          "pelvis_height_min_m": 0.6664332909435869
+        },
+        "completed_without_fall": true
+      }
+    },
+    {
+      "id": "shadow_gancho_right_test_02",
+      "motion_sha256": "7307977b8e7fba5dbf408736082ffca7cd6c6ad1744f7833f85b5fc173b1342d",
+      "stock": {
+        "report": ".runtime/adapter-final-test/stock-shadow_gancho_right_test_02.json",
+        "report_sha256": "af9a0809224b79ac714225e57c885791edb37b8eaef5ed81d620041ff8d9dec5",
+        "metrics": {
+          "mpjpe_local_mean_mm": 31.220175057989042,
+          "mpjpe_global_mean_mm": 103.89871323658643,
+          "root_position_mean_mm": 101.99403927965706,
+          "joint_rmse_mean_deg": 11.248625358136506,
+          "pelvis_height_min_m": 0.667358765209682
+        },
+        "completed_without_fall": true
+      },
+      "selected": {
+        "report": ".runtime/adapter-exported-eval/test-shadow_gancho_right_test_02.json",
+        "report_sha256": "633f9545c25baeae84fa87ea69d4577f2181277b0acff465700c87faa0adf14a",
+        "metrics": {
+          "mpjpe_local_mean_mm": 31.621267992487645,
+          "mpjpe_global_mean_mm": 83.46011342627324,
+          "root_position_mean_mm": 81.29005475594467,
+          "joint_rmse_mean_deg": 10.441509629488937,
+          "pelvis_height_min_m": 0.6535934658854752
+        },
+        "completed_without_fall": true
+      }
+    }
+  ],
+  "interpretation": "The adapter preserves 8/8 upright completion and reduces joint RMSE, with small global/root improvements, but local MPJPE is modestly worse. It is a transparent fallback experiment, not evidence of the required Isaac/PPO fine-tune.",
+  "limitations": [
+    "No Isaac Lab execution or organizer WBT-Bench package was used.",
+    "The adapter is an affine supervised calibration, not the released PPO recipe.",
+    "The proxy is deterministic and does not provide the required three-seed robustness test.",
+    "This report must not be presented as an official challenge score."
+  ]
+}

@@ -1,6 +1,6 @@
 # SuperSONIC submission progress
 
-**Last updated:** 2026-08-16 19:11 PT
+**Last updated:** 2026-08-16 23:15 PT
 **Branch:** `feature/supersonic-submission`
 **Deadline:** 2026-08-16 23:59 PT
 
@@ -227,6 +227,23 @@ status here must remain truthful.
   are 0.0013639 degree/cm in CSV values, `2.38035e-5` in SI/radian arrays,
   `6.741e-9` in manifest IK residuals, and `0.0030365` in derived QA metrics. CI uses
   separate strict payload and abs+relative metric bounds based on those measurements.
+- [x] Passed exact-head Linux CI on both the public fork's `main` and feature branches
+  at `016b6051396745114491979a8ad860e19c8fb8b8`: Ruff, 40 tests, asset hydration,
+  54-motion regeneration/validation, cross-platform comparison, and QA upload.
+- [x] Trained and froze an account-free **experimental** affine action adapter using
+  only the 12 gancho training motions, then selected `alpha=0.10` on four heldout
+  ganchos before opening the v2 test split. The checked derivative decoder retains the
+  public `[1,994] -> [1,29]` ONNX contract and has SHA-256 `caf8b40c...add27`.
+- [x] Reported the complete eight-motion deterministic MuJoCo proxy test with no
+  post-test retuning: stock/adapter both complete 8/8; joint RMSE improves 9.60%, global
+  MPJPE improves 0.72%, root error improves 1.26%, and local MPJPE worsens 0.75%.
+  Because the result is mixed and uses neither Isaac/PPO nor WBT-Bench, it is retained
+  only as transparent supplemental evidence and is not called the challenge fine-tune.
+- [x] Built a license-complete 52-file model/evidence package plus frame-locked
+  stock/adapter video. The package includes every training, heldout, and final-test raw
+  report; an extracted copy passed all file hashes and ONNX checker. The v2 final-test
+  family is no longer "unopened" and any later official run must disclose that prior
+  proxy use or reserve a new final-test family.
 
 ## Ready after entrant handoff
 
@@ -268,8 +285,9 @@ status here must remain truthful.
 ## Not yet claimed
 
 - Stock SONIC failure on the hero reference.
-- Any training improvement, WBT-Bench score, checkpoint, ONNX export, policy render, or
-  real-robot execution.
+- Any **official** Isaac/PPO training improvement, WBT-Bench score, selected checkpoint,
+  official policy render, or real-robot execution. The experimental affine ONNX/video
+  is separately labelled and does not satisfy these claims.
 
 ## Next execution order
 
@@ -284,7 +302,8 @@ status here must remain truthful.
    19:29 PT, followed by 5/500 through 19:59 PT, 5/250 through 20:29 PT, and smoke-only
    through 20:59 PT. The planner refuses any route that cannot preserve finalization
    and portal reserves.
-5. Freeze the winner, open the untouched test split, export, validate, render, hash,
-   and publish the selected checkpoint.
+5. Freeze the winner, reserve a newly generated official test family (preferred) or
+   disclose prior proxy use of v2 test, then export, validate, render, hash, and publish
+   the selected checkpoint.
 6. Replace every bracketed submission value from raw evidence, verify public links,
    then submit the portal entry.

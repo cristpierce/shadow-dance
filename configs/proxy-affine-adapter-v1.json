@@ -1,0 +1,201 @@
+{
+  "format": "shadow_dance_affine_action_adapter_v1",
+  "method": "training-only per-joint least-squares calibration with bounded shrinkage",
+  "alpha": 0.1,
+  "ridge": 1e-06,
+  "gain_bounds": [
+    0.5,
+    1.5
+  ],
+  "bias_limit": 0.5,
+  "training_motion_count": 12,
+  "training_frames": 3046,
+  "training_motion_ids": [
+    "shadow_gancho_left_train_01",
+    "shadow_gancho_left_train_02",
+    "shadow_gancho_left_train_03",
+    "shadow_gancho_left_train_04",
+    "shadow_gancho_left_train_05",
+    "shadow_gancho_left_train_06",
+    "shadow_gancho_right_train_01",
+    "shadow_gancho_right_train_02",
+    "shadow_gancho_right_train_03",
+    "shadow_gancho_right_train_04",
+    "shadow_gancho_right_train_05",
+    "shadow_gancho_right_train_06"
+  ],
+  "training_reports": [
+    {
+      "path": ".runtime/adapter-fit-train/shadow_gancho_left_train_01.json",
+      "sha256": "813d6c0934b1c8179f48aec01ab0c196f963b08e72290149678b6b1df94cf486"
+    },
+    {
+      "path": ".runtime/adapter-fit-train/shadow_gancho_left_train_02.json",
+      "sha256": "c050d49f044a693049857233e13cb15732bfe6232e9ce630745030708b45e41a"
+    },
+    {
+      "path": ".runtime/adapter-fit-train/shadow_gancho_left_train_03.json",
+      "sha256": "99cff826715e623d39f609bb452681e41114e504acef6777ab774b2ab34ad863"
+    },
+    {
+      "path": ".runtime/adapter-fit-train/shadow_gancho_left_train_04.json",
+      "sha256": "f52ffa432634a68ed05e5a41cd2a4e3124ced3df1e8fa16684608f5cccc0c762"
+    },
+    {
+      "path": ".runtime/adapter-fit-train/shadow_gancho_left_train_05.json",
+      "sha256": "490eda765f14ff62e3494eae1d91265656aa806b860df271eb1a7a62b4cd9228"
+    },
+    {
+      "path": ".runtime/adapter-fit-train/shadow_gancho_left_train_06.json",
+      "sha256": "16435e08d4a3d6c48c213701bf8d91ec4c01843d1095157ba3319e8bc6f818d8"
+    },
+    {
+      "path": ".runtime/adapter-fit-train/shadow_gancho_right_train_01.json",
+      "sha256": "c1160052bc1ebb66ca30260232584ad518bafc277f026b23941c487753ed9b0c"
+    },
+    {
+      "path": ".runtime/adapter-fit-train/shadow_gancho_right_train_02.json",
+      "sha256": "d7c38ffb234789a6935502d24d54ca2c77cf9959c18ce4dbe8b8bb6320178a2d"
+    },
+    {
+      "path": ".runtime/adapter-fit-train/shadow_gancho_right_train_03.json",
+      "sha256": "bccc764c3960f59b3435810ae0f0b46bf0ed6b443912435f6976bc446ac093bd"
+    },
+    {
+      "path": ".runtime/adapter-fit-train/shadow_gancho_right_train_04.json",
+      "sha256": "533f52eb21fb77d406677c9bde1e86d0c8a7bb51cd4861cfc6f4219ba211e94f"
+    },
+    {
+      "path": ".runtime/adapter-fit-train/shadow_gancho_right_train_05.json",
+      "sha256": "1663bfff3174c6ff716613407e052278ef1a95c10c0115fa6c1e8bb275959bba"
+    },
+    {
+      "path": ".runtime/adapter-fit-train/shadow_gancho_right_train_06.json",
+      "sha256": "8842715a737242ed0e7335b83227bf1b1baa5a1650ce05f5ca2793bf33336547"
+    }
+  ],
+  "gain": [
+    1.0038440677102312,
+    1.0025419448966415,
+    0.9960948400808612,
+    0.95,
+    0.95,
+    0.95,
+    0.95,
+    0.95,
+    0.95,
+    1.0170631054494907,
+    1.0014314079900628,
+    0.9884896443324948,
+    0.9793251606315134,
+    0.95,
+    0.95,
+    0.95,
+    0.9545138583582423,
+    0.9762867607799418,
+    0.9642332130628104,
+    0.95,
+    0.9593740620792699,
+    0.95,
+    0.95,
+    0.95,
+    0.9516726003671113,
+    0.95,
+    0.9895186962105207,
+    0.9609006474687356,
+    0.9802552000871544
+  ],
+  "bias": [
+    -0.0024969115367494913,
+    -0.0062652783066908585,
+    0.0013008497477898183,
+    -0.019057923035067332,
+    0.01950837748369108,
+    -0.00044557497860895755,
+    0.014278008027662811,
+    -0.0141969565671893,
+    -0.05,
+    0.05,
+    0.023827135021826793,
+    0.02666998432090384,
+    0.020897178387269257,
+    0.001164112303992764,
+    0.006241829926487661,
+    0.03106522865238901,
+    -0.010033787435805708,
+    0.004994784272953762,
+    -0.011268001782100093,
+    -0.05,
+    0.05,
+    0.05,
+    0.05,
+    -0.03062147620621443,
+    0.025602601237955422,
+    -0.03172675713912395,
+    -0.05,
+    -0.05,
+    0.05
+  ],
+  "raw_fit_gain": [
+    1.0384406771023127,
+    1.025419448966415,
+    0.9609484008086125,
+    0.04759842250046739,
+    0.0395208115723435,
+    -0.06736503355653307,
+    0.0716832083649017,
+    0.11047041000329309,
+    -0.25213206830963475,
+    1.1706310544949086,
+    1.0143140799006274,
+    0.8848964433249471,
+    0.793251606315134,
+    -0.048015388120480326,
+    -0.10730636013889468,
+    0.39246145649776076,
+    0.5451385835824228,
+    0.7628676077994182,
+    0.6423321306281042,
+    0.1419649158030715,
+    0.5937406207926987,
+    -0.2660945915927745,
+    0.0048418552581901714,
+    0.4009789372175816,
+    0.516726003671113,
+    0.24785612705191634,
+    0.8951869621052065,
+    0.6090064746873555,
+    0.8025520008715441
+  ],
+  "raw_fit_bias": [
+    -0.02496911536749491,
+    -0.06265278306690858,
+    0.013008497477898182,
+    -0.1905792303506733,
+    0.1950837748369108,
+    -0.0044557497860895755,
+    0.1427800802766281,
+    -0.14196956567189298,
+    -0.5462265970404728,
+    0.5534832235546239,
+    0.23827135021826792,
+    0.2666998432090384,
+    0.20897178387269255,
+    0.01164112303992764,
+    0.0624182992648766,
+    0.3106522865238901,
+    -0.10033787435805708,
+    0.04994784272953762,
+    -0.11268001782100091,
+    -0.8417220346907708,
+    0.7057759384721684,
+    0.6925358695028316,
+    0.7658082831866566,
+    -0.30621476206214426,
+    0.2560260123795542,
+    -0.31726757139123946,
+    -0.6367434750767833,
+    -1.1652953540992936,
+    0.565024301349188
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "format": "shadow_dance_proxy_adapter_selection_v1",
+  "selected_utc": "2026-08-17T03:54:58Z",
+  "official_wbt_bench": false,
+  "isaac_result": false,
+  "official_sonic_recipe": false,
+  "method": "training-only bounded affine calibration of the public SONIC decoder output",
+  "selection_split": "heldout gancho only",
+  "fresh_final_test_opened_before_selection": false,
+  "selection_rule": "Require 4/4 upright and local MPJPE within 1% of stock; then prefer lower global MPJPE, root error, and joint RMSE.",
+  "selected_adapter": {
+    "path": ".runtime/adapter-candidates/alpha-0.10.json",
+    "sha256": "ea38d0f98c96649eb7f4a5e19b73524e9ac971721b194bf5590301f438035935",
+    "alpha": 0.1
+  },
+  "heldout_macro": {
+    "stock": {
+      "upright": "4/4",
+      "mpjpe_local_mean_mm": 28.8814577031318,
+      "mpjpe_global_mean_mm": 115.000105022153,
+      "root_position_mean_mm": 114.497546496126,
+      "joint_rmse_mean_deg": 10.1386086729666
+    },
+    "selected": {
+      "upright": "4/4",
+      "mpjpe_local_mean_mm": 28.9005420236475,
+      "mpjpe_global_mean_mm": 103.507121869874,
+      "root_position_mean_mm": 101.17227247921,
+      "joint_rmse_mean_deg": 9.36880925049718
+    },
+    "relative_change_percent": {
+      "mpjpe_local": 0.066078,
+      "mpjpe_global": -9.993889,
+      "root_position": -11.638043,
+      "joint_rmse": -7.592752
+    }
+  },
+  "bound_reports": [
+    {"path": ".runtime/adapter-heldout-global/stock-shadow_gancho_left_heldout_01.json", "sha256": "19f8906a2fe6123a5a2c4f7a645cfd24a6823007c458effeb85c5aec26933760"},
+    {"path": ".runtime/adapter-heldout-global/stock-shadow_gancho_left_heldout_02.json", "sha256": "591a9107b9619d880a7ad000bc163f6891e831f037b4cf0be620804a653d9cd9"},
+    {"path": ".runtime/adapter-heldout-global/stock-shadow_gancho_right_heldout_01.json", "sha256": "a38f234609a626c5665b2167b0de2f3e0491832b487390cbfdebb3173d64a0dc"},
+    {"path": ".runtime/adapter-heldout-global/stock-shadow_gancho_right_heldout_02.json", "sha256": "5c2bca1a67aa070923e425ebd691c17f483d760d8e5b233b02d6e1064ee4338b"},
+    {"path": ".runtime/adapter-heldout-global/alpha-0.10-shadow_gancho_left_heldout_01.json", "sha256": "a8cf4381dd93633f43beba80a92932e26c5e361c2086972bcc5f8627f82457d2"},
+    {"path": ".runtime/adapter-heldout-global/alpha-0.10-shadow_gancho_left_heldout_02.json", "sha256": "2cfb46f58377957a2123a405161b586608ad77af4fa300f3669cc76ba6e0a226"},
+    {"path": ".runtime/adapter-heldout-global/alpha-0.10-shadow_gancho_right_heldout_01.json", "sha256": "07c9141dedc1786d8f9dd9b27209e71487ac32a7a4f53034a9bfca6c821906cf"},
+    {"path": ".runtime/adapter-heldout-global/alpha-0.10-shadow_gancho_right_heldout_02.json", "sha256": "ce0d3a0d004ee42558c4823c2801ed025583eedb0785d11e9109bf38c4a5490e"}
+  ],
+  "limitations": [
+    "This is a MuJoCo deployment proxy, not Isaac Lab or WBT-Bench.",
+    "This is not the organizer-provided PPO fine-tuning recipe.",
+    "The adapter is selected only on heldout motions; final-test reports must bind back to this file and adapter hash."
+  ]
+}

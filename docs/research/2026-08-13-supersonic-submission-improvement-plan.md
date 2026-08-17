@@ -1511,6 +1511,42 @@ outcome is no policy claim—not synthetic or estimated evidence.
   remain unchanged. This is a measured numerical-portability allowance, not a relaxation
   of inventory, schema, split, hash, finite-value, or validation pass/fail contracts.
 
+### Account-free derivative-policy fallback (August 16, 23:15 PT)
+
+- **License fact:** the exact public GEAR-SONIC `LICENSE` at revision `9c0ff22`
+  places model weights under the NVIDIA Open Model License. It permits derivative-model
+  creation and redistribution provided the agreement and the required NVIDIA attribution
+  accompany the model. The fallback package includes both. This permission does not turn
+  a non-Isaac experiment into the organizer's prescribed fine-tune.
+- **Method:** twelve authored gancho training motions (3,046 frames) supplied stock
+  decoder actions and authored joint targets to a per-joint least-squares affine
+  calibration. Gains/biases were bounded, then shrunk 90% toward identity. Five shrinkage
+  candidates were screened on two training motions; `0.05`, `0.10`, and `0.20` advanced
+  to the four-motion gancho heldout set. The selection rule required 4/4 upright and
+  local-MPJPE non-inferiority within 1%, then preferred lower global/root/joint error.
+- **Selection fact:** `alpha=0.10` was hash-frozen before opening v2 test. On heldout,
+  stock/selected both completed 4/4; local MPJPE changed 28.8815 to 28.9002 mm
+  (+0.066%), global MPJPE 115.0001 to 103.5073 mm (-9.99%), root error 114.4975 to
+  101.1724 mm (-11.64%), and joint RMSE 10.1386 to 9.3692 degrees (-7.59%).
+- **Complete final finding:** the exported float32 ONNX was evaluated once on all eight
+  v2 test motions after selection. Both policies completed 8/8. Local MPJPE changed
+  29.2287 to 29.4477 mm (**+0.75%, worse**), global MPJPE 85.4274 to 84.8103 mm
+  (-0.72%), root error 77.6875 to 76.7058 mm (-1.26%), and joint RMSE 9.5444 to
+  8.6278 degrees (-9.60%). There was no post-test retuning.
+- **Artifact fact:** the derivative decoder retains the parent's `[1,994] -> [1,29]`
+  contract, passes ONNX checker, produces finite outputs in five CPU Runtime probes,
+  and has SHA-256 `caf8b40c...add27`. A 52-file evidence package includes every training,
+  heldout, and final-test raw report; a clean extraction passed every declared hash.
+- **Decision:** publish this only as an experimental supervised deployment adapter and
+  mixed negative/positive result. It is not an Isaac/PPO fine-tune, official WBT-Bench
+  score, or replacement for the required challenge evidence. The matched video states
+  those limits and displays both the joint improvement and worsened local MPJPE.
+- **Leakage consequence:** the eight v2 test motions are now consumed for this frozen
+  proxy experiment. A later official run must not describe them as previously unopened.
+  Because the official pipeline was preregistered and unchanged, reuse can be disclosed,
+  but the cleaner recommendation is to reserve a newly generated final-test family before
+  any further model or threshold changes.
+
 ## Primary sources
 
 - [Ultimate Bots Trial 03 challenge page](https://www.ultimatebots.com/hackathon)

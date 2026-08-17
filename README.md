@@ -22,8 +22,11 @@ fills result tables with estimates.
 > global-position weakness on the gancho validation family, but it is not Isaac or
 > WBT-Bench evidence. The
 > immutable [Shadow Dance v2.0.0 reference release](https://github.com/cristpierce/shadow-dance/releases/tag/shadow-dance-v2.0.0)
-> is public, with v1 retained as its audit anchor. Stock/fine-tuned metrics, final ONNX links, and the policy before/after
-> video remain pending authorized compute access.
+> is public, with v1 retained as its audit anchor. A separately labelled experimental
+> affine deployment adapter now provides a real derivative ONNX and deterministic
+> MuJoCo stock/adapted comparison, but its mixed result is **not** the required
+> Isaac/PPO fine-tune or WBT-Bench evidence. Official metrics and the official policy
+> before/after remain pending authorized compute access.
 > See [PROGRESS.md](PROGRESS.md).
 > The exact Nebius execution and publication handoff is in
 > [docs/cloud-runbook.md](docs/cloud-runbook.md).
@@ -46,10 +49,11 @@ either policy is measured on the independent final-test family.
 | Original data + provenance | `data/manifests/shadow-dance-v2.json`, PKLs, and source CSVs; immutable [v1 release](https://github.com/cristpierce/shadow-dance/releases/tag/shadow-dip-v1.0.0) retained | 54 v2 sequences committed; 60/60 v1 PKL/CSV hashes preserved |
 | G1 limits / foot IK / support QA | `results/reference-validation-v2.json` | 54/54 pass; 0 warnings |
 | Public stock ONNX preflight | MuJoCo port of NVIDIA's deployment observation/action contract | Gancho validation: 4/4 upright, 28.88 mm local MPJPE, 114.50 mm mean root error; not Isaac/WBT-Bench |
+| Experimental affine proxy adapter | `results/proxy-adapter-final-comparison.json`, model card, checked derivative ONNX release | Fresh proxy test: 8/8 upright; joint RMSE -9.60%, global MPJPE -0.72%, local MPJPE +0.75% (worse); not Isaac/PPO/WBT-Bench |
 | Stock SONIC on validation moves | raw Isaac eval log + novelty report | Pending authorized Isaac run |
 | Fine-tuned SONIC | deadline-planned 5/250/500/2,000/4,000 ladder from pinned base | Pending Isaac run |
 | Fundamentals retention | identical stock/fine-tuned suite | Pending Isaac run |
-| Untouched final test | 8 motions × 3 seeds per policy, bound to frozen selection | Pending checkpoint selection |
+| Official final test | 8 motions × 3 seeds per policy, bound to frozen selection | V2 test was consumed once after proxy-adapter freeze; any later official run must disclose that reuse or reserve a new test family |
 | Deployable policy | checked ONNX graphs + hashes | Pending selected checkpoint |
 | Judge-facing comparison | locked-camera stock/fine-tuned video | Pending both policy renders |
 
@@ -146,6 +150,33 @@ policy baseline remains a mandatory go/no-go gate. Every dip/gancho deepest hold
 positive quasi-static support margin; the gancho's aerial leg is checked through joint
 limits, velocity, clearance, self-contact, and one-foot support rather than a fictitious
 six-DOF sole target.
+
+## Experimental account-free adapter
+
+Licensed Isaac compute was unavailable, so a deliberately small fallback experiment
+calibrates the public GEAR-SONIC decoder with a per-joint affine transform. Twelve
+gancho training motions provide supervised action/target statistics; gains and biases
+are bounded and shrunk 90% toward identity. Four separate gancho validation motions
+select the transform before the eight v2 test motions are opened. The frozen transform
+is appended directly to the public decoder graph without changing its
+`obs_dict [1,994] -> action [1,29]` contract.
+
+| Deterministic MuJoCo proxy, 8 fresh motions | Stock | Adapter | Change |
+|---|---:|---:|---:|
+| Upright completion | 8/8 | 8/8 | unchanged |
+| Local MPJPE | 29.229 mm | 29.448 mm | **+0.75% (worse)** |
+| Global MPJPE | 85.427 mm | 84.810 mm | -0.72% |
+| Root-position error | 77.687 mm | 76.706 mm | -1.26% |
+| Joint RMSE | 9.544 deg | 8.628 deg | -9.60% |
+
+This is a mixed result and is not promoted as the challenge fine-tune. It is useful
+supplemental evidence that the complete data-to-ONNX/evaluation path works without
+concealing a regression. See the [model card](docs/proxy-adapter-model-card.md),
+[frozen selection](results/proxy-adapter-selection.json), and
+[complete comparison](results/proxy-adapter-final-comparison.json). Because these test
+motions have now been evaluated by the proxy adapter, a later official run must disclose
+that prior use and avoid describing them as previously unopened; preferably it should
+reserve a newly generated final-test family before any additional tuning.
 
 ## Train, compare, and export
 

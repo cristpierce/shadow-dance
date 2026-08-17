@@ -1500,6 +1500,16 @@ outcome is no policy claim—not synthetic or estimated evidence.
   in manifest IK residuals, and `0.0030365` in derived validation metrics. The CI
   comparator now separates strict payload tolerances from an absolute-plus-relative
   metric tolerance, avoiding both a false failure and an overly broad raw-array bound.
+- **GitHub-hosted Linux reproduction (August 16, 20:14 PT):** the uploaded QA
+  artifact from exact-head run `31989871463` independently regenerated and validated
+  all 54 sequences. Against the frozen Windows bundle, its maxima were `0.0010527`
+  degree/cm in CSV, `1.83721e-5` in SI/radian PKLs, `5.971e-9` in manifest IK
+  residuals, and `0.00598145` in derived metrics. The largest derived difference was a
+  `2.801e-5` relative change in a finite-difference joint-acceleration peak while the
+  underlying payload stayed within its stricter bound. Based on both independent Linux
+  samples, the report-only relative tolerance is `3e-5`; raw CSV/PKL/manifest limits
+  remain unchanged. This is a measured numerical-portability allowance, not a relaxation
+  of inventory, schema, split, hash, finite-value, or validation pass/fail contracts.
 
 ## Primary sources
 

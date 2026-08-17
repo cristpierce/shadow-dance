@@ -80,7 +80,7 @@ jobs:
             --csv-atol 2e-3 \
             --atol 5e-5 \
             --report-atol 5e-5 \
-            --report-rtol 2e-5
+            --report-rtol 3e-5
           for split in train heldout preflight test; do
             cmp "data/splits-v2/${split}.txt" "$QA_ROOT/splits-v2/${split}.txt"
           done

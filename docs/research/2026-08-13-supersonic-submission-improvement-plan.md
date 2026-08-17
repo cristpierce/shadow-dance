@@ -1314,6 +1314,76 @@ outcome is no policy claim—not synthetic or estimated evidence.
   bounded stock gate and best deadline-feasible candidate. Do not spend the remaining
   window polishing synthetic evidence while those gates are unresolved.
 
+### Native-Windows contingency preparation (August 16, 17:15 PT)
+
+- **Fact (public inputs ready):** the exact SONIC source revision `0a87181c...ec664`
+  is available in a separate detached checkout. Its G1 asset tree was hydrated and
+  independently verified at 69 files, 68,376,574 bytes, zero LFS pointers, and
+  manifest SHA-256 `4c7faab7...62399e3`. The public `nvidia/GEAR-SONIC` checkpoint
+  downloaded anonymously at the pinned revision: `last.pt` is 469,418,283 bytes with
+  SHA-256 `e6bdab3f...ded8909`, and `config.yaml` is 28,331 bytes with SHA-256
+  `f0818779...ab629c7`. Hugging Face login is therefore unnecessary for training and
+  remains necessary only for final publication.
+- **Fact (open tooling only):** uv 0.11.15, an uv-managed Python 3.11.15 interpreter,
+  and an isolated ignored virtual environment are prepared. No Isaac Sim/Isaac Lab
+  package, licence variable, or proprietary cache has been installed or created.
+- **Fact (support boundary):** NVIDIA's Isaac Sim 5.1 requirements list Windows driver
+  580.88, 32 GB RAM, and 16 GB VRAM as minimums. The laptop has driver 577.13 and a
+  12,227 MiB RTX 5070 Ti Laptop GPU. Isaac Lab 2.3 documents a Windows pip installation
+  route, so a very small native smoke is technically testable after licence acceptance,
+  but this machine remains below the published support floor. Success must be reported
+  as an unsupported contingency; failure must not trigger an autonomous driver update
+  or reboot.
+- **Fact (live deadline bound):** at 17:12 PT the frozen planner returned stages 5 and
+  2,000 with 14,498 candidate seconds available after the two-hour finalization and
+  45-minute portal reserves. That calculation excludes stock evaluation, package
+  installation, and cloud cold start, so it is an upper bound rather than an execution
+  forecast. The 2,000-stage route closes at 17:29 PT; after that the best formal route
+  is 5/250/500, provided setup and stock evaluation finish before its later cutoff.
+- **Decision:** keep authenticated Nebius RTX PRO compute as the preferred route. If
+  Nebius remains unavailable and the entrant supplies the exact named NVIDIA acceptance,
+  install the official native packages in the isolated environment and attempt only a
+  tiny import/sample smoke first. Stop on a driver or memory incompatibility and retain
+  the honest reference-only submission rather than fabricating a learned-policy clip.
+
+### Official-container contingency (August 16, 17:22 PT)
+
+- **Fact (same-challenge evidence):** [GhostTrial's public training record](https://github.com/SpiRaiL/GhostTrial-public/blob/main/docs/training_env.md)
+  reports an
+  end-to-end SONIC run from `nvcr.io/nvidia/isaac-lab:2.3.2`, with dummy SMPL and an
+  independently found G1 Git LFS repair. Its RTX 5080 had driver 595.84 and 16 GB VRAM;
+  a 16-environment smoke reported about 155--185 steps/s. This validates the software
+  combination, not this below-minimum laptop.
+- **Fact (immutable identity):** the public NGC manifest resolves its linux/amd64 image
+  to `sha256:f07c37e3f0c9f58f7febd0aa9a425523d282be623c0db81ac61006d0e24be07f`:
+  29 compressed layers totalling 8,408,106,479 bytes (7.831 GiB). Manifest inspection
+  fetched metadata only; no licensed layer was pulled or run.
+- **Prepared control:** an ignored derived Dockerfile copies only the already pinned
+  `gear_sonic` source/assets and installs its open dependencies. Acceptance is not
+  stored in the image. An ignored wrapper rejects the run unless both entrant-owned
+  markers are supplied, pins the base digest and submission commit, runs a one-process
+  CUDA/Isaac import first, and defaults the full pipeline to 2/4 environments and the
+  5/250 ladder. Its Bash syntax passes; this is preparation, not runtime evidence.
+- **Decision:** after explicit licence acceptance, try this pinned official container
+  before the native-Windows pip route. It is a smaller, already-integrated cold start,
+  and its CUDA compatibility can be falsified before training. Stop immediately on a
+  driver or memory error; do not treat the competitor's stronger hardware as proof of
+  local support.
+
+### Final local revalidation (August 16, 17:31 PT)
+
+- **Fact:** the complete non-Isaac suite still passes at the published implementation
+  head: 34 tests passed, 3 simulator-dependent tests skipped, Ruff passed, and
+  `git diff --check` found no whitespace errors. The current unpublished changes are
+  documentation only.
+- **Fact:** the frozen deadline planner at 17:30 PT schedules 5/250/500 and omits
+  2,000/4,000, preserving the two-hour evidence and 45-minute portal reserves. The
+  13,403-second candidate allowance still excludes environment and baseline time.
+- **Correction:** the current driver is known to reject the separate CUDA 13 NPA image,
+  but the official Isaac Lab 2.3.2 contingency has not been run. Do not claim that it
+  fails before its post-acceptance import probe; do continue to label the entire laptop
+  route unsupported because the hardware is below NVIDIA's published minimums.
+
 ## Primary sources
 
 - [Ultimate Bots Trial 03 challenge page](https://www.ultimatebots.com/hackathon)
@@ -1321,6 +1391,8 @@ outcome is no policy claim—not synthetic or estimated evidence.
 - [NVIDIA GR00T Whole-Body Control repository](https://github.com/NVlabs/GR00T-WholeBodyControl)
 - [NVIDIA SONIC training guide](https://nvlabs.github.io/GR00T-WholeBodyControl/user_guide/training.html)
 - [NVIDIA SONIC model card](https://nvlabs.github.io/GR00T-WholeBodyControl/model_card.html)
+- [Isaac Sim 5.1 system requirements](https://docs.isaacsim.omniverse.nvidia.com/5.1.0/installation/requirements.html)
+- [Isaac Lab 2.3 pip installation](https://isaac-sim.github.io/IsaacLab/v2.3.0/source/setup/installation/pip_installation.html)
 - [NVIDIA Kimodo project](https://research.nvidia.com/labs/sil/projects/kimodo/)
 - [Unitree G1 product page](https://www.unitree.com/g1/)
 - [BONES-SEED dataset license](https://huggingface.co/datasets/bones-studio/seed/blob/main/LICENSE.md)

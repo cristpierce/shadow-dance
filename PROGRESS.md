@@ -1,6 +1,6 @@
 # SuperSONIC submission progress
 
-**Last updated:** 2026-08-16 16:42 PT
+**Last updated:** 2026-08-16 17:31 PT
 **Branch:** `feature/supersonic-submission`
 **Deadline:** 2026-08-16 23:59 PT
 
@@ -131,15 +131,19 @@ status here must remain truthful.
   guaranteed to emit an atomic `last.pt` because the callback is overridden to save
   every five global steps, evaluation writes `metrics_eval.json` to the supplied output
   directory, and the universal-token export produces the expected five ONNX graphs plus
-  `model_config.yaml`. Bash syntax passed and 24 deadline/evidence/video/contract tests
-  plus Ruff passed locally; no licensed runtime was invoked.
-- [x] Passed both public CI copies at the final implementation head
-  `938f0b968d284288b6e1ab6cf9da00f82a81c877`: [main run
-  31979083056](https://github.com/cristpierce/shadow-dance/actions/runs/31979083056)
+  `model_config.yaml`. Bash syntax passed; the current full local suite reports 34 passed
+  and 3 simulator-only skips, and Ruff passes. No licensed runtime was invoked.
+- [x] Passed both public CI copies at the last published head before this
+  progress-only update:
+  `f36878bb19291e620e2571266b6485a1b038472a`: [main run
+  31979929826](https://github.com/cristpierce/shadow-dance/actions/runs/31979929826)
   and [feature run
-  31979081796](https://github.com/cristpierce/shadow-dance/actions/runs/31979081796).
+  31979929089](https://github.com/cristpierce/shadow-dance/actions/runs/31979929089).
   The main artifact was downloaded and independently checked: 69 G1 assets,
   68,376,574 bytes, zero LFS pointers, and canonical manifest `4c7faab7...62399e3`.
+- [x] Updated the upstream PR body and existing owner handoff comment to the exact
+  `f36878b` head and passing runs. PR #1 remains open, clean, and mergeable; merge still
+  requires `Durp06` or another collaborator with write access.
 - [x] Ran a secret-suppressing WSL cloud-readiness probe at 23:33 UTC. NPA/SkyPilot is
   installed, but `npa cluster list --format json` reports `NOT_CONFIGURED`; no Nebius
   project, cluster, kubeconfig, or Kubernetes context exists. SkyPilot's detailed check
@@ -153,6 +157,25 @@ status here must remain truthful.
   SkyPilot verification now reaches the expected missing-kubeconfig/account gate rather
   than a missing-tool gate. No account, cloud resource, licence variable, or charge was
   created by this setup.
+- [x] Prepared an isolated native-Windows contingency without crossing the NVIDIA
+  licence gate: uv 0.11.15, Python 3.11.15, and an empty ignored virtual environment;
+  an exact detached SONIC checkout at `0a87181c`; and the verified 69-file G1 asset
+  tree. No Isaac Sim or Isaac Lab package was downloaded or invoked.
+- [x] Downloaded the public `nvidia/GEAR-SONIC` base checkpoint without Hugging Face
+  authentication and independently rehashed both pinned files. `last.pt` is
+  469,418,283 bytes with SHA-256 `e6bdab3f...ded8909`; `config.yaml` is 28,331 bytes
+  with SHA-256 `f0818779...ab629c7`. The failed interactive Hugging Face login is now
+  a publication gate only, not a training-input gate.
+- [x] Recomputed the immutable deadline planner at 17:30 PT. A run beginning then can
+  schedule stages 5/250/500 with 13,403 candidate seconds available after the two-hour
+  finalization and 45-minute portal reserves. That excludes stock evaluation,
+  environment installation, and cloud cold-start time, so it is an upper bound rather
+  than an executable claim while both compute routes remain gated.
+- [x] Identified and prepared a second below-floor local contingency based on NVIDIA's
+  official Isaac Lab 2.3.2 NGC image. Its public manifest is pinned to the amd64 digest
+  `f07c37e3...24be07f` (29 layers; 8,408,106,479 compressed bytes). A fail-closed ignored
+  wrapper and derived Dockerfile are Bash-parse clean, do not bake acceptance, and reuse
+  the already verified source/assets/checkpoint. No image layer was pulled or run.
 
 ## Ready after entrant handoff
 
@@ -164,9 +187,12 @@ status here must remain truthful.
 - [ ] Named acceptance of the three NVIDIA/Isaac licence agreements and authorization
   for the documented run-scoped `ACCEPT_EULA=Y` value plus the project-owned
   `ENTRANT_NVIDIA_EULA_ACCEPTED=YES` marker.
-- [ ] For the unsupported laptop fallback only, install NVIDIA Windows driver 580.88
-  or newer and reboot; the current 577.13 driver is rejected by the pinned CUDA 13
-  image before container startup. This is not required for the managed cloud route.
+- [ ] For either laptop fallback, treat the current 577.13 driver and 12 GB VRAM as
+  below NVIDIA's documented Isaac Sim 5.1 minimums. The separate CUDA 13 NPA image was
+  rejected by this driver, but the pinned official Isaac Lab 2.3.2 image has not been
+  run and must not be described as incompatible in advance. After explicit licence
+  acceptance, try only its cheapest import probe and stop on any driver or memory
+  failure. No autonomous driver update or reboot is authorized.
 - [ ] Interactive Nebius profile/login plus visible challenge credit, a `us-central1`
   project, object-storage credentials, and RTX PRO 6000 Managed Kubernetes quota. A
   23:33 UTC read-only probe positively confirmed that these are not configured; only the
@@ -196,17 +222,17 @@ status here must remain truthful.
 
 ## Next execution order
 
-1. Obtain the entrant-owned licence/authentication handoff and mirror the immutable
-   GitHub dataset release to Hugging Face.
-2. Materialize the no-compute plan, then run the Isaac sample smoke and stock validation
-   baseline once NVIDIA acceptance and Nebius authentication are present.
+1. Obtain the entrant-owned licence handoff and unlock either Nebius or a local
+   contingency. Hugging Face publication can wait until a real model exists.
+2. Materialize the no-compute cloud plan, try the smaller pinned official NGC 2.3.2
+   container, or install the native runtime; first run only the cheapest CUDA/Isaac
+   import probe, then the stock validation baseline.
 3. Go/no-go novelty decision; adjust the target if stock already succeeds.
 4. Run the deadline-planned checkpoint ladder with validation and retention at each
-   gate. The post-baseline scheduler can still target 4,000 steps through 14:59 PT by
-   omitting lower-value intermediate candidates as time shrinks; 2,000-step routes
-   remain through 17:29, followed by 5/250/500 through 19:29, 5/500 through 19:59,
-   5/250 through 20:29, and smoke-only through 20:59. The planner refuses any route
-   that cannot preserve finalization and portal reserves.
+   gate. The 2,000-step route closed at 17:29 PT. The current route is 5/250/500 through
+   19:29 PT, followed by 5/500 through 19:59 PT, 5/250 through 20:29 PT, and smoke-only
+   through 20:59 PT. The planner refuses any route that cannot preserve finalization
+   and portal reserves.
 5. Freeze the winner, open the untouched test split, export, validate, render, hash,
    and publish the selected checkpoint.
 6. Replace every bracketed submission value from raw evidence, verify public links,

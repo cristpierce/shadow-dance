@@ -5,7 +5,7 @@ link in a logged-out/clean session.
 
 ## Project name
 
-G1 Shadow Dance
+G1 Shadow Partner Dip
 
 ## Track
 

@@ -5,7 +5,7 @@ commit exist. Replace every bracket from the bound evidence before publishing.
 
 ## Title
 
-G1 Shadow Dance — Stock vs Fine-tuned SONIC | Ultimate Bots SuperSONIC
+G1 Shadow Partner Dip — Stock vs Fine-tuned SONIC | Ultimate Bots SuperSONIC
 
 ## Description
 
@@ -31,7 +31,7 @@ test was opened.
 Simulation only; no real-robot execution is claimed.
 
 Challenge acknowledgement: **Motion Data by Bones Studio.** No BONES-SEED motion or
-derived data was used in Shadow Dance's independently authored dataset.
+derived data was used in the independently authored Shadow Partner Dip dataset.
 
 ## Upload contract
 
